@@ -90,13 +90,24 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 //para conectar mi back con mi web
-builder.Services.AddCors(options =>
+/*builder.Services.AddCors(options =>
 {
     options.AddPolicy("CorsPolicy",
         builder => builder.AllowAnyOrigin()
                           .AllowAnyMethod()
                           .AllowAnyHeader());
 });
+*/
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("CorsPolicy",
+        builder => builder.WithOrigins("https://evillanuevam.github.io") // Permitir GitHub Pages
+                          .AllowAnyMethod()
+                          .AllowAnyHeader()
+                          .AllowCredentials()); // Si usas autenticación
+});
+
 
 var app = builder.Build();
 
