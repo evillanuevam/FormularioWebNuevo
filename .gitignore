@@ -1,0 +1,15 @@
+# Ignorar archivos de compilación de .NET
+BackendAPI/bin/
+BackendAPI/obj/
+BackendAPI/Debug/
+BackendAPI/Release/
+
+# Ignorar configuraciones locales
+.vs/
+.vscode/
+*.user
+*.suo
+
+# Ignorar archivos generados por el sistema
+Thumbs.db
+*.log
