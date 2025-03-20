@@ -156,3 +156,4 @@ C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\BackendAPI\bin\Debug\ne
 C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\BackendAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Security.Cryptography.ProtectedData.dll
 C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\BackendAPI\bin\Debug\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\BackendAPI\bin\Debug\net9.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
+C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\BackendAPI\obj\Debug\net9.0\BackendAPI.sourcelink.json
