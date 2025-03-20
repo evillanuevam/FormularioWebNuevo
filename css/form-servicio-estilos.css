@@ -1,0 +1,436 @@
+/* Agrupar los campos en dos columnas */
+.form-container {
+    max-width: 1100px; /* Mantiene el tamaño adecuado */
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    padding: 30px;
+}
+
+.form-container .horario-item input {
+    width: 100%;
+}
+
+#otros-material {
+    padding: 5px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+    width: 200px; /* Ajusta el tamaño */
+}
+
+/*ESTILOS PROPIOS DE SERVICIO, DE LAS DESCRIPCIONES DE SERVICIO*/
+
+.form-container .descripcion-item {
+    display: grid;
+    grid-template-columns: auto 2fr 1fr 1fr 0.5fr auto; /* Ahora hay 5 columnas */
+    gap: 10px;
+    align-items: center;
+    padding: 15px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #dedede;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.form-container .descripcion-item textarea {
+    height: 85px;
+    resize: none;
+    padding: 8px;
+    font-size: 14px;
+    box-sizing: border-box;
+    width: 100%; /* Asegura que el ancho se reparta */
+}
+
+/* Estilo de la sección de horario */
+.form-container .horario {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-container .horario-item {
+    display: flex;
+    align-items: center;
+}
+
+.form-container .horario-item label {
+    font-size: 14px;
+    color: #666;
+    min-width:40px;
+    margin: 0;
+}
+
+.form-container .horario-item input {
+    padding: 5px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+
+/*ajustes solo para el label de descripcion*/
+.form-container .descripcion-item label {
+    font-weight: bold !important;
+    font-size: 0.9em; /* Ajusta el tamaño según lo que necesites */
+}
+
+/* Observaciones opcionales */
+.form-container textarea {
+    resize: none;
+    font-family: 'Roboto', sans-serif;
+}
+
+/* Estilo de los textos secundarios (checkbox y radio) */
+.form-container input[type="checkbox"] + label,
+.form-container input[type="radio"] + label {
+    font-weight: normal;
+    color: #000000a8;
+    margin-left: 5px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+/* Aseguramos que el resto de los label permanezcan en bold */
+.form-container label:not(.label-checkbox):not(.label-radio) {
+    font-weight: bold;
+    color: #000000b8;
+}
+
+/* Alinear cada ítem dentro del contenedor */
+.verificacion-item,
+.incidencia-item {
+    display: flex;
+    align-items: center; /* Centrar elementos dentro */
+    gap: 15px; /* Espaciado entre texto y elemento */
+}
+
+.incidencia-item .incidencia-checkbox{
+    margin-right: 25%;
+}
+
+/* Ajustar el tamaño del select */
+.verificacion-item select {
+    width: 80px; /* Ancho reducido */
+    height: 35px; /* Altura ajustada */
+
+}
+
+/* Ajustar alineación del texto "Verificación" */
+.verificacion-item label {
+    display: flex;
+    align-items: center; /* Centrar texto verticalmente */
+    font-size: 14px; /* Tamaño de fuente más pequeño */
+}
+
+/* Ajustar alineación del texto "Marque si es incidencia" */
+.incidencia-item label {
+    display: flex;
+    align-items: center;
+    font-size: 14px; /* Reducir el tamaño de fuente */
+}
+
+
+/*CSS PARA ADJUNTAR FOTO*/
+
+/* Contenedor para el input de archivos */
+.archivo-container {
+    display: flex;
+    align-items: center; /* Alineación vertical */
+    gap: 10px; /* Espaciado entre los elementos */
+    width: 100%;
+}
+
+/* Ocultar el input por defecto y crear un botón personalizado */
+.archivo-container input[type="file"] {
+    display: none;
+}
+
+/* Botón personalizado para subir archivos */
+/* Color por defecto del botón */
+.archivo-item .archivo-boton {
+    background-color: #1b5f93;
+    transition: background-color 0.3s ease-in-out;
+}
+
+/* Cambio de color cuando pasas el mouse */
+.archivo-item .archivo-boton:hover {
+    background-color: #144974;
+}
+
+/* Cambio de color cuando haces clic */
+.archivo-item .archivo-boton:active {
+    background-color: #0e3551;
+}
+
+.archivo-nombre{
+    font-size: 13px;
+}
+/*CSS PARA PONER  FORM-ROW PARA PONER LOS CAMPOS DE TEXTO DE FORMA HORIZONTAL*/
+/* Agrupar Aeropuerto y Horario del Turno en una línea */
+.form-row {
+    display: flex;
+    gap: 10px; /* Espacio entre los campos */
+    flex-wrap: wrap; /* Se ajusta en pantallas pequeñas */
+    align-items: center; /* Alinea verticalmente */
+}
+
+/* Ajustar los elementos internos */
+.form-row .form-group {
+    flex: 1;
+    min-width: 250px; /* Ajusta según necesidad */
+}
+
+/* Para que los selects y inputs no sean demasiado grandes */
+.form-row select,
+.form-row input {
+    width: 100%;
+}
+
+
+.form-row2{
+    display: flex;
+    gap: 10px; /* Espacio entre los campos */
+    flex-wrap: wrap; /* Permite que los elementos se ajusten si la pantalla es pequeña */
+}
+
+.form-row2 .form-group {
+    flex: 1; /* Hace que los elementos tengan el mismo tamaño */
+    min-width: 200px; /* Evita que sean demasiado pequeños */
+}
+
+/* Para asegurarte de que los inputs no sean muy anchos */
+.form-row2 input {
+    width: 100%;
+}
+
+
+.form-container .nombre-vigilante label {
+    font-weight: normal !important;
+    font-style: italic !important;
+    margin-bottom: 15px;
+}
+
+/*CSS para la tabla de formularion de servicio*/
+/* Estilo para la cabecera de la tabla */
+#tabla-descripciones thead th {
+    font-weight: bold;  /* Poner en negrita */
+    background-color: #003366;  /* Color azul oscuro */
+    color: white;  /* Texto en blanco */
+    padding: 10px;
+    text-align: center;
+}
+
+/* Estilo para las filas de la tabla */
+#tabla-descripciones tbody tr {
+    border-bottom: 1px solid #ddd;
+}
+
+/* Estilo para las celdas de la tabla */
+#tabla-descripciones td {
+    padding: 10px;
+    text-align: left;
+}
+
+/* Estilo alterno para filas */
+#tabla-descripciones tbody tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+/* Bordes redondeados en la tabla */
+#tabla-descripciones {
+    border-collapse: collapse;
+    width: 100%;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+/* Hacer que la tabla no se vea tan pegada */
+.form-group {
+    margin-top: 15px;
+}
+
+/* Aplicar color rojo a incidencias */
+.incidencia {
+    background-color: #FFCCCC !important; /* Rojo claro */
+}
+
+
+
+/*CSS para el formulario responsivo*/
+/* Estilos responsivos para móviles y tablets */
+/* ✅ ESTILOS DE LA TABLA */
+#tabla-descripciones {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+#tabla-descripciones th, #tabla-descripciones td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+}
+
+#tabla-descripciones th {
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+}
+
+#tabla-descripciones tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* ✅ RESPONSIVE PARA DISPOSITIVOS PEQUEÑOS */
+@media screen and (max-width: 920px) {
+    #tabla-descripciones, #tabla-descripciones thead, #tabla-descripciones tbody, 
+    #tabla-descripciones th, #tabla-descripciones td, #tabla-descripciones tr {
+        display: block;
+    }
+
+    /* Ocultar encabezados de tabla en pantallas intermedias y móviles */
+    #tabla-descripciones thead {
+        display: none;
+    }
+
+    /* Mostrar cada fila como un bloque */
+    #tabla-descripciones tbody tr {
+        margin-bottom: 15px;
+        border: 1px solid #ddd;
+        padding: 10px;
+        background: white;
+        border-radius: 5px;
+    }
+
+    /* Mostrar encabezado antes de cada valor en filas */
+    #tabla-descripciones td {
+        display: flex;
+        justify-content: space-between;
+        padding: 8px;
+        border-bottom: 1px solid #ddd;
+        position: relative;
+    }
+
+    #tabla-descripciones td:before {
+        content: attr(data-label); /* Toma el nombre del encabezado */
+        font-weight: bold;
+        text-transform: uppercase;
+        color: #003366;
+        margin-right: 10px; /* Espacio entre el título y el valor */
+    }
+
+    /* Evitar que el último elemento tenga un borde inferior */
+    #tabla-descripciones td:last-child {
+        border-bottom: none;
+    }
+}
+
+/* ✅ ESTILOS RESPONSIVOS GENERALES */
+@media screen and (max-width: 1024px) {
+    .form-row, .form-row2 {
+        flex-direction: column;
+    }
+
+    .form-container .descripcion-item {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+
+    .archivo-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    /* Ajustes en el footer */
+    .footer-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .footer-links nav ul {
+        display: flex;
+        flex-direction: column;
+    }
+}
+
+@media screen and (max-width: 768px) {
+    /* Para tablets y celulares */
+    .form-container {
+        padding: 12px;
+    }
+
+    .form-container h1 {
+        font-size: 1.8rem;
+    }
+
+    .descripcion-item {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+    }
+
+    .archivo-item {
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+    }
+
+    .archivo-boton {
+        width: 100%;
+        text-align: center;
+    }
+
+    .footer-container {
+        text-align: center;
+        padding: 15px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    /* Ajustes específicos para móviles */
+    .form-container {
+        padding: 8px;
+    }
+
+    .form-container h1 {
+        font-size: 1.5rem;
+    }
+
+    .form-container label {
+        font-size: 12px;
+    }
+
+    .form-container button {
+        padding: 7px;
+        font-size: 12px;
+    }
+
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+        font-size: 12px;
+        padding: 6px;
+    }
+    .form-container input[type="text"]{
+        font-size: 12px;
+    }
+    .form-container .descripcion-item textarea{
+        font-size: 12px;
+    }
+
+    /* Ajustes adicionales en el footer para móviles */
+    .footer-container {
+        padding: 10px;
+    }
+
+    .footer-links nav ul {
+        flex-direction: column;
+        gap: 8px;
+    }
+    .form-container .horario-item label,
+    .form-container .incidencia-item label,
+    .form-container .descripcion-item label{
+        font-size: 12px;
+    }
+}

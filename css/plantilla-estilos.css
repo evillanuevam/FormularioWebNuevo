@@ -1,0 +1,697 @@
+@font-face {
+    font-family: 'Fugaz One';
+    src: url('../fonts/FugazOne-Regular.ttf') format('truetype');
+}
+
+@font-face {
+    font-family: 'Oswald';
+    src: url('../fonts/Oswald-VariableFont_wght.ttf') format('truetype');
+}
+/*********************ESTILOS GENERALES PARA LA PAGINA*****************/
+
+
+#plantilla-aena {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #1a2732;
+    background-color: #fff;
+    overflow-x: hidden;
+}
+
+.header {
+    background-color: #1a2732;
+    padding: 10px 20px;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+    position: fixed; /* Cambiar de relative a fixed */
+    top: 0; /* Fijarlo en la parte superior de la ventana */
+    left: 0;
+    z-index: 10; /* Mantenerlo sobre otros elementos */
+    transition: background-color 0.3s ease;
+    height: 85px;
+}
+
+
+.header-container {
+    display: flex;
+    justify-content: space-between; /* Distribuye los elementos */
+    align-items: center;
+    width: 100%;
+    height: 100%; /* Ocupa toda la altura del header */
+    box-sizing: border-box;
+}
+
+/* Contenedor del logo */
+.header-left {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre el logo y el texto */
+    flex: 1; /* Permite que este contenedor ocupe más espacio */
+    padding-left: 150px; /* Mueve todo el contenido hacia la derecha */
+}
+
+.header-logo {
+    height: 60px;
+    margin-right: 15px;
+}
+
+.header-text {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 18px; /* Ajusta el tamaño según el diseño */
+    font-weight: 300; /* Negrita si es necesario */
+}
+
+.language-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 12px; /* Ajusta el espaciado interno */
+    border-radius: 5px; /* Bordes redondeados */
+    transition: all 0.3s ease;
+    box-shadow: none; /* Sin sombra por defecto */
+}
+
+/* Cuando el encabezado tiene fondo verde */
+.header-green .language-button {
+    background-color: #fff; /* Fondo blanco */
+    color: #1a2732; /* Texto oscuro */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Sombra */
+    height: 100%; /* Ocupa toda la altura del header */
+    padding: 0 18px; /* Ajusta el padding horizontal */
+    display: flex;
+    align-items: center; /* Centra verticalmente el contenido */
+    border-radius: 0; /* Elimina bordes redondeados */
+}
+
+
+.language-bar {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    top: calc(100% + 0px); /* Posición debajo del botón */
+    width: 70%; /* Ocupa todo el ancho del header */
+    background-color: #fff; /* Fondo blanco */
+    padding: 10px 0; /* Espaciado vertical */
+    z-index: 1000;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra */
+}
+
+.language-bar.visible {
+    display: flex; /* Mostrar en fila */
+    justify-content: space-around; /* Espaciado entre opciones */
+    align-items: center;
+}
+
+.language-option {
+    text-decoration: none;
+    color: #1a2732;
+    font-size: 12px;
+    font-weight: bold; /* Ajuste por defecto */
+    padding: 5px 10px;
+    transition: all 0.3s ease;
+    position: relative; /* Para el subrayado */
+}
+
+.language-option:hover {
+    color: #a0d911; /* Cambia el color al pasar el ratón */
+}
+
+.language-option:hover,
+.language-option.active {
+    font-weight: bold; /* Negrita al estar activo o al pasar el mouse */
+    
+}
+
+.language-option.selected::after {
+    content: '';
+    display: block;
+    height: 3px; /* Aumenta el grosor del subrayado */
+    width: 100%; /* Ajusta el ancho del subrayado */
+    background-color: #a0d911; /* Color del subrayado */
+    margin: 0 auto; /* Centrar subrayado */
+    transition: all 0.3s ease;
+}
+
+/* Asegura que el contenedor del botón tenga posición relativa */
+.language-dropdown {
+    display: flex;
+    flex: 1; /* Permite que el contenedor del idioma ocupe espacio proporcional */
+    align-items: stretch; /* Asegura que el botón ocupa toda la altura del header */
+    height: 130%; /* Igual que el header */
+    position: relative; /* Para que el menú de idiomas se ancle correctamente */
+    justify-content: flex-end; /* Alinea el botón a la derecha */
+    padding-right: 20px; /* Agrega un poco de espacio a la derecha */
+    margin-right: 200px; /* Ajusta la distancia hacia la izquierda */
+}
+
+.header-green {
+    background-color: #a0d911;
+}
+
+/* Transiciones generales */
+.header,
+.language-bar {
+    transition: all 0.3s ease;
+}
+
+/* Cambia el color del logo y del texto */
+.header.header-green .header-text {
+    color: #1a2732; /* Texto más oscuro */
+}
+
+/*la linea separador de texto y el logo*/
+.separator {
+    width: 1px;
+    height: 30px; /* Ajusta según sea necesario */
+    background-color: #fff; /* Blanco por defecto */
+    margin: 0 10px; /* Espaciado entre la línea y los textos */
+    transition: background-color 0.3s ease; /* Suaviza la transición */
+}
+
+.header-green .separator {
+    background-color: #1a2732; /* Cambia a oscuro cuando el fondo es verde */
+}
+
+.header-line-and-text {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Espacio entre la línea y el texto */
+}
+
+
+/*********************************** Pie de página *********************************/
+/* Para garantizar que el footer quede al final de la página */
+
+
+.footer {
+    position: relative;
+    width: 100%;
+    bottom: 0;
+    background-color: #1a2732;
+    color: #fff;
+    padding: 20px 10px;
+    text-align: center;
+    font-size: 12px;
+    z-index: 10; /* Mantiene el footer sobre otros elementos */
+    margin-bottom: 50px;
+}
+
+/* Contenedor general del footer */
+.footer-container {
+    justify-content: space-between; /* Distribuir enlaces y cuadro a los extremos */
+    align-items: flex-start; /* Alinea verticalmente al inicio */
+    flex-wrap: wrap; /* Permitir que se acomode en varias filas si es necesario */
+    gap: 20px;
+    padding: 10px;
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+/* Redes sociales ajustadas */
+.footer-social {
+    display: flex; /* Activa flexbox para el contenedor */
+    justify-content: flex-end; /* Empuja el contenido hacia la derecha */
+    width: 100%; /* Asegura que ocupe todo el ancho disponible */
+}
+
+/* Redes sociales */
+.footer-social .social-box {
+    display: flex; /* Activa Flexbox */
+    padding: 15px;
+    border-radius: 8px; /* Bordes redondeados */
+    text-align: center; /* Centrar contenido */
+    margin-left: auto; /* Empujar hacia la derecha */
+}
+
+.footer-social .social-box p {
+    margin-bottom: 10px;
+    margin-right: 10px;
+    color: #fff;
+    font-size: 16px;
+}
+
+/* Íconos de redes sociales */
+.footer-social .social-icons {
+    display: flex;
+    gap: 15px; /* Espacio entre los recuadros */
+    justify-content: center;
+}
+
+.footer-social .social-item {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espacio entre ícono y texto */
+    border: 2px solid #a0d911; /* Borde verde */
+    padding: 8px 12px; /* Espaciado interno */
+    border-radius: 6px; /* Bordes redondeados */
+    color: #fff;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    cursor: pointer;
+}
+
+.footer-social .social-item i {
+    font-size: 20px;
+    color: #a0d911;
+}
+
+.footer-social .social-item span {
+    font-size: 14px;
+    font-weight: bold;
+    color: #fff;
+}
+
+/* Efecto hover en cada recuadro */
+.footer-social .social-item:hover {
+    background-color: #a0d911; /* Fondo verde al pasar el cursor */
+    color: #0f1c24; /* Texto oscuro */
+    transform: scale(1.1); /* Ligeramente más grande */
+}
+
+.footer-social .social-item:hover i {
+    color: #0f1c24; /* Ícono oscuro */
+}
+
+
+/* linea horizontal divisoria */
+.footer-divider {
+    border-top: 1px solid #fff; /* Color de la línea */
+    margin: 15px 0; /* Espaciado arriba y abajo */
+    width: 100vw; /* Ocupa todo el ancho del viewport */
+    position: absolute; /* Asegura que esté dentro del flujo */
+    left: 0; /* Asegura que comience desde el borde izquierdo */
+
+}
+
+/* Bloque de enlaces y copyright */
+.footer-links-copyright {
+    display: flex;
+    justify-content: space-between; /* Espaciado entre enlaces y copyright */
+    align-items: center; /* Centrar verticalmente */
+    width: 100%; /* Asegura que el contenedor ocupe todo el ancho */
+    gap: 20px; /* Espacio entre elementos */
+    margin-top: 40px; 
+   
+}
+
+/* Enlaces */
+.footer-links {
+    text-align: left; /* Alinear a la izquierda */
+    flex: 1; /* Ocupa el espacio restante */
+
+}
+
+/* Copyright */
+.footer-copyright {
+    text-align: right; /* Alinear a la derecha */
+    color: #a0d911;
+    font-weight: normal;
+    margin-right: 15px;
+    font-size: 15px;
+}
+
+.footer-links nav ul {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    margin: 0;
+}
+
+.footer-links nav ul li a {
+    text-decoration: none;
+    color: #fff;
+    font-size: 14px;
+    font-weight: medium; /* Cambia el grosor a negrita */
+    font-family: Arial, sans-serif; /* Mantén tu fuente original */
+    transition: color 0.3s ease;
+}
+
+.footer-links nav ul li a:hover {
+    color: #a0d911; /* Cambia el color al pasar el cursor */
+}
+
+
+/**************** Línea verde dinámica ********/
+.scroll-progress {
+    position: fixed;
+    bottom: 50px;
+    left: 0;
+    width: 0%;
+    height: 5px;
+    background-color: #a0d911;
+    z-index: 9;
+    transition: width 0.1s ease-in-out;
+}
+
+
+/* Botón SUBIR */
+.scroll-to-top {
+    font-family: light;
+    height: 50px;
+    position: fixed;
+    bottom: 0; /* Posicionarlo en la parte inferior */
+    left: 0; /* Alinearlo al inicio */
+    width: 100%; /* Que ocupe todo el ancho */
+    background-color: #1a2732; /* Fondo */
+    color: #90ce00; /* Texto blanco */
+    text-align: center; /* Centrar el contenido */
+    font-size: 12px; /* Tamaño del texto */
+    text-decoration: none; /* Quitar subrayado */
+    z-index: 1000; /* Para que esté encima de otros elementos */
+    padding: 0px 0; /* Ajusta para eliminar el espacio vertical extra */
+    transition: opacity 0.3s ease; /* Suavidad en la transición de visibilidad */
+    opacity: 1; /* Visible por defecto */
+    overflow: hidden; /* Evitar que el contenido se desborde */
+}
+
+.scroll-to-top.hidden {
+    opacity: 0; /* Ocultar */
+    transform: translateY(20px); /* Desplazar ligeramente hacia abajo */
+    pointer-events: none; /* Evitar clics mientras está oculto */
+}
+
+/* Flecha en subir*/
+.scroll-to-top::before {
+    content: "↑"; /* Flecha */
+    display: block; /* Mostrar como un bloque separado */
+    font-size: 12px; /* Tamaño de la flecha */
+    margin-bottom: 2px; /* Espaciado entre flecha y texto */
+    margin-top: 5px;
+}
+
+/* Efecto hover en Subir*/
+.scroll-to-top:hover {
+    font-weight: bold; /* Poner el texto en negrita */
+    color: #a0d911; /* Cambiar el color del texto al pasar el cursor (opcional) */
+    transition: all 0.3s ease; /* Suavizar la transición */
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+/* estilo para el boton de barra lateral*/
+.toggle-button {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1.5rem;
+    cursor: pointer;
+    position: absolute;
+    top: 15px;
+    left: 15px;
+    z-index: 2000; /* Por encima de otros elementos */
+}
+
+.toggle-button:focus {
+    outline: none;
+}
+
+/************************************* ESRILOS DE LA BARRA LATERAL *************************************/
+
+/* Estilos específicos para main-content */
+.main-content {
+    height: 100%; /* Altura completa de la ventana */
+    margin: 0;
+    padding: 0;
+
+}
+
+/* Estilos del encabezado */
+.index-header {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.index-header-title {
+    font-family: 'Fugaz One', sans-serif;
+    font-size: 3rem;
+    color: white;
+    text-transform: uppercase;
+    margin: 0;
+    position: relative;
+}
+
+.index-header-title i {
+    color: #ffffff;
+    font-size: 2.5rem;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+.index-header-subtitle {
+    font-family: 'Oswald', sans-serif;
+    font-size: 1.5rem;
+    color: #8c8c8c;
+    display: block;
+    margin-top: -12px;
+    text-transform: uppercase;
+    text-align: right;
+}
+
+/* Estilos del cuerpo */
+.index-body {
+    font-family: 'Fugaz One', sans-serif;
+    color: #87807f;
+    margin: 0;
+    padding: 0;
+    background-color: #000;
+}
+
+.index-sidebar {
+    position: fixed;
+    width: 240px;
+    height: 100vh;
+    background: linear-gradient(180deg, #06080bde, #2b3c489c);
+    flex-direction: column;
+    padding: 20px;
+    margin-top: 85px;
+    transform: translateX(-100%);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1; /*para que este debajo de del pie de pagina*/
+   
+}
+
+/*funcionalidad de barra lateral*/
+.index-sidebar.active {
+    transform: translateX(0);
+}
+
+.index-sidebar h1 {
+    color: #fff;
+    font-size: 2rem;
+    margin-bottom: 40px;
+}
+
+.toggle-button i {
+    font-size: 24px; /* Tamaño más grande */
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+.toggle-button i.active {
+    transform: rotate(90deg); /* Rota 90 grados */
+    color: #a0d911;
+}
+
+.toggle-button i:hover {
+    color: #a0d911; /* Verde de AENA */
+}
+
+.index-sidebar a {
+    font-family: "Oswald", serif;
+    font-size: 1.1rem;
+    font-weight: 480;
+    color: #fff;
+    text-decoration: none;
+    margin: 15px 0px; /*ancho de los textos*/
+    display: block;
+    transition: color 0.3s, background-color 0.3s, padding 0.3s;
+    line-height: 0.5;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    letter-spacing: 1px;
+    border-radius: 5px;
+    padding: 12px 10px;
+    position: relative;
+    transition: padding-left 0.3s ease;
+    /*box-shadow: 3px 0 10px rgba(0, 0, 0, 0.1);*/
+    /* Control de desbordamiento */
+    white-space: nowrap;
+    /*overflow: hidden;/*ocutlar textos grandes*/
+    text-overflow: ellipsis;
+    box-sizing: border-box; /* Evita cambios de tamaño inesperados */
+}
+
+.index-sidebar a:hover {
+    transform: scale(1.1);
+    box-shadow: 0px 8px 20px rgba(160, 217, 17, 0.7); /* Sombra con el tono exacto */
+    background: linear-gradient(90deg, rgba(160, 217, 17, 0.9), rgba(140, 190, 15, 0.9), rgba(120, 160, 10, 0.9)); /* Gradiente basado en #a0d911 */
+    color: #ffffff;
+    border-radius: 8px;
+    padding: 12px 10px; /* Se mantiene igual al estado normal */
+    position: relative;
+    padding-left: 35px;
+    transition: all 0.1s ease-in-out;
+    /*momentaneo*/
+    overflow: visible;
+    width: auto; /* Permite que se expanda el texto */
+    /*min-width: 70%;/*modificar el hover*/
+}
+
+.index-sidebar a:hover::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 5px;
+    height: 100%;
+    /*background: #3b500798; /* Línea lateral en el icono de avion*/
+    border-radius: 0 5px 5px 0; 
+}
+
+.index-sidebar a:hover::after {
+    content: '\f072';
+    font-family: "Font Awesome 5 Free";
+    font-weight: 900;
+    color: #ffffff;
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 1rem;
+}
+
+.index-sidebar .footer {
+    color: #9a9898;
+    font-size: 0.9rem;
+    text-align: left;
+    margin-bottom: 10px;
+    margin-top: auto;
+    padding: 15px 0;
+}
+
+.index-sidebar .footer p {
+    margin-top: 10px;
+}
+
+.index-content {
+    flex-grow: 1; /* Permite que el contenido se expanda automáticamente */
+    transition: margin-left 0.3s ease-in-out, width 0.3s ease-in-out;
+    display: flex;
+    justify-content: center; /* Centra horizontalmente */
+    align-items: flex-start; /* Mantiene la parte superior alineada */
+    padding: 50px;
+    min-height: 100vh;
+    background-size: contain;
+}
+
+/* Cuando la barra lateral está activa- moverlo a la derecha */
+.index-sidebar.active ~ .index-content {
+    margin-left: 250px; /* Desplaza el contenido cuando la barra está activa */
+    width: calc(100% - 350px); /* Ajusta el tamaño */
+}
+
+
+
+.index-content h1 {
+    color: #fff;
+    font-size: 3rem;
+    margin-bottom: 10px;
+}
+
+.index-content p {
+    color: #ddd;
+    font-size: 1.2rem;
+}
+
+.index-content h1,
+.index-content p {
+    position: relative;
+    z-index: 2;
+}
+
+
+/*ESTILOS SUB PESTAÑAS DE BARRA LATERAL*/
+
+
+/* Submenú */
+.submenu {
+    position: relative;
+}
+
+/* Contenedor del submenú */
+.submenu-content {
+    display: none; /* Oculto por defecto */
+    position: absolute;
+    left: 100%; /* Alineado a la derecha */
+    top: 0;
+    margin-left: -10px; /* Ajuste fino */
+    background: #1d2528;/* Fondo oscuro */
+    min-width: 200px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+    border-radius: 3px;
+    padding: 5px 0;
+}
+
+/* Flecha indicadora en la caja negra */
+.submenu-content::before {
+    content: "";
+    position: absolute;
+    top: 10px; /* Ajusta la posición vertical de la flecha */
+    left: -12px; /* La hace salir desde la izquierda del submenú */
+    width: 0;
+    height: 0;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
+    border-right: 12px solid #1d2528; /* Color igual al fondo del submenú */
+}
+
+
+/* Elementos dentro del submenú */
+.submenu-content a {
+    padding: 10px 15px;
+    display: flex;
+    align-items: center;
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    position: relative;
+    transition: color 0.2s ease-in-out;
+}
+
+/* Hover: solo resalta el texto y agrega la línea verde  */
+.submenu-content a:hover {
+    color: #a0d911 !important; /* Verde brillante en hover */
+    background: none !important; /* Evita que el fondo cambie */
+    box-shadow: none !important; /* Elimina cualquier resplandor */
+    text-shadow: none !important; /* Evita cualquier brillo */
+}
+
+
+/* Muestra el submenú al pasar el mouse */
+.submenu:hover .submenu-content {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+
+/* Mantiene el hover activo en la pestaña principal mientras el submenú está abierto */
+.submenu:hover > a {
+    background: linear-gradient(90deg, rgba(160, 217, 17, 0.9), rgba(140, 190, 15, 0.9), rgba(120, 160, 10, 0.9)) !important;
+    color: white !important;
+    border-radius: 8px;
+    padding-left: 35px;
+    width: 100%;
+}
+
+
+/*CSS RESPONSIBO PARA LA PLANTILLA ENCABEZADO Y PIE DE PAGINA*/
+/* Estilos responsivos para móviles y tablets */
+
+
+

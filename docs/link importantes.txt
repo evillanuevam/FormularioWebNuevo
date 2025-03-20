@@ -1,0 +1,2 @@
+jquery-3.6.0.min.js y mdtimepicker.min.js son librerias externas descargadas para poder utilizar el icono del reloj en todos los navegadores
+porque el tipico timer esta fallando para el navegador mozila

@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formulario Parte de Equipos</title>
+    <link rel="stylesheet" href="css/plantilla-estilos.css">
+    <link rel="stylesheet" href="css/global-formularios-estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="images/favico.svg" type="image/x-icon">
+
+</head>
+<body id="plantilla-aena">
+    <!-- Encabezado -->
+    <header class="header header-blue" id="header">
+        <div class="header-container">
+            <!-- Botón de alternar barra lateral -->
+            <button id="toggle-sidebar" class="toggle-button" title="Abrir/Cerrar menú">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="header-left">
+                <img src="images/aena.svg" alt="Logo AENA" class="header-logo">
+                <div class="header-line-and-text">
+                    <div class="separator"></div> <!-- Línea -->
+                    <span id="header-text" class="header-text">Formulario de Partes</span>
+                </div>
+            </div>
+            <div class="language-dropdown">
+                <button class="language-button">
+                    <i class="fa fa-comment"></i> ES <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="language-bar hidden" id="languageBar">
+                    <a href="#" class="language-option selected">ESPAÑOL</a>
+                    <a href="#" class="language-option">ENGLISH</a>
+                    <a href="#" class="language-option">CATALÀ</a>
+                    <a href="#" class="language-option">EUSKARA</a>
+                    <a href="#" class="language-option">GALEGO</a>
+                    <a href="#" class="language-option">VALENCIÀ</a>
+                </div>
+            </div>
+        </div>
+    </header>  
+
+    <!-- Contenido principal -->
+    <main class="main-content" >
+        <!-- barra lateral -->
+        <div class="index-sidebar">
+            <div class="index-header">
+                <h1 class="index-header-title">
+                    <img src="images/airplane_animation.gif" alt="Logo AENA" class="header-logo"> FORMULARIOS 
+                    <span class="index-header-subtitle">DE PARTES</span>
+                </h1>
+            </div>   
+            <div class="menu">
+                <a href="administrar.html">Administrar</a>
+                <a href="parte-servicio.html">Parte de Servicios</a>
+
+                <!-- Menú desplegable -->
+                <div class="submenu">
+                    <a href="#" class="submenu-toggle">Parte de Patrullas ▾</a>
+                    <div class="submenu-content">
+                        <a href="patrullas-perimetro.html">Perímetro</a>
+                        <a href="patrullas-otras-zonas.html">Otras Zonas</a>
+                        <a href="patrullas-acreditaciones.html">Acreditaciones</a>
+                        <a href="patrullas-control-indigentes.html">Control de Indigentes</a>
+                        <a href="patrullas-alarmas-puertas.html">Alarmas y Puertas</a>
+                    </div>
+                </div>
+
+                <a href="parte-equipos.html">Parte de Equipos</a>
+                <a href="inspeccion-vehiculos.html">Inspección de Vehículos</a>
+                <a href="inspeccion-suministros.html">Inspección de Suministros</a>
+                <a href="#">Contáctanos</a>
+                <a href="#" id="logout">Salir</a>
+
+            </div>
+        </div>
+        <!-- formulario -->
+        <div class="index-content">
+            <div class="form-container">
+                <h1 id="titulo-formulario">Test de Verificación - Equipos Detectores</h1>
+                <form id="formulario-verificacion">
+                    <!-- Selector de tipo de test -->
+                    <div class="form-group">
+                        <label for="tipo-test">Tipo de Test:</label>
+                        <select id="tipo-test" name="tipo-test" onchange="cambiarTitulo()" required>
+                            <option value="" disabled selected>Seleccione un tipo de test</option>
+                            <option value="ETD">Equipos detectores de trazas explosivos (ETD)</option>
+                            <option value="LEDS">Equipos detectores de líquidos (LEDS)</option>
+                        </select>
+                    </div>
+                    <!-- Aeropuertos -->
+                    <div class="form-group">
+                        <label for="aeropuerto">Aeropuerto:</label>
+                        <select id="aeropuerto" name="aeropuerto" required>
+                            <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            <option value="ABC - Albacete">ABC - Albacete</option>
+                            <option value="ACE - Lanzarote">ACE - Lanzarote</option>
+                            <option value="AEI - Algeciras">AEI - Algeciras</option>
+                            <option value="AGP - Málaga-Costa del Sol">AGP - Málaga-Costa del Sol</option>
+                            <option value="ALC - Alicante-Elche">ALC - Alicante-Elche</option>
+                            <option value="BCN - Barcelona-El Prat">BCN - Barcelona-El Prat</option>
+                            <option value="BIO - Bilbao">BIO - Bilbao</option>
+                            <option value="BJZ - Badajoz">BJZ - Badajoz</option>
+                            <option value="EAS - San Sebastián">EAS - San Sebastián</option>
+                            <option value="FUE - Fuerteventura">FUE - Fuerteventura</option>
+                            <option value="GMZ - La Gomera">GMZ - La Gomera</option>
+                            <option value="GRO - Girona-Costa Brava">GRO - Girona-Costa Brava</option>
+                            <option value="HSK - Huesca-Pirineos">HSK - Huesca-Pirineos</option>
+                            <option value="IBZ - Ibiza">IBZ - Ibiza</option>
+                            <option value="LCG - A Coruña">LCG - A Coruña</option>
+                            <option value="LEI - Almería">LEI - Almería</option>
+                            <option value="LEJ - León">LEJ - León</option>
+                            <option value="LPA - Gran Canaria">LPA - Gran Canaria</option>
+                            <option value="MAD - Madrid-Barajas">MAD - Madrid-Barajas</option>
+                            <option value="MAH - Menorca">MAH - Menorca</option>
+                            <option value="MLN - Melilla">MLN - Melilla</option>
+                            <option value="ODB - Córdoba">ODB - Córdoba</option>
+                            <option value="OVD - Asturias">OVD - Asturias</option>
+                            <option value="PMI - Palma de Mallorca">PMI - Palma de Mallorca</option>
+                            <option value="PNA - Pamplona">PNA - Pamplona</option>
+                            <option value="REU - Reus">REU - Reus</option>
+                            <option value="RGS - Burgos">RGS - Burgos</option>
+                            <option value="RJL - Logroño-Agoncillo">RJL - Logroño-Agoncillo</option>
+                            <option value="SCQ - Santiago de Compostela">SCQ - Santiago de Compostela</option>
+                            <option value="SDR - Santander">SDR - Santander</option>
+                            <option value="SLM - Salamanca">SLM - Salamanca</option>
+                            <option value="SPC - La Palma">SPC - La Palma</option>
+                            <option value="SVQ - Sevilla">SVQ - Sevilla</option>
+                            <option value="TFN - Tenerife Norte">TFN - Tenerife Norte</option>
+                            <option value="TFS - Tenerife Sur">TFS - Tenerife Sur</option>
+                            <option value="VDE - El Hierro">VDE - El Hierro</option>
+                            <option value="VGO - Vigo">VGO - Vigo</option>
+                            <option value="VIT - Vitoria">VIT - Vitoria</option>
+                            <option value="VLC - Valencia">VLC - Valencia</option>
+                            <option value="VLL - Valladolid">VLL - Valladolid</option>
+                            <option value="XRY - Jerez de la Frontera">XRY - Jerez de la Frontera</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="fecha">Fecha:</label>
+                        <input type="date" id="fecha" name="fecha" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="realizado-por">Realizado por:</label>
+                        <input type="text" id="nombre-vigilante" name="realizado-por" placeholder="Nombre del vigilante" required>
+                    </div>
+                    <!-- Tabla de equipos -->
+                    <div class="form-group">
+                        <label>Detalles de los Equipos:</label>
+                        <table id="tabla-equipos">
+                            <thead>
+                                <tr>
+                                    <th>Equipo</th>
+                                    <th>Marca/Modelo</th>
+                                    <th>Control de Seguridad</th>
+                                    <th>N° de Serie</th>
+                                    <th>Tipo</th>
+                                    <th>Verificación</th>
+                                    <th>Comentarios</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><input type="text" name="equipo[]" required title="Ingrese nombre del equipo" aria-label="equipo"></td>
+                                    <td><input type="text" name="marca[]" required title="Ingrese la la marca" aria-label="marca"></td>
+                                    <td>
+                                        <select name="control[]" required title="Seleccion uno" aria-label="control de seguridad">
+                                            <option value="" disabled selected>Seleccione...</option>
+                                            <option value="PAX">PAX</option>
+                                            <option value="Personal">Personal</option>
+                                            <option value="Mixto">Mixto</option>
+                                        </select>
+                                    </td>
+                                    <td><input type="text" name="serie[]" required title="Ingrese Nº de Serie" aria-label="Serie"></td>
+                                    <td>
+                                        <div class="radio-group">
+                                            <input type="radio" name="tipo[]" value="A" required title="Seleccione el tipo" aria-label="Opción A"> A
+                                            <input type="radio" name="tipo[]" value="B" aria-label="Opción B"> B
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="radio-group">
+                                            <input type="radio" name="verificacion[]" value="OK" required title="Seleccione uno" aria-label="Opción OK"> Ok
+                                            <input type="radio" name="verificacion[]" value="NO_OK" aria-label="Opción No OK"> No Ok
+                                        </div>
+                                    </td>
+                                    <td><input type="text" name="comentarios[]" title="Escriba un comentario" aria-label="comentario"></td>
+                                    <td><button type="button" class="btn-eliminar" onclick="eliminarFila(this)" title="Eliminar fila"><i class="fa fa-trash"></i></button></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button type="button" class="btn-agregar" onclick="agregarFila()" title="Agregar nueva fila">
+                            <i class="fas fa-plus-circle"></i> Agregar Fila
+                        </button>
+                    </div>
+
+                    <button type="submit" class="btn-enviar"> <i class="fas fa-paper-plane"></i>Enviar Verificación</button>
+                </form>
+            </div>        
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Redes sociales -->
+            <div class="footer-social">
+                <div class="social-box">
+                    <p>Síguenos en:</p>
+                    <div class="social-icons">
+                        <div class="social-item">
+                            <a href="https://twitter.com/aena" target="_blank" aria-label="Twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="http://www.facebook.com/Aena.es" target="_blank" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="https://www.instagram.com/aena.es/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="https://www.linkedin.com/company/aena" target="_blank" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+            <div class="footer-divider"></div> <!-- Línea divisoria -->
+            <!-- Enlaces y copyright -->
+            <div class="footer-links-copyright">
+                <div class="footer-links">
+                    <nav>
+                        <ul>
+                            <li><a href="#">Mapa Web</a></li>
+                            <li><a href="#">Contacto</a></li>
+                            <li><a href="#">Cookies</a></li>
+                            <li><a href="#">Aviso Legal</a></li>
+                            <li><a href="#">Política de Privacidad</a></li>
+                            <li><a href="#">Accesibilidad</a></li>
+                            <li><a href="#">Trámites y Reclamaciones</a></li>
+                            <li><a href="#">Canal de Denuncias</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="footer-copyright">
+                    <p>Copyright © 2025 Aena</p>
+                </div>
+                <div class="scroll-progress" id="scrollProgress"></div> <!-- Línea verde dinámica -->
+                <a href="#top" class="scroll-to-top">SUBIR</a>      
+            </div>
+        </div>
+    </footer>
+
+     <!-- llamadas a scripts -->
+    <script src="js/utils/config-encabezado-pie.js"></script>
+    <script src="js/utils/config-fecha-hora.js"></script>
+    <script src="js/parte-equipos-detectores.js"></script>
+    <script src="js/api/auth.js"></script> <!-- token y authentication-->
+      
+</body>
+</html>

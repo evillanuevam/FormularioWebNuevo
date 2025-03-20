@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Register</title>
+    <link rel="stylesheet" href="css/login-estilos.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"> 
+    <link rel="icon" href="images/favico.svg" type="image/x-icon">  
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="form-box">
+            <!-- Sección Izquierda (Logo y Botones) -->
+            <div class="left-section">
+                <div class="logo-container">
+                    <img src="images/aena.png" alt="Logo">
+                </div>
+                <div class="button-container">
+                    <button class="toggle-btn" onclick="mostrarLogin()">
+                        <i class="fa-solid fa-sign-in-alt"></i> LOGIN
+                    </button>
+                    <button class="toggle-btn" onclick="mostrarRegistro()">
+                        <i class="fa-solid fa-user-plus"></i> REGISTER
+                    </button> 
+                </div>
+            </div>
+
+            <!-- Sección Derecha (Formularios) -->
+            <div class="right-section">
+                <!-- Formulario de Login -->
+                <form id="login-form">
+                    <h2>Login</h2>
+                    <div class="input-group">
+                        <i class="fa-solid fa-plane"></i>
+                        <select id="aeropuerto" title="Seleccione un Aeropuerto" required>
+                            <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            <option value="ABC - Albacete">ABC - Albacete</option>
+                            <option value="ACE - Lanzarote">ACE - Lanzarote</option>
+                            <option value="AEI - Algeciras">AEI - Algeciras</option>
+                            <option value="AGP - Málaga-Costa del Sol">AGP - Málaga-Costa del Sol</option>
+                            <option value="ALC - Alicante-Elche">ALC - Alicante-Elche</option>
+                            <option value="BCN - Barcelona-El Prat">BCN - Barcelona-El Prat</option>
+                            <option value="BIO - Bilbao">BIO - Bilbao</option>
+                            <option value="BJZ - Badajoz">BJZ - Badajoz</option>
+                            <option value="EAS - San Sebastián">EAS - San Sebastián</option>
+                            <option value="FUE - Fuerteventura">FUE - Fuerteventura</option>
+                            <option value="GMZ - La Gomera">GMZ - La Gomera</option>
+                            <option value="GRO - Girona-Costa Brava">GRO - Girona-Costa Brava</option>
+                            <option value="HSK - Huesca-Pirineos">HSK - Huesca-Pirineos</option>
+                            <option value="IBZ - Ibiza">IBZ - Ibiza</option>
+                            <option value="LCG - A Coruña">LCG - A Coruña</option>
+                            <option value="LEI - Almería">LEI - Almería</option>
+                            <option value="LEJ - León">LEJ - León</option>
+                            <option value="LPA - Gran Canaria">LPA - Gran Canaria</option>
+                            <option value="MAD - Madrid-Barajas">MAD - Madrid-Barajas</option>
+                            <option value="MAH - Menorca">MAH - Menorca</option>
+                            <option value="MLN - Melilla">MLN - Melilla</option>
+                            <option value="ODB - Córdoba">ODB - Córdoba</option>
+                            <option value="OVD - Asturias">OVD - Asturias</option>
+                            <option value="PMI - Palma de Mallorca">PMI - Palma de Mallorca</option>
+                            <option value="PNA - Pamplona">PNA - Pamplona</option>
+                            <option value="REU - Reus">REU - Reus</option>
+                            <option value="RGS - Burgos">RGS - Burgos</option>
+                            <option value="RJL - Logroño-Agoncillo">RJL - Logroño-Agoncillo</option>
+                            <option value="SCQ - Santiago de Compostela">SCQ - Santiago de Compostela</option>
+                            <option value="SDR - Santander">SDR - Santander</option>
+                            <option value="SLM - Salamanca">SLM - Salamanca</option>
+                            <option value="SPC - La Palma">SPC - La Palma</option>
+                            <option value="SVQ - Sevilla">SVQ - Sevilla</option>
+                            <option value="TFN - Tenerife Norte">TFN - Tenerife Norte</option>
+                            <option value="TFS - Tenerife Sur">TFS - Tenerife Sur</option>
+                            <option value="VDE - El Hierro">VDE - El Hierro</option>
+                            <option value="VGO - Vigo">VGO - Vigo</option>
+                            <option value="VIT - Vitoria">VIT - Vitoria</option>
+                            <option value="VLC - Valencia">VLC - Valencia</option>
+                            <option value="VLL - Valladolid">VLL - Valladolid</option>
+                            <option value="XRY - Jerez de la Frontera">XRY - Jerez de la Frontera</option>
+                        </select>
+                        
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <input type="text" id="tip" placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <input type="text" id="rol-login" placeholder="Rol" title="No puede modificar su ROL" readonly>
+                    </div>
+                    <button type="submit" class="submit-btn">
+                        <i class="fa-solid fa-right-to-bracket"></i> Login
+                    </button>
+                    <div id="mensaje-login" style="display: none;margin-top: 10px ;padding: 10px; border-radius: 5px; text-align: center;"></div>
+                    
+                </form>
+
+                <!-- Formulario de Registro -->
+                <form id="register-form" class="hidden">
+                    <h2>Register</h2>
+                    
+                    <div class="input-group">
+                        <i class="fa-solid fa-plane"></i>
+                        <select title="Seleccione un Aeropuerto" required>
+                            <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            <option value="ABC - Albacete">ABC - Albacete</option>
+                            <option value="ACE - Lanzarote">ACE - Lanzarote</option>
+                            <option value="AEI - Algeciras">AEI - Algeciras</option>
+                            <option value="AGP - Málaga-Costa del Sol">AGP - Málaga-Costa del Sol</option>
+                            <option value="ALC - Alicante-Elche">ALC - Alicante-Elche</option>
+                            <option value="BCN - Barcelona-El Prat">BCN - Barcelona-El Prat</option>
+                            <option value="BIO - Bilbao">BIO - Bilbao</option>
+                            <option value="BJZ - Badajoz">BJZ - Badajoz</option>
+                            <option value="EAS - San Sebastián">EAS - San Sebastián</option>
+                            <option value="FUE - Fuerteventura">FUE - Fuerteventura</option>
+                            <option value="GMZ - La Gomera">GMZ - La Gomera</option>
+                            <option value="GRO - Girona-Costa Brava">GRO - Girona-Costa Brava</option>
+                            <option value="HSK - Huesca-Pirineos">HSK - Huesca-Pirineos</option>
+                            <option value="IBZ - Ibiza">IBZ - Ibiza</option>
+                            <option value="LCG - A Coruña">LCG - A Coruña</option>
+                            <option value="LEI - Almería">LEI - Almería</option>
+                            <option value="LEJ - León">LEJ - León</option>
+                            <option value="LPA - Gran Canaria">LPA - Gran Canaria</option>
+                            <option value="MAD - Madrid-Barajas">MAD - Madrid-Barajas</option>
+                            <option value="MAH - Menorca">MAH - Menorca</option>
+                            <option value="MLN - Melilla">MLN - Melilla</option>
+                            <option value="ODB - Córdoba">ODB - Córdoba</option>
+                            <option value="OVD - Asturias">OVD - Asturias</option>
+                            <option value="PMI - Palma de Mallorca">PMI - Palma de Mallorca</option>
+                            <option value="PNA - Pamplona">PNA - Pamplona</option>
+                            <option value="REU - Reus">REU - Reus</option>
+                            <option value="RGS - Burgos">RGS - Burgos</option>
+                            <option value="RJL - Logroño-Agoncillo">RJL - Logroño-Agoncillo</option>
+                            <option value="SCQ - Santiago de Compostela">SCQ - Santiago de Compostela</option>
+                            <option value="SDR - Santander">SDR - Santander</option>
+                            <option value="SLM - Salamanca">SLM - Salamanca</option>
+                            <option value="SPC - La Palma">SPC - La Palma</option>
+                            <option value="SVQ - Sevilla">SVQ - Sevilla</option>
+                            <option value="TFN - Tenerife Norte">TFN - Tenerife Norte</option>
+                            <option value="TFS - Tenerife Sur">TFS - Tenerife Sur</option>
+                            <option value="VDE - El Hierro">VDE - El Hierro</option>
+                            <option value="VGO - Vigo">VGO - Vigo</option>
+                            <option value="VIT - Vitoria">VIT - Vitoria</option>
+                            <option value="VLC - Valencia">VLC - Valencia</option>
+                            <option value="VLL - Valladolid">VLL - Valladolid</option>
+                            <option value="XRY - Jerez de la Frontera">XRY - Jerez de la Frontera</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Nombre" title="Ingresa tu Nombre" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Apellido 1" title="Ingresa tu Apellido 1 " required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user"></i>
+                        <input type="text" placeholder="Apellido 2" title="Ingresa tu Apellido 2"  required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-id-badge"></i>
+                        <input type="text" placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
+                    </div>
+                    <div class="input-group">
+                        <i class="fa-solid fa-user-shield"></i>
+                        <input type="text" id="rol-login" placeholder="Vigilante" title="No puede modificar su ROL" readonly >
+                    </div>
+                    <button id="registerButton" type="submit" class="submit-btn">
+                        <i class="fa-solid fa-user-check"></i> Sign Up
+                    </button>
+                    <div id="mensaje-registro"style="display: none;margin-top: 10px ;padding: 10px; border-radius: 5px; text-align: center;"></div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function mostrarRegistro() {
+            document.getElementById('login-form').classList.add('hidden');
+            document.getElementById('register-form').classList.remove('hidden');
+        }
+
+        function mostrarLogin() {
+            document.getElementById('register-form').classList.add('hidden');
+            document.getElementById('login-form').classList.remove('hidden');
+        }
+    </script>
+    <script src="js/utils/config-api-url.js"></script>
+    <script src="js/api/api-auth.js"></script>
+</body>
+</html>
