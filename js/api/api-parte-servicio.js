@@ -506,4 +506,25 @@ function formatFecha(fechaISO) {
 // ✅ Ejecutar la carga inicial
 document.addEventListener("DOMContentLoaded", cargarDescripcionesPorFecha);
 
+// ✅ Función para ocultar la tabla con botón de alternar
+document.addEventListener("DOMContentLoaded", function () {
+    const tabla = document.getElementById("tabla-descripciones");
+    const boton = document.getElementById("toggle-tabla");
 
+    // Asegurar que la tabla está oculta por defecto
+    tabla.style.display = "none";  
+    boton.textContent = "Mostrar Tabla";  // Cambiar el texto del botón
+
+    // ✅ Agregar evento para alternar entre mostrar y ocultar la tabla
+    boton.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        if (tabla.style.display === "none") {
+            tabla.style.display = "table"; 
+            boton.textContent = "Ocultar Tabla";
+        } else {
+            tabla.style.display = "none";
+            boton.textContent = "Mostrar Tabla";
+        }
+    });
+});
