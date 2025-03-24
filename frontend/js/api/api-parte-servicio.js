@@ -107,16 +107,84 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
+// ✅ Validar que las horas de descripción estén dentro del rango del turno
+function validarHorasDescripcionEnRango() {
+    const horaInicio = document.getElementById("horaInicio").value;
+    const horaFin = document.getElementById("horaFin").value;
+    const hoy = new Date().toISOString().split("T")[0];
+
+    if (!horaInicio || !horaFin) return true;
+
+    const inicio = new Date(`${hoy}T${horaInicio}`);
+    const fin = new Date(`${hoy}T${horaFin}`);
+
+    let esValido = true;
+
+    const horasDescripcion = document.querySelectorAll("input[name='hora-inicio']");
+
+    horasDescripcion.forEach(input => {
+        const horaValor = input.value;
+        if (!horaValor) return;
+
+        const horaDesc = new Date(`${hoy}T${horaValor}`);
+        if (horaDesc < inicio || horaDesc > fin) {
+            input.classList.add("hora-fuera-rango");
+            esValido = false;
+        } else {
+            input.classList.remove("hora-fuera-rango");
+        }
+    });
+
+    if (!esValido) {
+        alert("⚠️ Hay horas fuera del rango del turno. Corrígelas antes de enviar.");
+    }
+
+    return esValido;
+}
+
+// ✅ Validación en tiempo real al escribir hora
+document.addEventListener("input", function (event) {
+    if (event.target && event.target.matches("input[name='hora-inicio']")) {
+        const horaInput = event.target;
+        const hora = horaInput.value;
+        const horaInicio = document.getElementById("horaInicio").value;
+        const horaFin = document.getElementById("horaFin").value;
+
+        if (!hora || !horaInicio || !horaFin) return;
+
+        const [hDesc, mDesc] = hora.split(":").map(Number);
+        const [hIni, mIni] = horaInicio.split(":").map(Number);
+        const [hFin, mFin] = horaFin.split(":").map(Number);
+
+        const minutosDesc = hDesc * 60 + mDesc;
+        const minutosIni = hIni * 60 + mIni;
+        const minutosFin = hFin * 60 + mFin;
+
+        if (minutosDesc < minutosIni || minutosDesc > minutosFin) {
+            horaInput.style.border = "2px solid red";
+            horaInput.style.backgroundColor = "#ffe5e5";
+            horaInput.title = "⛔ Esta hora está fuera del horario del turno.";
+        } else {
+            horaInput.style.border = "";
+            horaInput.style.backgroundColor = "";
+            horaInput.title = "";
+        }
+    }
+});
+
+
 // ✅ Enviar el formulario
 document.getElementById("formulario").addEventListener("submit", async function (event) {
     event.preventDefault();
 
-    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value; // 🔹 Capturar correctamente la fecha
-    console.log("📌 FechaSeleccionada antes de enviar:", fechaSeleccionada); // 🔍 Verificar en consola
+    if (!validarHorasDescripcionEnRango()) return; // 🔒 Detener si hay errores
+
+    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
+    console.log("📌 FechaSeleccionada antes de enviar:", fechaSeleccionada);
 
     const parteServicio = {
-        fechaRegistro: new Date().toISOString(), // ✅ Mantiene la fecha y hora del sistema
-        fechaSeleccionada: fechaSeleccionada, // ✅ Guarda la fecha seleccionada sin hora
+        fechaRegistro: new Date().toISOString(),
+        fechaSeleccionada: fechaSeleccionada,
         horaInicio: document.getElementById("horaInicio").value,
         horaFin: document.getElementById("horaFin").value,
         materialControlado: obtenerMaterialControlado(),
@@ -144,7 +212,6 @@ document.getElementById("formulario").addEventListener("submit", async function 
         console.error("⚠️ Error al guardar:", error);
     }
 });
-
 
 // ✅ Obtener datos del usuario desde el token y normalizar caracteres especiales
 function obtenerUsuarioDatos() {
@@ -322,6 +389,7 @@ function resetearFormulario() {
     document.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
 }
 
+
 //************************************ MANEJO DE LA TABLA ***********************************************************/
 
 // ✅ Función para actualizar la tabla con nuevas descripciones
@@ -437,3 +505,5 @@ function formatFecha(fechaISO) {
 
 // ✅ Ejecutar la carga inicial
 document.addEventListener("DOMContentLoaded", cargarDescripcionesPorFecha);
+
+

@@ -254,6 +254,13 @@
     background-color: #FFCCCC !important; /* Rojo claro */
 }
 
+/* ✅ Estilo para marcar horas fuera del rango del turno */
+.hora-fuera-rango {
+    border: 2px solid red !important;
+    background-color: #ffe6e6 !important;
+}
+
+
 
 
 /*CSS para el formulario responsivo*/
