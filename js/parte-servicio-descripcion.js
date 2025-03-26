@@ -66,6 +66,10 @@ function agregarDescripcion() {
     });
 
     container.appendChild(nuevaDescripcion);
+
+    // Llamar a la función para que registre los eventos en los nuevos checkboxes
+    activarCambioColorIncidencia();
+
 }
 
 
@@ -75,21 +79,24 @@ function mostrarNombreArchivo(input) {
     input.nextElementSibling.nextElementSibling.textContent = nombreArchivo;
 }
 
-// Función para habilitar el cambio de color en todas las descripciones (tanto las nuevas como las iniciales)
 function activarCambioColorIncidencia() {
     document.querySelectorAll('.incidencia-checkbox').forEach(checkbox => {
-        const descripcionItem = checkbox.closest('.descripcion-item');
-        const inputHidden = descripcionItem.querySelector('input[type="hidden"][name="incidencia"]');
+        if (!checkbox.dataset.listenerAdded) { // ✅ Evita duplicar eventos
+            const descripcionItem = checkbox.closest('.descripcion-item');
+            const inputHidden = descripcionItem.querySelector('input[type="hidden"][name="incidencia"]');
 
-        checkbox.addEventListener('change', function () {
-            if (this.checked) {
-                descripcionItem.style.backgroundColor = "#ffcccc"; // Color rojo claro
-                if (inputHidden) inputHidden.value = "si"; // Solo cambiar si el inputHidden existe
-            } else {
-                descripcionItem.style.backgroundColor = ""; // Color normal
-                if (inputHidden) inputHidden.value = "no"; // Solo cambiar si el inputHidden existe
-            }
-        });
+            checkbox.addEventListener('change', function () {
+                if (this.checked) {
+                    descripcionItem.style.backgroundColor = "#ffcccc";
+                    if (inputHidden) inputHidden.value = "si";
+                } else {
+                    descripcionItem.style.backgroundColor = "";
+                    if (inputHidden) inputHidden.value = "no";
+                }
+            });
+
+            checkbox.dataset.listenerAdded = "true"; // 🔒 Marca como agregado
+        }
     });
 }
 
