@@ -1,6 +1,9 @@
 @echo off
 echo [1/4] Iniciando Cloudflare Tunnel...
-start powershell -NoExit -Command "cloudflared tunnel --url https://localhost:7187"
+
+REM Redirige salida del tunel a cloudflared.log
+start powershell -NoExit -Command "cloudflared tunnel --url https://localhost:7187 | Out-File -Encoding utf8 'C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\cloudflared.log'"
+
 timeout /t 10 > nul
 
 echo [2/4] Ejecutando script para actualizar URL...
