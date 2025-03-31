@@ -28,8 +28,10 @@ cmd /c "git add ."
 cmd /c "git commit -m ""Actualizando URL automatica"""
 cmd /c "git push origin main"
 
-# Abrir Hyper
-Start-Process "C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe"
+# Abrir Hyper completamente desacoplado del proceso de PowerShell o CMD
+Start-Process -FilePath "C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe" `
+    -WindowStyle Normal `
+    -WorkingDirectory "C:\Users\efrain.villanueva\Documents\AENA\FormularioWebBackendAPI"
 
 # Esperar a que Hyper abra
 Start-Sleep -Seconds 2
