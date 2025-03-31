@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>plantilla</title>
+    <title>Reporte Servicio</title>
     <link rel="stylesheet" href="css/plantilla-estilos.css">
+    <link rel="stylesheet" href="css/global-formularios-estilos.css">
+    <link rel="stylesheet" href="css/form-servicio-estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="images/favico.svg" type="image/x-icon">
 
@@ -45,7 +47,7 @@
 
     <!-- Contenido principal -->
     <main class="main-content" >
-        <!-- Barra lateral -->
+        <!-- barra lateral -->
         <div class="index-sidebar">
             <div class="index-header">
                 <h1 class="index-header-title">
@@ -71,8 +73,7 @@
 
                 <a href="parte-equipos.html">Parte de Equipos</a>
                 <a href="inspeccion-vehiculos.html">Inspección de Vehículos</a>
-                <a href="inspeccion-suministros.html">Inspección de Suministros</a> 
-
+                <a href="inspeccion-suministros.html">Inspección de Suministros</a>
                 <!-- Menú desplegable -->
                 <div class="submenu">
                     <a href="#" class="submenu-toggle">Reportes ▾</a>
@@ -80,14 +81,93 @@
                         <a href="reporte-servicio.html">Reporte Servicios</a>
                     </div>
                 </div>
-
                 <a href="#">Contáctanos</a>
                 <a href="#" id="logout">Salir</a>
             </div>
         </div>
-        <!-- formulario -->
+        
         <div class="index-content">
+            <div class="form-container">
+                <h1>Formulario de Parte de Servicio</h1>
+                <form id="formulario">
+                    <!-- Campo Aeropuerto -->
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="aeropuerto">Aeropuerto:</label>
+                            <select id="aeropuerto" name="aeropuerto" required >
+                                <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                                <option value="ABC - Albacete">ABC - Albacete</option>
+                                <option value="ACE - Lanzarote">ACE - Lanzarote</option>
+                                <option value="AEI - Algeciras">AEI - Algeciras</option>
+                                <option value="AGP - Málaga-Costa del Sol">AGP - Málaga-Costa del Sol</option>
+                                <option value="ALC - Alicante-Elche">ALC - Alicante-Elche</option>
+                                <option value="BCN - Barcelona-El Prat">BCN - Barcelona-El Prat</option>
+                                <option value="BIO - Bilbao">BIO - Bilbao</option>
+                                <option value="BJZ - Badajoz">BJZ - Badajoz</option>
+                                <option value="EAS - San Sebastián">EAS - San Sebastián</option>
+                                <option value="FUE - Fuerteventura">FUE - Fuerteventura</option>
+                                <option value="GMZ - La Gomera">GMZ - La Gomera</option>
+                                <option value="GRO - Girona-Costa Brava">GRO - Girona-Costa Brava</option>
+                                <option value="HSK - Huesca-Pirineos">HSK - Huesca-Pirineos</option>
+                                <option value="IBZ - Ibiza">IBZ - Ibiza</option>
+                                <option value="LCG - A Coruña">LCG - A Coruña</option>
+                                <option value="LEI - Almería">LEI - Almería</option>
+                                <option value="LEJ - León">LEJ - León</option>
+                                <option value="LPA - Gran Canaria">LPA - Gran Canaria</option>
+                                <option value="MAD - Madrid-Barajas">MAD - Madrid-Barajas</option>
+                                <option value="MAH - Menorca">MAH - Menorca</option>
+                                <option value="MLN - Melilla">MLN - Melilla</option>
+                                <option value="ODB - Córdoba">ODB - Córdoba</option>
+                                <option value="OVD - Asturias">OVD - Asturias</option>
+                                <option value="PMI - Palma de Mallorca">PMI - Palma de Mallorca</option>
+                                <option value="PNA - Pamplona">PNA - Pamplona</option>
+                                <option value="REU - Reus">REU - Reus</option>
+                                <option value="RGS - Burgos">RGS - Burgos</option>
+                                <option value="RJL - Logroño-Agoncillo">RJL - Logroño-Agoncillo</option>
+                                <option value="SCQ - Santiago de Compostela">SCQ - Santiago de Compostela</option>
+                                <option value="SDR - Santander">SDR - Santander</option>
+                                <option value="SLM - Salamanca">SLM - Salamanca</option>
+                                <option value="SPC - La Palma">SPC - La Palma</option>
+                                <option value="SVQ - Sevilla">SVQ - Sevilla</option>
+                                <option value="TFN - Tenerife Norte">TFN - Tenerife Norte</option>
+                                <option value="TFS - Tenerife Sur">TFS - Tenerife Sur</option>
+                                <option value="VDE - El Hierro">VDE - El Hierro</option>
+                                <option value="VGO - Vigo">VGO - Vigo</option>
+                                <option value="VIT - Vitoria">VIT - Vitoria</option>
+                                <option value="VLC - Valencia">VLC - Valencia</option>
+                                <option value="VLL - Valladolid">VLL - Valladolid</option>
+                                <option value="XRY - Jerez de la Frontera">XRY - Jerez de la Frontera</option>
+                            </select> 
+                        </div>
 
+                        <div class="form-group">
+                            <!-- Tabla para ver las descripciones del dia -->                    
+                            <div class="form-group">
+                                <table id="tabla-descripciones">
+                                    <thead>
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Fecha</th>
+                                            <th>Hora</th>
+                                            <th>Descripción</th>
+                                            <th>Acción Tomada</th>
+                                            <th>Verificación</th>
+                                            <th>Es Incidencia</th>
+                                            <th>Observaciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="tabla-descripciones-body">
+                                        <!-- Las filas se insertarán dinámicamente -->
+                                    </tbody>
+                                </table>
+                                <button id="toggle-tabla">Mostrar Tabla</button>
+                            </div>
+                        </div>
+                                      
+                    </div>
+                                
+                </form>
+            </div>
         </div>
     </main>
 
@@ -149,9 +229,9 @@
     </footer>
 
      <!-- llamadas a scripts -->
-     <script src="js/utils/config-encabezado-pie.js"></script>
-     <script src="js/utils/config-fecha-hora.js"></script>
-    <script src="js/parte-servicio-descripcion.js"></script>
+    <script src="js/utils/config-encabezado-pie.js"></script>
+    <script src="js/utils/config-fecha-hora.js"></script>
+ 
       
 </body>
 </html>
