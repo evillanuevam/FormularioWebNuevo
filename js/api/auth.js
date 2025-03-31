@@ -19,7 +19,6 @@ document.addEventListener("DOMContentLoaded", function () {
         let apellido1 = decodeURIComponent(escape(decoded["Apellido1"])).normalize("NFC").trim();
         let apellido2 = decodeURIComponent(escape(decoded["Apellido2"])).normalize("NFC").trim();
         
-
         // ✅ Aplicar normalización y decodificación correcta del aeropuerto
         aeropuerto = decodeURIComponent(escape(aeropuerto)).normalize("NFC").trim();
 
@@ -29,11 +28,13 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const paginaActual = window.location.pathname.split("/").pop();
 
-        if (paginaActual === "administrar.html" && rol !== "Administrador") {
-            alert("🚫 No tienes permisos para acceder a esta página.");
-            window.location.href = "parte-servicio.html"; 
-        }
+        const paginasSoloAdmin = ["administrar.html", "reporte-servicio.html"];
 
+        if (paginasSoloAdmin.includes(paginaActual) && rol !== "Administrador") {
+            alert("🚫 No tienes permisos para acceder a esta página.");
+            window.location.href = "parte-servicio.html";
+        }
+        
         // ✅ ASIGNAR EL AEROPUERTO AL ENCABEZADO Y FORMULARIOS
         document.getElementById("header-text").textContent = aeropuerto;
 
@@ -70,6 +71,14 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("nombre-vigilante").value = nombre;
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);
         }
+
+        if (paginaActual === "reporte-servicio.html") {
+            setAeropuertoValue("aeropuerto");
+            document.getElementById("nombre-vigilante").value = nombre;
+
+            document.getElementById("nombre-vigilante").setAttribute("readonly", true);
+        }
+
 
         // ✅ DETECTAR CAMBIO DE PESTAÑA Y ACTUALIZAR EL AEROPUERTO EN "ELIMINAR USUARIO"
         document.querySelectorAll(".tab-button").forEach(button => {

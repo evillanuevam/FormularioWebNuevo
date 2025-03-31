@@ -3,15 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reporte Servicio</title>
+    <title>Reporte Parte de servicio</title>
     <link rel="stylesheet" href="css/plantilla-estilos.css">
     <link rel="stylesheet" href="css/global-formularios-estilos.css">
     <link rel="stylesheet" href="css/form-servicio-estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="images/favico.svg" type="image/x-icon">
-
 </head>
-<script src="js/api/auth.js"></script> <!-- token y authentication-->
 
 <body id="plantilla-aena">
     <!-- Encabezado -->
@@ -26,11 +24,11 @@
                 <img src="images/aena.svg" alt="Logo AENA" class="header-logo">
                 <div class="header-line-and-text">
                     <div class="separator"></div> <!-- Línea -->
-                    <span id="header-text" class="header-text">Formulario de Partes</span>
+                    <span id="header-text" class="header-text">Partes de servicio</span>
                 </div>
             </div>
             <div class="language-dropdown">
-                <button class="language-button" onclick="toggleLanguages()">
+                <button class="language-button" >
                     <i class="fa fa-comment"></i> ES <i class="fa fa-chevron-down"></i>
                 </button>
                 <div class="language-bar hidden" id="languageBar">
@@ -43,6 +41,7 @@
                 </div>
             </div>
         </div>
+
     </header>  
 
     <!-- Contenido principal -->
@@ -85,10 +84,9 @@
                 <a href="#" id="logout">Salir</a>
             </div>
         </div>
-        
         <div class="index-content">
             <div class="form-container">
-                <h1>Formulario de Parte de Servicio</h1>
+                <h1>Reporte Parte de Servicio</h1>
                 <form id="formulario">
                     <!-- Campo Aeropuerto -->
                     <div class="form-row">
@@ -140,38 +138,56 @@
                             </select> 
                         </div>
 
+                        <!-- Campo oculto para la Fecha de Registro (se sigue llamando 'fecha') -->
+                        <input type="hidden" id="fecha" name="fecha">
+
                         <div class="form-group">
-                            <!-- Tabla para ver las descripciones del dia -->                    
-                            <div class="form-group">
-                                <table id="tabla-descripciones">
-                                    <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Fecha</th>
-                                            <th>Hora</th>
-                                            <th>Descripción</th>
-                                            <th>Acción Tomada</th>
-                                            <th>Verificación</th>
-                                            <th>Es Incidencia</th>
-                                            <th>Observaciones</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="tabla-descripciones-body">
-                                        <!-- Las filas se insertarán dinámicamente -->
-                                    </tbody>
-                                </table>
-                                <button id="toggle-tabla">Mostrar Tabla</button>
+                            <label>Selecionar fecha:</label>
+                            <div style="width: 95%;">
+                                <input type="date" id="fechaSeleccionada" name="fechaSeleccionada" required 
+                                title="Selecione la fecha">
                             </div>
                         </div>
-                                      
+
+                        <div class="form-group">
+                            <label for="nombre">Usuario:</label>
+                            <input type="text" id="nombre-vigilante" name="nombre" placeholder="Indica tu nombre" required>
+                        </div>    
+
                     </div>
-                                
+                    
+                    <div class="form-group">
+                        <!-- Tabla para ver las descripciones del dia -->                    
+                        <div class="form-group">
+                            <table id="tabla-descripciones">
+                                <thead>
+                                    <tr>
+                                        <th>Nombre</th>
+                                        <th>Fecha</th>
+                                        <th>Hora</th>
+                                        <th>Descripción</th>
+                                        <th>Acción Tomada</th>
+                                        <th>Verificación</th>
+                                        <th>Es Incidencia</th>
+                                        <th>Observaciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="tabla-descripciones-body">
+                                    <!-- Las filas se insertarán dinámicamente -->
+                                </tbody>
+                            </table>
+                            <button id="toggle-tabla">Mostrar Tabla</button>
+                        </div>
+                                       
+                    </div>
+                                   
                 </form>
             </div>
         </div>
     </main>
 
     <!-- Pie de página -->
+
     <footer class="footer">
         <div class="footer-container">
             <!-- Redes sociales -->
@@ -201,7 +217,7 @@
                         </div>
                     </div>
                 </div>
-            </div>        
+            </div>         
             <div class="footer-divider"></div> <!-- Línea divisoria -->
             <!-- Enlaces y copyright -->
             <div class="footer-links-copyright">
@@ -228,10 +244,12 @@
         </div>
     </footer>
 
-     <!-- llamadas a scripts -->
     <script src="js/utils/config-encabezado-pie.js"></script>
     <script src="js/utils/config-fecha-hora.js"></script>
- 
-      
+    <script src="js/parte-servicio-descripcion.js"></script>
+    <script src="js/utils/config-api-url.js"></script>
+    <script src="js/api/auth.js"></script> <!-- token y authentication-->
+    <script src="js/api/api-reportes.js"></script> 
+
 </body>
 </html>

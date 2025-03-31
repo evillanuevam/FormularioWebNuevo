@@ -334,197 +334,58 @@ function obtenerMaterialControlado() {
     return materiales.join(", ") || "No definido";
 }
 
-//************************************ MANEJO DE LA FECHA ***********************************************************/
+//************************************ TABLA INSPECCION DIARIO DE VEHICULOS ****************************************/
 
-// ✅ FECHA: Actualizar datos cuando se cambia de fecha
-document.getElementById("fechaSeleccionada").addEventListener("change", async function () {
-    const nuevaFecha = this.value;
-    console.log(`📆 Nueva fecha seleccionada: ${nuevaFecha}`);
+function agregarFila() {
+    const tabla = document.getElementById("tabla-inspeccion-vehiculos").querySelector("tbody");
+    const nuevaFila = document.createElement("tr");
 
-    await cargarParteServicio(nuevaFecha);
-    await cargarDescripcionesPorFecha(nuevaFecha);
-});
+    nuevaFila.innerHTML = `
+        <td><input type="time" name="horaVehiculo[]" required></td>
+        <td><input type="text" name="matriculaVehiculo[]" required></td>
+        <td><input type="text" name="observacionesVehiculo[]"></td>
+        <td>
+            <select name="revisionVehiculo[]" required>
+                <option value="">Seleccionar</option>
+                <option value="OK">OK</option>
+                <option value="NO OK">NO OK</option>
+            </select>
+        </td>
+        <td>
+            <button type="button" class="btn-eliminar" onclick="eliminarFila(this)" title="Eliminar fila">
+                <i class="fa fa-trash"></i>
+            </button>
+        </td>
+    `;
 
-// ✅ Función para cargar datos del parte de servicio
-async function cargarParteServicio() {
-    const { tip, aeropuerto } = obtenerUsuarioDatos();
-    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
+    tabla.appendChild(nuevaFila);
+}
 
-    if (!tip || !aeropuerto) {
-        console.error("❌ TIP o Aeropuerto no encontrados.");
-        return;
-    }
+function eliminarFila(boton) {
+    const fila = boton.closest("tr");
+    const tabla = fila.parentNode;
 
-    try {
-        const response = await fetch(`${API_URL}/api/ParteServicio/GetParteServicio?tip=${tip}&aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${fechaSeleccionada}`);
-
-        if (!response.ok) throw new Error(`Error HTTP ${response.status}`);
-
-        const data = await response.json();
-        console.log("✅ Datos cargados desde API:", data);
-
-        if (data.parteServicio) {
-            document.getElementById("horaInicio").value = data.parteServicio.horaInicio || "";
-            document.getElementById("horaFin").value = data.parteServicio.horaFin || "";
-            document.getElementById("fechaSeleccionada").value = data.parteServicio.fechaSeleccionadaISO || "";
-
-            marcarMaterialControlado(data.parteServicio.materialControlado);
-            seleccionarOpcion("normativa", data.parteServicio.leidoNormativa);
-            seleccionarOpcion("accidentes", data.parteServicio.accidentesPuesto);
-        } else {
-            //console.warn("⚠️ No hay parte de servicio para la fecha seleccionada.");
-            resetearFormulario();
-        }
-    } catch (error) {
-        console.error("❌ Error cargando los datos:", error);
+    if (tabla.rows.length > 1) {
+        fila.remove();
+    } else {
+        alert("Debe haber al menos una fila.");
     }
 }
 
-// ✅ Función para limpiar los campos si no hay datos
-function resetearFormulario() {
-    console.log("🧹 Limpiando formulario...");
-    document.getElementById("horaInicio").value = "";
-    document.getElementById("horaFin").value = "";
-    document.querySelectorAll("input[type='checkbox']").forEach(checkbox => checkbox.checked = false);
-    document.querySelectorAll("input[type='radio']").forEach(radio => radio.checked = false);
-}
-
-
-//************************************ MANEJO DE LA TABLA ***********************************************************/
-
-// ✅ Función para actualizar la tabla con nuevas descripciones
-function actualizarDescripcionesEnTabla(descripciones) {
-    console.log(`📌 Insertando ${descripciones.length} descripciones en la tabla...`);
-
-    const tablaBody = document.getElementById("tabla-descripciones-body");
-    if (!tablaBody) {
-        console.error("⚠️ No se encontró el elemento 'tabla-descripciones-body' en el DOM.");
-        return;
-    }
-
-    tablaBody.innerHTML = ""; 
-
-    if (descripciones.length === 0) {
-        mostrarMensajeTabla("No hay registros disponibles.");
-        return;
-    }
-
-    const encabezados = ["Nombre", "Fecha", "Hora", "Descripción", "Acción Tomada", "Verificación", "Es Incidencia", "Observaciones"];
-
-    descripciones.forEach(descripcion => {
-        const fila = document.createElement("tr");
-        if (descripcion.esIncidencia.trim().toLowerCase() === "incidencia") {
-            fila.classList.add("incidencia");
-        }
-
-        const valores = [
-            descripcion.nombre || "Sin nombre",
-            formatFecha(descripcion.fechaDescripcion) || "Sin fecha",
-            descripcion.horaDescripcion || "00:00",
-            descripcion.descripcion || "Sin descripción",
-            descripcion.accionTomada || "Sin acción",
-            descripcion.verificacion || "No definido",
-            descripcion.esIncidencia || "No incidencia",
-            descripcion.observaciones || "Sin observaciones"
-        ];
-
-        fila.innerHTML = valores.map((valor, index) => `<td data-label="${encabezados[index]}">${valor}</td>`).join("");
-        tablaBody.appendChild(fila);
-    });
-}
-
-// ✅ Función para cargar descripciones de la fecha seleccionada
-async function cargarDescripcionesPorFecha() {
-    const { aeropuerto } = obtenerUsuarioDatos();
-    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
-
-    if (!aeropuerto) {
-        console.error("❌ Aeropuerto no encontrado en el token.");
-        return;
-    }
-    try {
-        const aeropuertoCodificado = encodeURIComponent(aeropuerto.trim());
-        const fechaCodificada = encodeURIComponent(fechaSeleccionada.trim());
-        let url = `${API_URL}/api/ParteServicio/GetDescripcionesDelDia?aeropuerto=${aeropuertoCodificado}&fechaSeleccionada=${fechaCodificada}`;
-
-        console.log(`🔹 Solicitando datos de descripciones: ${url}`);
-        
-        const response = await fetch(url);
-
-        // ✅ Manejo específico del error 404 sin lanzar excepción
-        if (response.status === 404) {
-            console.warn("⚠️ No hay registros para la fecha seleccionada.");
-            mostrarMensajeTabla("No hay registros disponibles.");
-            return;
-        }
-
-        // ✅ Si la respuesta no es exitosa, lanzar error manualmente
-        if (!response.ok) {
-            console.error(`❌ Error HTTP ${response.status}`);
-            mostrarMensajeTabla("Error al cargar los datos.");
-            return;
-        }
-
-        // ✅ Procesar la respuesta correctamente
-        const data = await response.json();
-        console.log("✅ Descripciones cargadas desde API:", data);
-
-        // ✅ Si no hay valores en la respuesta, mostrar mensaje sin lanzar error
-        if (!data || !data.$values || data.$values.length === 0) {
-            console.warn("⚠️ La API devolvió una respuesta vacía.");
-            mostrarMensajeTabla("No hay registros disponibles.");
-            return;
-        }
-
-        // ✅ Actualizar la tabla si hay datos
-        actualizarDescripcionesEnTabla(data.$values);
-
-    } catch (error) {
-        console.error("❌ Error al cargar los datos desde la API:", error);
-        mostrarMensajeTabla("Error al cargar los datos.");
-    }
-}
-
-// ✅ Función para mostrar un mensaje en la tabla si no hay datos
-function mostrarMensajeTabla(mensaje) {
-    const tablaBody = document.getElementById("tabla-descripciones-body");
-    if (tablaBody) {
-        tablaBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">${mensaje}</td></tr>`;
-    }
-}
-
-// ✅ Formatear fecha
-function formatFecha(fechaISO) {
-    if (!fechaISO) return "Sin fecha";
-    const fecha = new Date(fechaISO);
-    const dia = fecha.getDate().toString().padStart(2, '0');
-    const mes = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const año = fecha.getFullYear();
-    return `${dia}-${mes}-${año}`;
-}
-
-// ✅ Ejecutar la carga inicial
-document.addEventListener("DOMContentLoaded", cargarDescripcionesPorFecha);
-
-// ✅ Función para ocultar la tabla con botón de alternar
 document.addEventListener("DOMContentLoaded", function () {
-    const tabla = document.getElementById("tabla-descripciones");
-    const boton = document.getElementById("toggle-tabla");
+    const contenedorTabla = document.getElementById("contenedor-tabla-vehiculos");
+    const botonToggle = document.getElementById("toggle-tabla-vehiculos");
 
-    // Asegurar que la tabla está oculta por defecto
-    tabla.style.display = "none";  
-    boton.textContent = "Mostrar Tabla";  // Cambiar el texto del botón
+    // Ocultar al cargar
+    contenedorTabla.style.display = "none";
 
-    // ✅ Agregar evento para alternar entre mostrar y ocultar la tabla
-    boton.addEventListener("click", function (event) {
-        event.preventDefault();
-
-        if (tabla.style.display === "none") {
-            tabla.style.display = "table"; 
-            boton.textContent = "Ocultar Tabla";
+    botonToggle.addEventListener("click", function () {
+        if (contenedorTabla.style.display === "none") {
+            contenedorTabla.style.display = "block";
+            botonToggle.textContent = "Ocultar Tabla de Inspeccion de Vehículos";
         } else {
-            tabla.style.display = "none";
-            boton.textContent = "Mostrar Tabla";
+            contenedorTabla.style.display = "none";
+            botonToggle.textContent = "Mostrar Tabla de Inspeccion de Vehículos";
         }
     });
 });

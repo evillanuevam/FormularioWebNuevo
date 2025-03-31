@@ -238,33 +238,56 @@
                             <label for="accidente-no" class="label-radio">No</label>
                         </div>
                     </div>
-        
-                    
-                    <div class="form-group">
-                        <label>Descripciones del Servicio:</label>
-                        <!-- Tabla para ver las descripciones del dia -->                    
+
+                    <!-- Tabla de Inspección Diario de Vehículos -->
+                    <button type="button" id="toggle-tabla-vehiculos" class="boton-toggle">
+                        Mostrar Tabla de Inspeccion de Vehículos
+                    </button>
+
+                    <!-- Contenedor ocultable -->
+                    <div id="contenedor-tabla-vehiculos">
                         <div class="form-group">
-                            <table id="tabla-descripciones">
+
+                            <table id="tabla-inspeccion-vehiculos" class="tabla-inspeccion-vehiculos">
                                 <thead>
                                     <tr>
-                                        <th>Nombre</th>
-                                        <th>Fecha</th>
                                         <th>Hora</th>
-                                        <th>Descripción</th>
-                                        <th>Acción Tomada</th>
-                                        <th>Verificación</th>
-                                        <th>Es Incidencia</th>
+                                        <th>Matrícula</th>
                                         <th>Observaciones</th>
+                                        <th>Revisión</th>
+                                        <th></th>
                                     </tr>
                                 </thead>
-                                <tbody id="tabla-descripciones-body">
-                                    <!-- Las filas se insertarán dinámicamente -->
+                                <tbody>
+                                    <tr>
+                                        <td><input type="time" name="horaVehiculo[]" required></td>
+                                        <td><input type="text" name="matriculaVehiculo[]" required></td>
+                                        <td><input type="text" name="observacionesVehiculo[]"></td>
+                                        <td>
+                                            <select name="revisionVehiculo[]" required>
+                                                <option value="">Seleccionar</option>
+                                                <option value="OK">OK</option>
+                                                <option value="NO OK">NO OK</option>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button type="button" class="btn-eliminar" onclick="eliminarFila(this)" title="Eliminar fila">
+                                                <i class="fa fa-trash"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
-                            <button id="toggle-tabla">Mostrar Tabla</button>
+
+                            <button type="button" class="btn-agregar btn-vehiculo" onclick="agregarFila()">
+                                <i class="fas fa-plus-circle"></i> Agregar Vehículo
+                            </button>
                         </div>
-                        
-                        
+                    </div>
+
+                    <div class="form-group">
+                        <label>Descripciones del Servicio:</label>
+
                         <!-- Campo Descripción del Servicio -->
                         <div id="descripcion-container">
                             <div class="descripcion-item">
@@ -391,7 +414,6 @@
             </div>
         </div>
     </footer>
-
     <script src="js/utils/config-encabezado-pie.js"></script>
     <script src="js/utils/config-fecha-hora.js"></script>
     <script src="js/parte-servicio-descripcion.js"></script>

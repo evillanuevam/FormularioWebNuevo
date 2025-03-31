@@ -212,7 +212,8 @@
 
 /*CSS para la tabla de formularion de servicio*/
 /* Estilo para la cabecera de la tabla */
-#tabla-descripciones thead th {
+#tabla-descripciones thead th,
+#tabla-inspeccion-vehiculos thead th {
     font-weight: bold;  /* Poner en negrita */
     background-color: #003366;  /* Color azul oscuro */
     color: white;  /* Texto en blanco */
@@ -221,23 +222,27 @@
 }
 
 /* Estilo para las filas de la tabla */
-#tabla-descripciones tbody tr {
+#tabla-descripciones tbody tr,
+#tabla-inspeccion-vehiculos tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
 /* Estilo para las celdas de la tabla */
-#tabla-descripciones td {
+#tabla-descripciones td,
+#tabla-inspeccion-vehiculos td {
     padding: 10px;
-    text-align: left;
+    text-align: center;
 }
 
 /* Estilo alterno para filas */
-#tabla-descripciones tbody tr:nth-child(even) {
+#tabla-descripciones tbody tr:nth-child(even)
+#tabla-inspeccion-vehiculos tbody tr:nth-child(even) {
     background-color: #f2f2f2;
 }
 
 /* Bordes redondeados en la tabla */
-#tabla-descripciones {
+#tabla-descripciones,
+#tabla-inspeccion-vehiculos {
     border-collapse: collapse;
     width: 100%;
     border-radius: 5px;
@@ -259,9 +264,6 @@
     border: 2px solid red !important;
     background-color: #ffe6e6 !important;
 }
-
-
-
 
 /*CSS para el formulario responsivo*/
 /* Estilos responsivos para móviles y tablets */
@@ -287,6 +289,19 @@
 #tabla-descripciones tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+
+.btn-agregar.btn-vehiculo {
+    background-color: #003366;
+    color: white;
+}
+
+.btn-agregar.btn-vehiculo:hover {
+    background-color: #002244;
+}
+
+
+
 
 /* ✅ RESPONSIVE PARA DISPOSITIVOS PEQUEÑOS */
 @media screen and (max-width: 920px) {
