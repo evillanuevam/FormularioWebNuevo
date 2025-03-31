@@ -4,7 +4,7 @@ start powershell -NoExit -Command "cloudflared tunnel --url https://localhost:71
 timeout /t 10 > nul
 
 echo [2/4] Ejecutando script para actualizar URL...
-powershell -ExecutionPolicy Bypass -File "C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\inicia-todo.ps1"
+powershell -ExecutionPolicy Bypass -File "C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\automatizacion\iniciar-servidor.ps1"
 
 echo [3/4] Abriendo Hyper y ejecutando dotnet run...
 powershell -Command "Start-Process 'C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe'"
