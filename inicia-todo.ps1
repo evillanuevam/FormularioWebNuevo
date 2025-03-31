@@ -27,13 +27,3 @@ cd "C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB"
 cmd /c "git add ."
 cmd /c "git commit -m ""Actualizando URL automatica"""
 cmd /c "git push origin main"
-
-# Abrir Hyper completamente desacoplado del proceso de PowerShell o CMD
-Start-Process "C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe" -WindowStyle Normal
-
-# Esperar a que Hyper abra
-Start-Sleep -Seconds 2
-
-# Usar SendKeys para escribir 'dotnet run'
-Add-Type -AssemblyName System.Windows.Forms
-[System.Windows.Forms.SendKeys]::SendWait("dotnet run{ENTER}")
