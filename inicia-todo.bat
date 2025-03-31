@@ -7,7 +7,7 @@ echo [2/4] Ejecutando script para actualizar URL...
 powershell -ExecutionPolicy Bypass -File "C:\Users\efrain.villanueva\Documents\AENA\FORMULARIO WEB\inicia-todo.ps1"
 
 echo [3/4] Abriendo Hyper y ejecutando dotnet run...
-start "" "C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe"
+powershell -Command "Start-Process 'C:\Users\efrain.villanueva\AppData\Local\Programs\Hyper\Hyper.exe'"
 timeout /t 3 > nul
 
 :: Simular teclas para escribir y ejecutar dotnet run
