@@ -1,4 +1,4 @@
-//norrmal
+//PARTE DE SERVICIO DESCRIPCION
 function agregarDescripcion() {
     const container = document.getElementById('descripcion-container');
     const nuevaDescripcion = document.createElement('div');
@@ -131,5 +131,120 @@ function toggleOtrosInput() {
     }
 }
 
+//************************************ TABLA INSPECCION DIARIO DE VEHICULOS ****************************************/
+
+//PARTE SERVICIO VEHICULOS:
+function agregarFila() {
+    const tabla = document.getElementById("tabla-inspeccion-vehiculos").querySelector("tbody");
+    const nuevaFila = document.createElement("tr");
+
+    nuevaFila.innerHTML = `
+        <td><input type="time" name="horaVehiculo[]"></td>
+        <td><input type="text" name="matriculaVehiculo[]"></td>
+        <td>
+            <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
+        </td>
+        <td><textarea type="text" name="detalles"></textarea></td>
+        <td>
+          <select name="revisionVehiculo[]">
+            <option value="">Seleccionar</option>
+            <option value="OK">OK</option>
+            <option value="NO OK">NO OK</option>
+          </select>
+        </td>
+        <td><input type="text" name="observacionesVehiculo[]"></td>
+
+        <td>
+            <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
+                    <i class="fa fa-trash"></i>
+            </button>
+        </td>
+    `;
+
+    tabla.appendChild(nuevaFila);
+}
+
+function eliminarFila(boton) {
+    const fila = boton.closest("tr");
+    fila.remove();
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    const contenedorTabla = document.getElementById("contenedor-tabla-vehiculos");
+    const botonToggle = document.getElementById("toggle-tabla-vehiculos");
+
+    // Ocultar al cargar
+    contenedorTabla.style.display = "none";
+
+    botonToggle.addEventListener("click", function () {
+        if (contenedorTabla.style.display === "none") {
+            contenedorTabla.style.display = "block";
+            botonToggle.textContent = "Ocultar Tabla de Inspeccion de Vehículos";
+        } else {
+            contenedorTabla.style.display = "none";
+            botonToggle.textContent = "Mostrar Tabla de Inspeccion de Vehículos";
+        }
+    });
+});
+
+
+//manejo del modal:
+function abrirModal(boton) {
+    const modal = document.getElementById("modalRevision");
+    modal.style.display = "block";
+    // Puedes aquí guardar a qué fila se está asociando para después guardar los datos si hace falta
+  }
+  
+  function cerrarModal() {
+    document.getElementById("modalRevision").style.display = "none";
+  }
+  
+  function guardarChecklist() {
+    // Aquí podrías guardar los checks en memoria o asociarlos a la fila correspondiente
+    cerrarModal();
+}
+
+//rellenar Modal en text area
+let textareaDetallesActual = null;
+
+function abrirModal(boton) {
+  const fila = boton.closest('tr');
+  const matricula = fila.querySelector('input[name="matriculaVehiculo[]"]').value;
+  textareaDetallesActual = fila.querySelector('textarea[name="detalles"]');
+
+  // Asigna la matrícula al título
+  const titulo = document.getElementById("tituloModal");
+  titulo.textContent = `Checklist de Revisión del Vehículo: ${matricula || '(sin matrícula)'}`;
+
+  // Limpia los checkboxes del modal antes de abrirlo
+  document.querySelectorAll('#modalRevision input[type="checkbox"]').forEach(c => c.checked = false);
+
+  // Abre el modal
+  document.getElementById("modalRevision").style.display = "block";
+}
+
+function cerrarModal() {
+  document.getElementById("modalRevision").style.display = "none";
+}
+
+function guardarChecklist() {
+  const checks = document.querySelectorAll('#modalRevision input[type="checkbox"]');
+  const seleccionados = [];
+
+  checks.forEach(chk => {
+    if (chk.checked) {
+      seleccionados.push(chk.parentElement.textContent.trim());
+    }
+  });
+
+  // Guarda los resultados en el textarea
+  if (textareaDetallesActual) {
+    textareaDetallesActual.value = seleccionados.join(", ");
+  }
+
+  cerrarModal();
+}
+
+  
 
 

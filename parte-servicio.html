@@ -250,38 +250,78 @@
 
                             <table id="tabla-inspeccion-vehiculos" class="tabla-inspeccion-vehiculos">
                                 <thead>
-                                    <tr>
-                                        <th>Hora</th>
-                                        <th>Matrícula</th>
-                                        <th>Observaciones</th>
-                                        <th>Revisión</th>
-                                        <th></th>
-                                    </tr>
+                                  <tr>
+                                    <th>Hora</th>
+                                    <th>Matrícula</th>
+                                    <th>Revisión</th>
+                                    <th>Revisión</th>
+                                    <th>Estado</th>
+                                    <th>Observaciones</th>
+                                    <th>Eliminar</th>
+                                  </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td><input type="time" name="horaVehiculo[]" required></td>
-                                        <td><input type="text" name="matriculaVehiculo[]" required></td>
-                                        <td><input type="text" name="observacionesVehiculo[]"></td>
-                                        <td>
-                                            <select name="revisionVehiculo[]" required>
-                                                <option value="">Seleccionar</option>
-                                                <option value="OK">OK</option>
-                                                <option value="NO OK">NO OK</option>
-                                            </select>
-                                        </td>
-                                        <td>
-                                            <button type="button" class="btn-eliminar" onclick="eliminarFila(this)" title="Eliminar fila">
-                                                <i class="fa fa-trash"></i>
-                                            </button>
-                                        </td>
-                                    </tr>
+                                  <tr>
+                                    <td><input type="time" name="horaVehiculo[]"></td>
+                                    <td><input type="text" name="matriculaVehiculo[]"></td>
+                                    <td>
+                                        <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
+                                    </td>
+                                    <td><textarea type="text" name="detalles"></textarea></td>
+                                    <td>
+                                      <select name="revisionVehiculo[]">
+                                        <option value="">Seleccionar</option>
+                                        <option value="OK">OK</option>
+                                        <option value="NO OK">NO OK</option>
+                                      </select>
+                                    </td>
+                                    <td><input type="text" name="observacionesVehiculo[]"></td>
+
+                                    <td>
+                                      <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
+                                        <i class="fa fa-trash"></i>
+                                      </button>
+                                    </td>
+                                  </tr>
                                 </tbody>
-                            </table>
+                              </table>
 
                             <button type="button" class="btn-agregar btn-vehiculo" onclick="agregarFila()">
                                 <i class="fas fa-plus-circle"></i> Agregar Vehículo
                             </button>
+                        </div>
+                    </div>
+
+                    <!-- ✅ Modal oculto de revisión de vehículos -->
+                    <div id="modalRevision" class="modal">
+                        <div class="modal-content">
+                        <h3 id="tituloModal">Checklist de Revisión del Vehículo</h3>
+                    
+                        <div class="grupo">
+                            <label><input type="checkbox" name="lucesCuadro"> Chequeo luces/avería cuadro</label>
+                            <label><input type="checkbox" name="cinturon"> Cinturón de seguridad</label>
+                            <label><input type="checkbox" name="limpiaparabrisas"> Limpiaparabrisas</label>
+                            <label><input type="checkbox" name="retrovisores"> Estado retrovisores</label>
+                        </div>
+                    
+                        <div class="grupo">
+                            <label><input type="checkbox" name="lucesVehiculo"> Luces vehículo</label>
+                            <label><input type="checkbox" name="lucesAC"> Puente de luces / A/C</label>
+                            <label><input type="checkbox" name="emisora"> Emisora TWR/TETRA</label>
+                            <label><input type="checkbox" name="neumaticos"> Estado neumáticos</label>
+                        </div>
+                    
+                        <div class="grupo">
+                            <label><input type="checkbox" name="fugas"> Presencia de fugas</label>
+                            <label><input type="checkbox" name="direccionFrenos"> Dirección y frenos</label>
+                            <label><input type="checkbox" name="elementosAsegurados"> Elementos asegurados</label>
+                            <label><input type="checkbox" name="planoEXA"> Presencia de plano EXA-37</label>
+                        </div>
+                    
+                        <div class="modal-buttons">
+                            <button type="button" onclick="guardarChecklist()">Guardar</button>
+                            <button type="button" onclick="cerrarModal()">Cancelar</button>
+                        </div>
                         </div>
                     </div>
 
@@ -414,12 +454,16 @@
             </div>
         </div>
     </footer>
+
+
+      
     <script src="js/utils/config-encabezado-pie.js"></script>
     <script src="js/utils/config-fecha-hora.js"></script>
     <script src="js/parte-servicio-descripcion.js"></script>
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
     <script src="js/api/api-parte-servicio.js"></script> 
+
 
 </body>
 </html>
