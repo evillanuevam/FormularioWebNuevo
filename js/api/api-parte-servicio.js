@@ -297,43 +297,6 @@ function obtenerDescripciones() {
     return descripciones;
 }
 
-// ✅ Obtener vehiculos del formulario
-function obtenerVehiculos() {
-    const contenedor = document.getElementById("contenedor-tabla-vehiculos");
-    if (!contenedor || contenedor.style.display === "none") return [];
-
-    const filas = document.querySelectorAll("#tabla-inspeccion-vehiculos tbody tr");
-    const vehiculos = [];
-
-    filas.forEach(fila => {
-        const horaInput = fila.querySelector("input[name='horaVehiculo[]']");
-        const matriculaInput = fila.querySelector("input[name='matriculaVehiculo[]']");
-        const detallesInput = fila.querySelector("textarea[name='detalles']");
-        const estadoSelect = fila.querySelector("select[name='revisionVehiculo[]']");
-        const observacionesInput = fila.querySelector("textarea[name='observacionesVehiculo[]']");
-
-        // Validar campos obligatorios
-        if (
-            horaInput?.value &&
-            matriculaInput?.value.trim() !== "" &&
-            detallesInput?.value.trim() !== "" &&
-            estadoSelect?.value.trim() !== ""
-        ) {
-            vehiculos.push({
-                hora: horaInput.value,
-                matricula: matriculaInput.value.trim(),
-                detallesChecklist: detallesInput.value.trim(),
-                estadoRevision: estadoSelect.value.trim(),
-                observaciones: observacionesInput?.value.trim() || "Sin observaciones"
-            });
-        }
-    });
-
-    return vehiculos;
-}
-
-
-
 
 // ✅ Marcar materiales controlados incluyendo "Otros" si tiene un valor válido
 function marcarMaterialControlado(materiales) {
@@ -380,5 +343,40 @@ function obtenerMaterialControlado() {
     }
 
     return materiales.join(", ") || "No definido";
+}
+
+// ✅ Obtener vehiculos del formulario
+function obtenerVehiculos() {
+    const contenedor = document.getElementById("contenedor-tabla-vehiculos");
+    if (!contenedor || contenedor.style.display === "none") return [];
+
+    const filas = document.querySelectorAll("#tabla-inspeccion-vehiculos tbody tr");
+    const vehiculos = [];
+
+    filas.forEach(fila => {
+        const horaInput = fila.querySelector("input[name='horaVehiculo[]']");
+        const matriculaInput = fila.querySelector("input[name='matriculaVehiculo[]']");
+        const detallesInput = fila.querySelector("textarea[name='detalles']");
+        const estadoSelect = fila.querySelector("select[name='revisionVehiculo[]']");
+        const observacionesInput = fila.querySelector("textarea[name='observacionesVehiculo[]']");
+
+        // Validar campos obligatorios
+        if (
+            horaInput?.value &&
+            matriculaInput?.value.trim() !== "" &&
+            detallesInput?.value.trim() !== "" &&
+            estadoSelect?.value.trim() !== ""
+        ) {
+            vehiculos.push({
+                hora: horaInput?.value?.length === 5 ? `${horaInput.value}:00` : (horaInput?.value || "00:00"),
+                matricula: matriculaInput.value.trim(),
+                detallesChecklist: detallesInput.value.trim(),
+                estadoRevision: estadoSelect.value.trim(),
+                observaciones: observacionesInput?.value.trim() || "Sin observaciones"
+            });
+        }
+    });
+
+    return vehiculos;
 }
 
