@@ -191,7 +191,8 @@ document.getElementById("formulario").addEventListener("submit", async function 
         leidoNormativa: obtenerValorRadio("normativa"),
         accidentesPuesto: obtenerValorRadio("accidentes"),
         usuario: obtenerUsuarioDatos(),
-        descripciones: obtenerDescripciones()
+        descripciones: obtenerDescripciones(),
+        vehiculos: obtenerVehiculos() // ✅ agrega esta línea
     };
 
     console.log("📤 Enviando datos al backend:", JSON.stringify(parteServicio, null, 2));
@@ -202,9 +203,18 @@ document.getElementById("formulario").addEventListener("submit", async function 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(parteServicio),
         });
-
-        const data = await response.json();
+        
+        let data;
+        try {
+            data = await response.json(); // Intenta parsear JSON
+        } catch (err) {
+            const text = await response.text(); // Si no es JSON, obtenemos el texto (HTML de error)
+            console.error("❌ Respuesta no es JSON. HTML recibido:", text);
+            throw new Error("El servidor respondió con un error que no es JSON.");
+        }
+        
         if (!response.ok) throw new Error(data.mensaje || `Error HTTP ${response.status}`);
+        
 
         alert("✅ Parte de servicio guardado con éxito.");
         location.reload();
@@ -286,6 +296,38 @@ function obtenerDescripciones() {
     });
     return descripciones;
 }
+
+// ✅ Obtener vehiculos del formulario
+function obtenerVehiculos() {
+    const contenedor = document.getElementById("contenedor-tabla-vehiculos");
+    if (!contenedor || contenedor.style.display === "none") return []; // ✅ Si está oculta, no procesar nada
+
+    const filas = document.querySelectorAll("#tabla-inspeccion-vehiculos tbody tr");
+    const vehiculos = [];
+
+    filas.forEach(fila => {
+        const horaInput = fila.querySelector("input[name='horaVehiculo[]']");
+        const matriculaInput = fila.querySelector("input[name='matriculaVehiculo[]']");
+        const detallesInput = fila.querySelector("textarea[name='detalles']");
+        const estadoSelect = fila.querySelector("select[name='revisionVehiculo[]']");
+        const observacionesInput = fila.querySelector("textarea[name='observacionesVehiculo[]']");
+
+        // Solo agregar si todos los campos requeridos existen
+        if (horaInput && matriculaInput && detallesInput && estadoSelect && observacionesInput) {
+            vehiculos.push({
+                hora: horaInput.value || "00:00",
+                matricula: matriculaInput.value || "",
+                detallesChecklist: detallesInput.value || "",
+                estadoRevision: estadoSelect.value || "",
+                observaciones: observacionesInput.value || "Sin observaciones"
+            });
+        }
+    });
+
+    return vehiculos;
+}
+
+
 
 // ✅ Marcar materiales controlados incluyendo "Otros" si tiene un valor válido
 function marcarMaterialControlado(materiales) {

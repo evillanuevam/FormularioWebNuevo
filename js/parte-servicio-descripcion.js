@@ -152,7 +152,7 @@ function agregarFila() {
             <option value="NO OK">NO OK</option>
           </select>
         </td>
-        <td><input type="text" name="observacionesVehiculo[]"></td>
+        <td><textarea type="text" name="observacionesVehiculo[]"></textarea></td>
 
         <td>
             <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
@@ -188,7 +188,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-//manejo del modal:
+//************************************MANEJO DE MODAL*********************************************
 function abrirModal(boton) {
     const modal = document.getElementById("modalRevision");
     modal.style.display = "block";

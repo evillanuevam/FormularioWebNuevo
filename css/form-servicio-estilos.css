@@ -283,12 +283,12 @@
 
 #tabla-inspeccion-vehiculos th:nth-child(4),
 #tabla-inspeccion-vehiculos td:nth-child(4) {
-    width: 25%; /* Revisión detalles */
+    width: 35%; /* Revisión detalles */
 }
 
 #tabla-inspeccion-vehiculos th:nth-child(5),
 #tabla-inspeccion-vehiculos td:nth-child(5) {
-    width: 20%; /* Estado */
+    width: 12%; /* Estado */
 }
 #tabla-inspeccion-vehiculos th:nth-child(6),
 #tabla-inspeccion-vehiculos td:nth-child(6) {
