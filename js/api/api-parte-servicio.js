@@ -300,7 +300,7 @@ function obtenerDescripciones() {
 // ✅ Obtener vehiculos del formulario
 function obtenerVehiculos() {
     const contenedor = document.getElementById("contenedor-tabla-vehiculos");
-    if (!contenedor || contenedor.style.display === "none") return []; // ✅ Si está oculta, no procesar nada
+    if (!contenedor || contenedor.style.display === "none") return [];
 
     const filas = document.querySelectorAll("#tabla-inspeccion-vehiculos tbody tr");
     const vehiculos = [];
@@ -312,20 +312,26 @@ function obtenerVehiculos() {
         const estadoSelect = fila.querySelector("select[name='revisionVehiculo[]']");
         const observacionesInput = fila.querySelector("textarea[name='observacionesVehiculo[]']");
 
-        // Solo agregar si todos los campos requeridos existen
-        if (horaInput && matriculaInput && detallesInput && estadoSelect && observacionesInput) {
+        // Validar campos obligatorios
+        if (
+            horaInput?.value &&
+            matriculaInput?.value.trim() !== "" &&
+            detallesInput?.value.trim() !== "" &&
+            estadoSelect?.value.trim() !== ""
+        ) {
             vehiculos.push({
-                hora: horaInput.value || "00:00",
-                matricula: matriculaInput.value || "",
-                detallesChecklist: detallesInput.value || "",
-                estadoRevision: estadoSelect.value || "",
-                observaciones: observacionesInput.value || "Sin observaciones"
+                hora: horaInput.value,
+                matricula: matriculaInput.value.trim(),
+                detallesChecklist: detallesInput.value.trim(),
+                estadoRevision: estadoSelect.value.trim(),
+                observaciones: observacionesInput?.value.trim() || "Sin observaciones"
             });
         }
     });
 
     return vehiculos;
 }
+
 
 
 
