@@ -1,4 +1,6 @@
+//variables globales
 const API_URL = window.CONFIG.API_BASE_URL; // Obtener la URL de la API
+const hayVehiculosIncompletos = false; //para comprobar la tabla incompleta de vehiculos
 
 // ✅ Función para capitalizar la primera letra en tiempo real en el campo "Otros"
 function capitalizarOtros() {
@@ -182,6 +184,15 @@ document.getElementById("formulario").addEventListener("submit", async function 
     const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
     console.log("📌 FechaSeleccionada antes de enviar:", fechaSeleccionada);
 
+    // ⏳ Obtener vehículos ANTES de construir el objeto final
+    const vehiculos = obtenerVehiculos();
+
+    // ⚠️ Verificar si hay vehículos incompletos y no se guardará ninguno
+    if (hayVehiculosIncompletos && vehiculos.length === 0) {
+        alert("⚠️ Tabla de vehículos incompleta. Ingrese todos los campos obligatorios o elimine la fila.");
+        return;
+    }
+
     const parteServicio = {
         fechaRegistro: new Date().toISOString(),
         fechaSeleccionada: fechaSeleccionada,
@@ -192,7 +203,7 @@ document.getElementById("formulario").addEventListener("submit", async function 
         accidentesPuesto: obtenerValorRadio("accidentes"),
         usuario: obtenerUsuarioDatos(),
         descripciones: obtenerDescripciones(),
-        vehiculos: obtenerVehiculos() // ✅ agrega esta línea
+        vehiculos: vehiculos // ya lo obtuviste arriba
     };
 
     console.log("📤 Enviando datos al backend:", JSON.stringify(parteServicio, null, 2));
@@ -203,7 +214,7 @@ document.getElementById("formulario").addEventListener("submit", async function 
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify(parteServicio),
         });
-        
+
         let data;
         try {
             data = await response.json(); // Intenta parsear JSON
@@ -212,9 +223,8 @@ document.getElementById("formulario").addEventListener("submit", async function 
             console.error("❌ Respuesta no es JSON. HTML recibido:", text);
             throw new Error("El servidor respondió con un error que no es JSON.");
         }
-        
+
         if (!response.ok) throw new Error(data.mensaje || `Error HTTP ${response.status}`);
-        
 
         alert("✅ Parte de servicio guardado con éxito.");
         location.reload();
@@ -352,6 +362,7 @@ function obtenerVehiculos() {
 
     const filas = document.querySelectorAll("#tabla-inspeccion-vehiculos tbody tr");
     const vehiculos = [];
+    hayVehiculosIncompletos = false; // Reiniciar estado
 
     filas.forEach(fila => {
         const horaInput = fila.querySelector("input[name='horaVehiculo[]']");
@@ -360,23 +371,28 @@ function obtenerVehiculos() {
         const estadoSelect = fila.querySelector("select[name='revisionVehiculo[]']");
         const observacionesInput = fila.querySelector("textarea[name='observacionesVehiculo[]']");
 
-        // Validar campos obligatorios
-        if (
-            horaInput?.value &&
-            matriculaInput?.value.trim() !== "" &&
-            detallesInput?.value.trim() !== "" &&
-            estadoSelect?.value.trim() !== ""
-        ) {
+        const hora = horaInput?.value;
+        const matricula = matriculaInput?.value.trim();
+        const detalles = detallesInput?.value.trim();
+        const estado = estadoSelect?.value.trim();
+        const observaciones = observacionesInput?.value.trim() || "Sin observaciones";
+
+        const esCompleto = hora && matricula && detalles && estado;
+
+        if (esCompleto) {
             vehiculos.push({
-                hora: horaInput?.value?.length === 5 ? `${horaInput.value}:00` : (horaInput?.value || "00:00"),
-                matricula: matriculaInput.value.trim(),
-                detallesChecklist: detallesInput.value.trim(),
-                estadoRevision: estadoSelect.value.trim(),
-                observaciones: observacionesInput?.value.trim() || "Sin observaciones"
+                hora: hora.length === 5 ? `${hora}:00` : hora,
+                matricula,
+                detallesChecklist: detalles,
+                estadoRevision: estado,
+                observaciones
             });
+        } else {
+            hayVehiculosIncompletos = true;
         }
     });
 
     return vehiculos;
 }
+
 
