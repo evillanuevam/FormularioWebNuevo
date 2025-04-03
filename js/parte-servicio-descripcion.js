@@ -57,7 +57,7 @@ function agregarDescripcion() {
     `;
 
     // Agregar evento para capitalizar el texto en tiempo real en los nuevos textarea
-    nuevaDescripcion.querySelectorAll("textarea[name='descripcion-servicio'], textarea[name='descripcion-accion']").forEach(textarea => {
+    nuevaDescripcion.querySelectorAll("textarea[name='descripcion-servicio'], textarea[name='descripcion-accion'], textarea[name='observacionesVehiculo']").forEach(textarea => {
         textarea.addEventListener("input", function () {
             let cursorPos = this.selectionStart; // Guardar la posición del cursor
             this.value = capitalizarFrase(this.value);
@@ -140,23 +140,23 @@ function agregarFila() {
 
     nuevaFila.innerHTML = `
         <td><input type="time" name="horaVehiculo[]"></td>
-        <td><input type="text" name="matriculaVehiculo[]"></td>
+        <td><input type="text" name="matriculaVehiculo[]" placeholder="Matrícula"></td>
         <td>
             <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
         </td>
-        <td><textarea type="text" name="detalles"></textarea></td>
+        <td><textarea type="text" name="detalles" placeholder="Seleccione los distintos detalles"></textarea></td>
         <td>
-          <select name="revisionVehiculo[]">
+            <select name="revisionVehiculo[]">
             <option value="">Seleccionar</option>
             <option value="OK">OK</option>
             <option value="NO OK">NO OK</option>
-          </select>
+            </select>
         </td>
-        <td><textarea type="text" name="observacionesVehiculo[]"></textarea></td>
+        <td><textarea type="text" name="observacionesVehiculo[]" placeholder="Ingresar observación relevante (opcional)"></textarea></td>
 
         <td>
             <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
-                    <i class="fa fa-trash"></i>
+            <i class="fa fa-trash"></i>
             </button>
         </td>
     `;

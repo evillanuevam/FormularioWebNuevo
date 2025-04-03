@@ -1,6 +1,6 @@
 //variables globales
 const API_URL = window.CONFIG.API_BASE_URL; // Obtener la URL de la API
-const hayVehiculosIncompletos = false; //para comprobar la tabla incompleta de vehiculos
+let hayVehiculosIncompletos = false; //tiene que ser let, porque const no permite reasignacion
 
 // ✅ Función para capitalizar la primera letra en tiempo real en el campo "Otros"
 function capitalizarOtros() {
@@ -61,7 +61,7 @@ function capitalizarFrase(texto) {
 
 // ✅ Aplicar la capitalización en tiempo real a los textarea
 document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("textarea[name='descripcion-servicio'], textarea[name='descripcion-accion'], textarea[name='observaciones']").forEach(textarea => {
+    document.querySelectorAll("textarea[name='descripcion-servicio'], textarea[name='descripcion-accion'], textarea[name='observaciones'], textarea[name='detalles'], textarea[name='observacionesVehiculo[]']").forEach(textarea => {
         textarea.addEventListener("input", function () {
             let cursorPos = this.selectionStart; // Guardar posición del cursor
             this.value = capitalizarFrase(this.value);
@@ -146,7 +146,7 @@ function validarHorasDescripcionEnRango() {
 
 // ✅ Validación en tiempo real al escribir hora
 document.addEventListener("input", function (event) {
-    if (event.target && event.target.matches("input[name='hora-inicio']")) {
+    if (event.target && event.target.matches("input[name='hora-inicio'], input[name='horaVehiculo[]']")) {
         const horaInput = event.target;
         const hora = horaInput.value;
         const horaInicio = document.getElementById("horaInicio").value;
@@ -173,7 +173,6 @@ document.addEventListener("input", function (event) {
         }
     }
 });
-
 
 // ✅ Enviar el formulario
 document.getElementById("formulario").addEventListener("submit", async function (event) {
@@ -365,6 +364,10 @@ function obtenerVehiculos() {
     hayVehiculosIncompletos = false; // Reiniciar estado
 
     filas.forEach(fila => {
+        // Quitar cualquier marca anterior de error
+        fila.style.border = "";
+        fila.style.backgroundColor = "";
+
         const horaInput = fila.querySelector("input[name='horaVehiculo[]']");
         const matriculaInput = fila.querySelector("input[name='matriculaVehiculo[]']");
         const detallesInput = fila.querySelector("textarea[name='detalles']");
@@ -389,10 +392,11 @@ function obtenerVehiculos() {
             });
         } else {
             hayVehiculosIncompletos = true;
+            // 🔴 Marcar fila en rojo
+            fila.style.border = "2px solid red";
+            fila.style.backgroundColor = "#ffe5e5";
         }
     });
 
     return vehiculos;
 }
-
-

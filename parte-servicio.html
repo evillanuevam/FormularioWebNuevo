@@ -263,11 +263,11 @@
                                 <tbody>
                                   <tr>
                                     <td><input type="time" name="horaVehiculo[]"></td>
-                                    <td><input type="text" name="matriculaVehiculo[]"></td>
+                                    <td><input type="text" name="matriculaVehiculo[]" placeholder="Matrícula"></td>
                                     <td>
                                         <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
                                     </td>
-                                    <td><textarea type="text" name="detalles"></textarea></td>
+                                    <td><textarea type="text" name="detalles" placeholder="Seleccione los distintos detalles"></textarea></td>
                                     <td>
                                       <select name="revisionVehiculo[]">
                                         <option value="">Seleccionar</option>
@@ -275,7 +275,7 @@
                                         <option value="NO OK">NO OK</option>
                                       </select>
                                     </td>
-                                    <td><textarea type="text" name="observacionesVehiculo[]"></textarea></td>
+                                    <td><textarea type="text" name="observacionesVehiculo[]" placeholder="Ingresar observación relevante (opcional)"></textarea></td>
 
                                     <td>
                                       <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
