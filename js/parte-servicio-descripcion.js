@@ -12,45 +12,55 @@ function agregarDescripcion() {
 
     nuevaDescripcion.innerHTML = `
         <div class="horario">
-            <div class="nombre-vigilante">
-                <label class="label-nombre-vigilante"><em>${nombreVigilante}</em></label>
-            </div>    
+            <div id="nombre-vigilante-container" class="nombre-vigilante">
+                <label id="label-nombre-vigilante">Nombre</label>
+            </div>                                    
             <div class="horario-item">
                 <label for="hora-inicio">Hora</label>
                 <input type="time" name="hora-inicio" required>
             </div>
         </div>
-
+        <!-- Columna 2: Descripción del servicio -->
         <textarea name="descripcion-servicio" placeholder="Describe el servicio realizado" required></textarea>
+        <!-- Columna 3: Acción tomada -->
         <textarea name="descripcion-accion" placeholder="Describe la acción tomada (opcional)"></textarea>
-
-        <!-- Contenedor de verificación y checkbox -->
+        <!-- Columna 4: Verificación + Checkbox incidencia -->
         <div class="verificacion-container">
+            <!-- Contenedor de verificación -->
             <div class="verificacion-item">
-                <label for="verificacion">Verificación</label>
+                <label for="verificacion">Verificación:</label>
                 <select name="verificacion">
-                    <option value="" disabled selected>Seleccione...</option>
+                    <option value="" disabled selected>Seleccione..</option>
                     <option value="Ok">Ok</option>
-                    <option value="No Ok">No OK</option>
+                    <option value="No OK">No OK</option>
                 </select>
             </div>
-
+            <!-- Contenedor de checkbox de incidencia -->
             <div class="incidencia-item">
                 <label for="incidencia">Marque si es incidencia:</label>
                 <input type="checkbox" class="incidencia-checkbox">
                 <input type="hidden" name="incidencia" value="Incidencia">
             </div>
-        </div>
+            <!-- Contenedor para tipo de incidencia (se agregará dinámicamente si el checkbox está marcado) -->
+            <div class="tipo-incidencia-container" style="display: none;">
+                <label for="tipo-incidencia">Tipo de incidencia:</label>
+                <select name="tipoIncidencia" class="tipo-incidencia-select">
+                    <option value="" disabled selected>Seleccione tipo...</option>
+                    <!-- Las opciones se insertarán por JS -->
+                </select>
+            </div>
 
-        <!-- Sección de subida de archivo -->
+        </div>
+        <!-- Contenedor 5: de subida de archivos -->
         <div class="archivo-item">
-            <input type="file" id="${uniqueId}" class="archivo-input" style="display: none;" onchange="mostrarNombreArchivo(this)">
-            <button type="button" class="archivo-boton" onclick="document.getElementById('${uniqueId}').click();">
-                📁 Subir archivo
-            </button>
-            <span class="archivo-nombre">Archivo no seleccionado</span>
+        <input type="file" id="${uniqueId}" class="archivo-input" style="display: none;" onchange="mostrarNombreArchivo(this)">
+        <button type="button" class="archivo-boton" onclick="document.getElementById('${uniqueId}').click();">
+            📁 Subir archivo
+        </button>
+        <span class="archivo-nombre">Archivo no seleccionado</span>
         </div>
-
+        
+        <!-- Columna 6: Botón eliminar -->
         <button type="button" class="btn-eliminar" onclick="eliminarDescripcion(this)" title="Eliminar">
             <i class="fa fa-trash"></i>
         </button>
@@ -244,6 +254,43 @@ function guardarChecklist() {
 
   cerrarModal();
 }
+
+//******************************* DESPLEGABLE INCIDENCIA***************************************/
+const tiposIncidenciaPorAeropuerto = {
+    "MAD - Madrid-Barajas": ["Fallo eléctrico", "Puerta averiada", "Retraso relevo", "Otro"],
+    "PMI - Palma de Mallorca": ["Falta de personal", "Alarma falsa", "Fuga de agua", "Otro"],
+    // Añade más según los aeropuertos que tengas
+};
+
+//mostrar el desplegable al dar check en en recuadro de incidencia.
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("incidencia-checkbox")) {
+        const checkbox = event.target;
+        const contenedor = checkbox.closest(".descripcion-item");
+        const tipoContainer = contenedor.querySelector(".tipo-incidencia-container");
+        const select = contenedor.querySelector(".tipo-incidencia-select");
+
+        if (checkbox.checked) {
+            // Obtener aeropuerto actual
+            const aeropuerto = obtenerUsuarioDatos().aeropuerto;
+            const tipos = tiposIncidenciaPorAeropuerto[aeropuerto] || ["General"];
+
+            // Limpiar y rellenar select
+            select.innerHTML = `<option value="" disabled selected>Seleccione tipo...</option>`;
+            tipos.forEach(tipo => {
+                const option = document.createElement("option");
+                option.value = tipo;
+                option.textContent = tipo;
+                select.appendChild(option);
+            });
+
+            tipoContainer.style.display = "block";
+        } else {
+            tipoContainer.style.display = "none";
+            select.innerHTML = ""; // Opcional: limpiar si se desmarca
+        }
+    }
+});
 
   
 

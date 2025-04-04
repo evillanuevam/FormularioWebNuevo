@@ -363,9 +363,18 @@
                                         <input type="checkbox" class="incidencia-checkbox">
                                         <input type="hidden" name="incidencia" value="Incidencia">
                                     </div>
+                                    <!-- Contenedor para tipo de incidencia (se agregará dinámicamente si el checkbox está marcado) -->
+                                    <div class="tipo-incidencia-container" style="display: none;">
+                                        <label for="tipo-incidencia">Tipo de incidencia:</label>
+                                        <select name="tipoIncidencia" class="tipo-incidencia-select">
+                                            <option value="" disabled selected>Seleccione tipo...</option>
+                                            <!-- Las opciones se insertarán por JS -->
+                                        </select>
+                                    </div>
+
                                 </div>
-                               <!-- Contenedor 5: de subida de archivos -->
-                               <div class="archivo-item">
+                                <!-- Contenedor 5: de subida de archivos -->
+                                <div class="archivo-item">
                                 <input type="file" id="${uniqueId}" class="archivo-input" style="display: none;" onchange="mostrarNombreArchivo(this)">
                                 <button type="button" class="archivo-boton" onclick="document.getElementById('${uniqueId}').click();">
                                     📁 Subir archivo

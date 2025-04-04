@@ -371,6 +371,10 @@
   text-align: right;
 }
 
+/* css de tipo de incidencia*/
+.tipo-incidencia-container {
+    margin-top: 6px; /* o prueba con 10px o 12px si quieres más separación */
+}
 
 
 

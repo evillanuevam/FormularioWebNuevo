@@ -299,6 +299,7 @@ function obtenerDescripciones() {
             accionTomada: item.querySelector("textarea[name='descripcion-accion']")?.value || "Sin acción",
             verificacion: item.querySelector("select[name='verificacion']")?.value || "No definido",
             esIncidencia: obtenerValorIncidencia(item.querySelector(".incidencia-checkbox")),
+            tipoIncidencia: item.querySelector(".tipo-incidencia-select")?.value || null, //AGREGADO ULTIMO CON LA MODIFICACION DE INCIDENCIA
             observaciones: observacionesInput ? observacionesInput.value.trim() : "Sin observaciones",
             archivoRuta: null
         });
