@@ -38,14 +38,32 @@ document.addEventListener("DOMContentLoaded", function () {
         // ✅ ASIGNAR EL AEROPUERTO AL ENCABEZADO Y FORMULARIOS
         document.getElementById("header-text").textContent = aeropuerto;
 
-        const setAeropuertoValue = (id) => {
+        /*const setAeropuertoValue = (id) => {
             const selectElement = document.getElementById(id);
             if (selectElement) {
                 selectElement.value = aeropuerto;
                 selectElement.setAttribute("readonly", true);
             }
-        };
+        };*/
 
+        const setAeropuertoValue = (id) => {
+            const selectElement = document.getElementById(id);
+            if (selectElement) {
+              // Limpiar opciones existentes
+              selectElement.innerHTML = "";
+          
+              // Crear una opción con el aeropuerto del token
+              const option = document.createElement("option");
+              option.value = aeropuerto;
+              option.textContent = aeropuerto;
+              option.selected = true;
+          
+              selectElement.appendChild(option);
+              selectElement.disabled = true;
+            }
+          };
+          
+        
         if (paginaActual === "parte-servicio.html") {
             setAeropuertoValue("aeropuerto");
             document.getElementById("nombre-vigilante").value = nombre;
@@ -60,8 +78,15 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("tip").setAttribute("readonly", true);
         }
 
+        if (paginaActual === "administrar.html") {
+            setAeropuertoValue("aeropuerto-incidencias");
+            // Asignar el aeropuerto a los otros selects si existen
+            setAeropuertoValue("aeropuerto-admin");
+            setAeropuertoValue("aeropuerto-eliminar");
+        }
+
         if (["patrullas-perimetro.html", "patrullas-otras-zonas.html", "parte-equipos.html", 
-             "inspeccion-vehiculos.html", "inspeccion-suministros.html", "administrar.html"]
+             "inspeccion-vehiculos.html", "inspeccion-suministros.html"]
             .includes(paginaActual)) {
             setAeropuertoValue("aeropuerto");
         }

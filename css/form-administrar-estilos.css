@@ -1,3 +1,8 @@
+/*exclusivos para esta pagina*/
+.form-group, h1 {
+    margin: 20px;
+} 
+
 /* Estilo de las secciones de Administrar desplegables */
 .security-section, .patrol-section {
     border: 2px solid #003366b6;
@@ -51,6 +56,7 @@
 .form-container{
     margin: 0px;
     border-radius: 0px;
+    /*height: 800px;*/
 }
 
 /* Contenedor principal */
@@ -85,8 +91,6 @@
     margin-right: 2px;
     position: relative;
     top: 3px; /* Para que la pestaña activa esté en primer plano */
-    user-select: none; 
-
 }
 /* Estilo de la pestaña activa */
 .tab-button.active {
@@ -94,6 +98,7 @@
     color: white; /* Cambia el color del texto a blanco */
     transform: scale(1.01); /* Pequeño efecto de crecimiento */
 }
+
 
 
 /* Estilos del contenido de las pestañas */
@@ -107,11 +112,20 @@
     background-color: transparent; /* Fondo transparente para evitar el recuadro gris */
     box-shadow: none; /* Elimina cualquier sombra */
     border: none; /* Elimina cualquier borde visible */
+    
 }
 
 .tab-content.active {
     display: block;
 }
+
+/*tabla*/
+.table-container table {
+    width: 100%;
+    table-layout: fixed; /* fuerza a expandirse aunque tenga pocas columnas */
+    
+}
+
 
 
 /*ESTILOS DE ELIMINAR USUARIO*/
@@ -165,7 +179,4 @@
     border-radius: 5px;
     margin-right: 20px;
 }
-
-
-
 
