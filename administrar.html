@@ -100,7 +100,7 @@
                     <div class="form-container">
                         <h1>Administrar Desplegables</h1>
                 
-                        <form id="formulario">
+                        <form id="formulario-desplegables">
                             <div class="select-container">
                                 <i class="fa-solid fa-plane"></i>
                                 <select id="aeropuerto-admin" name="aeropuerto" title="seleccione un aeropuerto" required>
@@ -169,7 +169,7 @@
                     <div class="form-container">
                       <h1>Administrar Tipos de Incidencias</h1>
                   
-                      <form id="formulario">
+                      <form id="formulario-incidencias">
                         <div class="select-container">
                           <i class="fa-solid fa-plane"></i>
                           <select id="aeropuerto-incidencias" name="aeropuerto" title="seleccione un aeropuerto" required>
@@ -179,7 +179,7 @@
                   
                         <div class="form-group">
                           <label for="nueva-incidencia">Ingrese un nuevo tipo de incidencia:</label>
-                          <input type="text" id="nueva-incidencia" placeholder="Ej: Puerta averiada, Retraso relevo" required>
+                          <input type="text" id="nueva-incidencia" class="solo-letras" placeholder="Ej: Puerta averiada, Retraso relevo" required>
                         </div>
 
                         <div class="form-group">
@@ -198,14 +198,14 @@
                   
                         <!-- TABLA DE REGISTROS -->
                         <div class="table-container">
-                        <h3>Tipos de Icidencia Registradas</h3>
-                        <table>
+                        <h3>Tipos de Incidencia Registradas</h3>
+                        <table id="tabla-incidencias">
                             <thead>
                                 <tr>
                                     <th>Incidencia</th>
                                     <th>Resumen Diario</th>
                                     <th>Usuario</th>
-                                    <th>Acciones</th>
+                                    <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody id="incidencias-list">
@@ -221,7 +221,7 @@
                     <div class="form-container">
                         <h1>Eliminar Usuario</h1>
 
-                        <form id="formulario">
+                        <form id="formulario-eliminar">
                             <div class="select-container">
                                 <i class="fa-solid fa-plane"></i>
                                 <select id="aeropuerto-eliminar" name="aeropuerto" title="seleccione un aeropuerto" required>
@@ -317,6 +317,7 @@
      <!-- llamadas a scripts -->
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/utils/config-encabezado-pie.js"></script>
+    <script src="js/utils/validaciones-globales.js"></script>
     <script src="js/administrar.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
     <script src="js/api/api-administrar.js"></script>

@@ -19,7 +19,6 @@
     padding: 0 10px;
 }
 
-
 /* Contenedor del select con ícono */
 .select-container {
     position: relative;
@@ -48,8 +47,6 @@
     cursor: pointer;
     margin: 20px;
 }
-
-
 
 /* Estilos generales para la sección de administración con pestañas */
 
@@ -99,8 +96,6 @@
     transform: scale(1.01); /* Pequeño efecto de crecimiento */
 }
 
-
-
 /* Estilos del contenido de las pestañas */
 .tab-content {
     display: none;
@@ -125,8 +120,6 @@
     table-layout: fixed; /* fuerza a expandirse aunque tenga pocas columnas */
     
 }
-
-
 
 /*ESTILOS DE ELIMINAR USUARIO*/
 
@@ -163,7 +156,6 @@
     border-radius: 3px;
 }
 
-
 /* Ajustar el input para eliminar el espacio a la izquierda y abajo */
 #buscar-tip {
     max-width: 180px;
@@ -179,4 +171,51 @@
     border-radius: 5px;
     margin-right: 20px;
 }
+
+/*CSS DE TABLA INCIDENCIAS*/
+/* ✅ ESTILO SIMILAR A LA TABLA AZUL */
+#tabla-incidencias {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+#tabla-incidencias th,
+#tabla-incidencias td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: left;
+    text-align: center;         /* ✅ Centrar horizontalmente */
+    vertical-align: middle;  
+}
+
+/* Encabezado en azul oscuro */
+#tabla-incidencias th {
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+}
+
+/* Filas alternas gris claro */
+#tabla-incidencias tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Botón de eliminar centrado */
+#tabla-incidencias .btn-eliminar {
+    background-color: #e74c3c;
+    border: none;
+    padding: 6px 10px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#tabla-incidencias .btn-eliminar:hover {
+    background-color: #c0392b;
+}
+
 

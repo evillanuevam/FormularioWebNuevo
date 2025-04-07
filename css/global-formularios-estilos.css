@@ -112,6 +112,12 @@
     padding: 10px;
 }
 
+.form-container .btn-eliminar i {
+    font-size: 14px;
+    pointer-events: none;
+}
+
+
 .form-container .btn-eliminar:hover {
     background-color: #c0392b;
 }
