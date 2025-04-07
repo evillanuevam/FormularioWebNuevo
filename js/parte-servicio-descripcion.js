@@ -255,43 +255,5 @@ function guardarChecklist() {
   cerrarModal();
 }
 
-//******************************* DESPLEGABLE INCIDENCIA***************************************/
-const tiposIncidenciaPorAeropuerto = {
-    "MAD - Madrid-Barajas": ["Fallo eléctrico", "Puerta averiada", "Retraso relevo", "Otro"],
-    "PMI - Palma de Mallorca": ["Falta de personal", "Alarma falsa", "Fuga de agua", "Otro"],
-    // Añade más según los aeropuertos que tengas
-};
-
-//mostrar el desplegable al dar check en en recuadro de incidencia.
-document.addEventListener("change", function (event) {
-    if (event.target.classList.contains("incidencia-checkbox")) {
-        const checkbox = event.target;
-        const contenedor = checkbox.closest(".descripcion-item");
-        const tipoContainer = contenedor.querySelector(".tipo-incidencia-container");
-        const select = contenedor.querySelector(".tipo-incidencia-select");
-
-        if (checkbox.checked) {
-            // Obtener aeropuerto actual
-            const aeropuerto = obtenerUsuarioDatos().aeropuerto;
-            const tipos = tiposIncidenciaPorAeropuerto[aeropuerto] || ["General"];
-
-            // Limpiar y rellenar select
-            select.innerHTML = `<option value="" disabled selected>Seleccione tipo...</option>`;
-            tipos.forEach(tipo => {
-                const option = document.createElement("option");
-                option.value = tipo;
-                option.textContent = tipo;
-                select.appendChild(option);
-            });
-
-            tipoContainer.style.display = "block";
-        } else {
-            tipoContainer.style.display = "none";
-            select.innerHTML = ""; // Opcional: limpiar si se desmarca
-        }
-    }
-});
-
-  
 
 

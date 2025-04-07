@@ -401,3 +401,61 @@ function obtenerVehiculos() {
 
     return vehiculos;
 }
+
+//******************************* DESPLEGABLE INCIDENCIA***************************************/
+
+//mostrar el desplegable al dar check en en recuadro de incidencia.
+//mostrar el desplegable al dar check en en recuadro de incidencia.
+document.addEventListener("change", async function (event) {
+    if (event.target.classList.contains("incidencia-checkbox")) {
+        const checkbox = event.target;
+        const contenedor = checkbox.closest(".descripcion-item");
+        const tipoContainer = contenedor.querySelector(".tipo-incidencia-container");
+        const select = contenedor.querySelector(".tipo-incidencia-select");
+
+        if (checkbox.checked) {
+            const tipos = await obtenerTiposIncidenciaDesdeAPI();
+
+            select.innerHTML = `<option value="" disabled selected>Seleccione tipo...</option>`;
+            tipos.forEach(tipo => {
+                const option = document.createElement("option");
+                option.value = tipo;
+                option.textContent = tipo;
+                select.appendChild(option);
+            });
+
+            select.required = true; // ✅ hacer obligatorio
+            tipoContainer.style.display = "block";
+        } else {
+            tipoContainer.style.display = "none";
+            select.innerHTML = "";
+            select.required = false; // ✅ quitar obligatorio si se desmarca
+        }
+    }
+});
+
+
+async function obtenerTiposIncidenciaDesdeAPI() {
+    const { aeropuerto } = obtenerUsuarioDatos();
+    if (!aeropuerto) return [];
+
+    try {
+        const response = await fetch(`${API_URL}/api/Administrar/leer-incidencias?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Error al obtener incidencias");
+
+        const data = await response.json();
+        console.log("✅ Tipos de incidencia desde backend:", data);
+
+        const lista = data.$values || []; // 👈 EXTRAER ARRAY REAL
+
+        return lista.map(i => i.nombreIncidencia); // 🔹 Convertimos a ["Puerta", "Escalera", ...]
+    } catch (err) {
+        console.error("❌ Error al obtener tipos de incidencia:", err);
+        return [];
+    }
+}
