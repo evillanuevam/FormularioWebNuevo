@@ -173,8 +173,8 @@
 }
 
 /*CSS DE TABLA INCIDENCIAS*/
-/* ✅ ESTILO SIMILAR A LA TABLA AZUL */
-#tabla-incidencias {
+/* ✅ ESTILO UNIFICADO PARA TODAS LAS TABLAS DENTRO DE .table-container */
+.table-container table {
     width: 100%;
     border-collapse: collapse;
     margin-top: 20px;
@@ -182,29 +182,28 @@
     font-size: 15px;
 }
 
-#tabla-incidencias th,
-#tabla-incidencias td {
+.table-container th,
+.table-container td {
     border: 1px solid #ddd;
     padding: 10px;
-    text-align: left;
-    text-align: center;         /* ✅ Centrar horizontalmente */
-    vertical-align: middle;  
+    text-align: center;         /* Centrado horizontal */
+    vertical-align: middle;     /* Centrado vertical */
 }
 
-/* Encabezado en azul oscuro */
-#tabla-incidencias th {
+/* Encabezado azul oscuro */
+.table-container th {
     background-color: #003366;
     color: white;
     font-weight: bold;
 }
 
 /* Filas alternas gris claro */
-#tabla-incidencias tbody tr:nth-child(even) {
+.table-container tbody tr:nth-child(even) {
     background-color: #f9f9f9;
 }
 
-/* Botón de eliminar centrado */
-#tabla-incidencias .btn-eliminar {
+/* Botón de eliminar en todas las tablas */
+.table-container .btn-eliminar {
     background-color: #e74c3c;
     border: none;
     padding: 6px 10px;
@@ -214,8 +213,6 @@
     cursor: pointer;
 }
 
-#tabla-incidencias .btn-eliminar:hover {
+.table-container .btn-eliminar:hover {
     background-color: #c0392b;
 }
-
-

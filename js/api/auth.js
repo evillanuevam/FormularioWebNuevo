@@ -80,6 +80,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         if (paginaActual === "administrar.html") {
             setAeropuertoValue("aeropuerto-incidencias");
+            setAeropuertoValue("aeropuerto-puestos");
             // Asignar el aeropuerto a los otros selects si existen
             setAeropuertoValue("aeropuerto-admin");
             setAeropuertoValue("aeropuerto-eliminar");

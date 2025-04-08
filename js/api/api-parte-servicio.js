@@ -405,7 +405,6 @@ function obtenerVehiculos() {
 //******************************* DESPLEGABLE INCIDENCIA***************************************/
 
 //mostrar el desplegable al dar check en en recuadro de incidencia.
-//mostrar el desplegable al dar check en en recuadro de incidencia.
 document.addEventListener("change", async function (event) {
     if (event.target.classList.contains("incidencia-checkbox")) {
         const checkbox = event.target;
@@ -433,7 +432,6 @@ document.addEventListener("change", async function (event) {
         }
     }
 });
-
 
 async function obtenerTiposIncidenciaDesdeAPI() {
     const { aeropuerto } = obtenerUsuarioDatos();

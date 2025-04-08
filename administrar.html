@@ -92,6 +92,7 @@
                 <div class="tabs-container">
                     <div class="tab-button active" data-tab="administrar">Administrar Desplegables</div>
                     <div class="tab-button" data-tab="incidencias">Incidencias</div>
+                    <div class="tab-button" data-tab="puestos">Puestos</div>
                     <div class="tab-button" data-tab="eliminar">Eliminar Usuario</div>
                 </div>
 
@@ -209,6 +210,48 @@
                                 </tr>
                             </thead>
                             <tbody id="incidencias-list">
+                                <!-- Aquí se insertarán los registros dinámicamente -->
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- FORMULARIO DE PUESTOS -->
+                <div id="puestos" class="tab-content">
+                    <div class="form-container">
+                      <h1>Administrar puestos de vigilantes</h1>
+                  
+                      <form id="formulario-puestos">
+                            <div class="select-container">
+                            <i class="fa-solid fa-plane"></i>
+                            <select id="aeropuerto-puestos" name="aeropuerto" title="seleccione un aeropuerto" required>
+                                <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            </select>
+                            </div>
+                    
+                            <div class="form-group">
+                            <label for="nueva-puesto">Ingrese un nuevo puesto de vigilante:</label>
+                            <input type="text" id="nueva-puesto" class="solo-letras" placeholder="Ej: Filtro pax, Filtro empleado, bodega, vehículos" required>
+                            </div>                       
+                    
+                            <div class="form-group">
+                            <button type="submit" class="btn-enviar"><i class="fa-solid fa-save"></i> Guardar</button>
+                            </div>
+                      </form>
+                  
+                        <!-- TABLA DE REGISTROS -->
+                        <div class="table-container">
+                        <h3>Tipos de Incidencia Registradas</h3>
+                        <table id="tabla-puesto">
+                            <thead>
+                                <tr>
+                                    <th>Puesto del Vigilante</th>
+                                    <th>Usuario Aministrador</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="puestos-list">
                                 <!-- Aquí se insertarán los registros dinámicamente -->
                             </tbody>
                         </table>
