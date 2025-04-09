@@ -164,8 +164,12 @@
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user-shield"></i>
-                        <input type="text" id="rol-login" placeholder="Vigilante" title="No puede modificar su ROL" readonly >
-                    </div>
+                        <select id="rol-login" title="Selecciona tu rol" required>
+                            <option value="" disabled selected>Selecciona un rol</option>
+                            <option value="Vigilante">Vigilante</option>
+                            <option value="Auxiliar">Auxiliar</option>
+                        </select>
+                    </div>                    
                     <button id="registerButton" type="submit" class="submit-btn">
                         <i class="fa-solid fa-user-check"></i> Sign Up
                     </button>

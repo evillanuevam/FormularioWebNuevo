@@ -147,7 +147,8 @@ document.addEventListener("DOMContentLoaded", function () {
             const apellido1 = document.querySelector("#register-form input[placeholder='Apellido 1']").value.trim();
             const apellido2 = document.querySelector("#register-form input[placeholder='Apellido 2']").value.trim();
             const tip = document.querySelector("#register-form input[placeholder='TIP']").value.trim();
-            const rol = "Vigilante"; // Todos los usuarios registrados serán vigilantes
+            //const rol = "Vigilante"; // Todos los usuarios registrados serán vigilantes
+            const rol = document.getElementById("rol-login").value;
         
             if (!aeropuerto || !nombre || !apellido1 || !apellido2 || !tip) {
                 mostrarMensaje(mensajeRegistro, "⚠️ Por favor, complete todos los campos.", "red");
@@ -206,6 +207,4 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         });
     }
-
-
 });
