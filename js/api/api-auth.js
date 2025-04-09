@@ -142,13 +142,13 @@ document.addEventListener("DOMContentLoaded", function () {
         registerForm.addEventListener("submit", async function (event) {
             event.preventDefault(); // Evitar que la página se recargue
         
-            const aeropuerto = document.querySelector("#register-form select").value;
+            const aeropuerto = document.querySelector("#register-form select[title='Seleccione un Aeropuerto']").value;
             const nombre = document.querySelector("#register-form input[placeholder='Nombre']").value.trim();
             const apellido1 = document.querySelector("#register-form input[placeholder='Apellido 1']").value.trim();
             const apellido2 = document.querySelector("#register-form input[placeholder='Apellido 2']").value.trim();
             const tip = document.querySelector("#register-form input[placeholder='TIP']").value.trim();
-            //const rol = "Vigilante"; // Todos los usuarios registrados serán vigilantes
-            const rol = document.getElementById("rol-login").value;
+            //const rol = "Vigilante";
+            const rol = document.querySelector("#register-form select#rol-login").value;
         
             if (!aeropuerto || !nombre || !apellido1 || !apellido2 || !tip) {
                 mostrarMensaje(mensajeRegistro, "⚠️ Por favor, complete todos los campos.", "red");

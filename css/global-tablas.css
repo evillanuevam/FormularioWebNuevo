@@ -1,0 +1,44 @@
+/* CSS PARA LAS TABLAS DE LOS REPORTES o cualquier otro en azul*/
+/* ✅ ESTILO GLOBAL PARA TODAS LAS TABLAS */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    font-family: inherit;
+    font-size: 15px;
+}
+
+th,
+td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+/* ✅ ENCABEZADO OSCURO */
+th {
+    background-color: #003366;
+    color: white;
+    font-weight: bold;
+}
+
+/* ✅ FILAS ALTERNAS */
+tbody tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* ✅ BOTÓN DE ELIMINAR (O DE ACCIÓN) */
+button.btn-eliminar {
+    background-color: #e74c3c;
+    border: none;
+    padding: 6px 10px;
+    color: white;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+button.btn-eliminar:hover {
+    background-color: #c0392b;
+}

@@ -46,9 +46,9 @@ function actualizarDescripcionesEnTabla(descripciones) {
     descripciones.forEach(descripcion => {
         const fila = document.createElement("tr");
 
-        if (descripcion.esIncidencia?.trim().toLowerCase() === "incidencia") {
+        if (descripcion.esIncidencia?.trim().toLowerCase() !== "no incidencia") {
             fila.classList.add("incidencia");
-        }
+        }       
 
         const valores = [
             descripcion.nombre || "Sin nombre",

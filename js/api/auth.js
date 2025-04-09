@@ -97,7 +97,14 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);
         }
 
-        if (paginaActual === "reporte-servicio.html") {
+        if (paginaActual === "reporte-parte-servicios.html") {
+            setAeropuertoValue("aeropuerto");
+            document.getElementById("nombre-vigilante").value = nombre;
+
+            document.getElementById("nombre-vigilante").setAttribute("readonly", true);
+        }
+
+        if (paginaActual === "reporte-incidencias.html") {
             setAeropuertoValue("aeropuerto");
             document.getElementById("nombre-vigilante").value = nombre;
 
