@@ -12,14 +12,18 @@ function agregarDescripcion() {
 
     nuevaDescripcion.innerHTML = `
         <div class="horario">
-            <div id="nombre-vigilante-container" class="nombre-vigilante">
-                <label id="label-nombre-vigilante">Nombre</label>
-            </div>                                    
             <div class="horario-item">
                 <label for="hora-inicio">Hora</label>
                 <input type="time" name="hora-inicio" required>
             </div>
+            <div class="puesto-item">
+                <select name="puesto" class="puesto-select" required>
+                    <option value="" disabled selected> Puesto Vigilante</option>
+                    <!-- Opciones dinámicas -->
+                </select>
+            </div>
         </div>
+
         <!-- Columna 2: Descripción del servicio -->
         <textarea name="descripcion-servicio" placeholder="Describe el servicio realizado" required></textarea>
         <!-- Columna 3: Acción tomada -->
@@ -30,22 +34,22 @@ function agregarDescripcion() {
             <div class="verificacion-item">
                 <label for="verificacion">Verificación:</label>
                 <select name="verificacion">
-                    <option value="" disabled selected>Seleccione..</option>
+                    <option value="" disabled selected>....</option>
                     <option value="Ok">Ok</option>
                     <option value="No OK">No OK</option>
                 </select>
             </div>
             <!-- Contenedor de checkbox de incidencia -->
             <div class="incidencia-item">
-                <label for="incidencia">Marque si es incidencia:</label>
+                <label for="incidencia">Marcar si es incidencia:</label>
                 <input type="checkbox" class="incidencia-checkbox">
                 <input type="hidden" name="incidencia" value="Incidencia">
             </div>
             <!-- Contenedor para tipo de incidencia (se agregará dinámicamente si el checkbox está marcado) -->
             <div class="tipo-incidencia-container" style="display: none;">
-                <label for="tipo-incidencia">Tipo de incidencia:</label>
+                
                 <select name="tipoIncidencia" class="tipo-incidencia-select">
-                    <option value="" disabled selected>Seleccione tipo...</option>
+                    <option value="" disabled selected>Tipo de Incidencia</option>
                     <!-- Las opciones se insertarán por JS -->
                 </select>
             </div>
@@ -79,6 +83,19 @@ function agregarDescripcion() {
 
     // Llamar a la función para que registre los eventos en los nuevos checkboxes
     activarCambioColorIncidencia();
+
+    // 🔹 Rellenar los puestos disponibles desde la API
+    obtenerPuestosVigilanteDesdeAPI().then(puestos => {
+        const selectPuesto = nuevaDescripcion.querySelector(".puesto-select");
+        if (selectPuesto && puestos.length > 0) {
+            puestos.forEach(puesto => {
+                const option = document.createElement("option");
+                option.value = puesto;
+                option.textContent = puesto;
+                selectPuesto.appendChild(option);
+            });
+        }
+    });
 
 }
 

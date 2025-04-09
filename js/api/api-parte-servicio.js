@@ -292,14 +292,28 @@ function obtenerValorIncidencia(checkbox) {
 function obtenerDescripciones() {
     const descripciones = [];
     document.querySelectorAll("#descripcion-container .descripcion-item").forEach(item => {
-        const observacionesInput = document.querySelector("textarea[name='observaciones']"); // 🔹 Asegurar que se toma correctamente
+        const observacionesInput = document.querySelector("textarea[name='observaciones']");
+
+        const checkbox = item.querySelector(".incidencia-checkbox");
+        const tipoIncidenciaSelect = item.querySelector(".tipo-incidencia-select");
+
+        let valorIncidencia = "No incidencia";
+
+        if (checkbox && checkbox.checked) {
+            if (!tipoIncidenciaSelect || !tipoIncidenciaSelect.value) {
+                alert("⚠️ Marcaste una incidencia pero no seleccionaste el tipo. Corrige antes de continuar.");
+                throw new Error("Tipo de incidencia no seleccionado.");
+            }
+            valorIncidencia = tipoIncidenciaSelect.value;
+        }
+
         descripciones.push({
             hora: item.querySelector("input[name='hora-inicio']")?.value || "00:00",
+            puestoVigilante: item.querySelector("select[name='puesto']")?.value || "No definido",
             descripcion: item.querySelector("textarea[name='descripcion-servicio']")?.value || "Sin descripción",
             accionTomada: item.querySelector("textarea[name='descripcion-accion']")?.value || "Sin acción",
             verificacion: item.querySelector("select[name='verificacion']")?.value || "No definido",
-            esIncidencia: obtenerValorIncidencia(item.querySelector(".incidencia-checkbox")),
-            tipoIncidencia: item.querySelector(".tipo-incidencia-select")?.value || null, //AGREGADO ULTIMO CON LA MODIFICACION DE INCIDENCIA
+            esIncidencia: valorIncidencia,
             observaciones: observacionesInput ? observacionesInput.value.trim() : "Sin observaciones",
             archivoRuta: null
         });
@@ -414,22 +428,30 @@ document.addEventListener("change", async function (event) {
 
         if (checkbox.checked) {
             const tipos = await obtenerTiposIncidenciaDesdeAPI();
-
-            select.innerHTML = `<option value="" disabled selected>Seleccione tipo...</option>`;
+        
+            select.innerHTML = `<option value="" disabled selected>Seleccionar Incidencia</option>`;
             tipos.forEach(tipo => {
                 const option = document.createElement("option");
                 option.value = tipo;
                 option.textContent = tipo;
                 select.appendChild(option);
             });
-
-            select.required = true; // ✅ hacer obligatorio
+        
+            select.required = true;
             tipoContainer.style.display = "block";
+        
+            // ✅ Activar clase para ampliar textarea
+            contenedor.classList.add("incidencia-activa");
+        
         } else {
             tipoContainer.style.display = "none";
             select.innerHTML = "";
-            select.required = false; // ✅ quitar obligatorio si se desmarca
+            select.required = false;
+        
+            // ✅ Quitar clase si se desmarca
+            contenedor.classList.remove("incidencia-activa");
         }
+        
     }
 });
 
@@ -457,3 +479,51 @@ async function obtenerTiposIncidenciaDesdeAPI() {
         return [];
     }
 }
+
+//********************************* DESPLEGABLE PUESTOS DE VIGILANTE **************************************//
+async function obtenerPuestosVigilanteDesdeAPI() {
+    const { aeropuerto } = obtenerUsuarioDatos();
+    if (!aeropuerto) return [];
+
+    try {
+        const response = await fetch(`${API_URL}/api/Administrar/leer-puestos?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
+        });
+
+        if (!response.ok) throw new Error("Error al obtener puestos");
+
+        const data = await response.json();
+        console.log("✅ Puestos vigilante desde backend:", data);
+
+        const lista = data.$values || [];
+        return lista.map(p => p.nombrePuesto);
+    } catch (err) {
+        console.error("❌ Error al obtener puestos:", err);
+        return [];
+    }
+}
+
+// ✅ Llenar todos los select de puestos existentes (incluye el que viene por defecto en el HTML)
+async function llenarSelectsPuestos() {
+    const puestos = await obtenerPuestosVigilanteDesdeAPI();
+
+    document.querySelectorAll("select.puesto-select").forEach(select => {
+        // Limpiar opciones previas (excepto el placeholder)
+        select.innerHTML = `<option value="" disabled selected>Puesto Vigilante</option>`;
+        
+        puestos.forEach(puesto => {
+            const option = document.createElement("option");
+            option.value = puesto;
+            option.textContent = puesto;
+            select.appendChild(option);
+        });
+    });
+}
+
+// ✅ Ejecutar automáticamente al cargar la página
+document.addEventListener("DOMContentLoaded", function () {
+    llenarSelectsPuestos();
+});
+

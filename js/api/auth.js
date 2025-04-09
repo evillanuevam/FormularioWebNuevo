@@ -70,7 +70,6 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("apellido1").value = apellido1;
             document.getElementById("apellido2").value = apellido2;
             document.getElementById("tip").value = tip;
-            document.getElementById("label-nombre-vigilante").textContent = nombre;
 
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);
             document.getElementById("apellido1").setAttribute("readonly", true);

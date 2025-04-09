@@ -65,12 +65,12 @@
 .form-container select,
 .form-container textarea {
     padding: 8px;
-    /*border-radius: 4px;*//*para no distorsionar cuando se escribe*/
+    border-radius: 4px;/*para no distorsionar cuando se escribe*/
     font-size: 14px;
     width: 100%;
     box-sizing: border-box;
     border: 1px solid #ccc;
-    margin-bottom: 5px; 
+    /*margin-bottom: 5px; **/
     border: none; 
     border-bottom: 2px solid #90ce00; 
     outline: none; 

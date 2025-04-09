@@ -7,10 +7,6 @@
     padding: 30px;
 }
 
-.form-container .horario-item input {
-    width: 100%;
-}
-
 #otros-material {
     padding: 5px;
     border-radius: 4px;
@@ -62,9 +58,11 @@
 }
 
 .form-container .horario-item input {
-    padding: 5px;
+    /*padding: 5px;*/
     font-size: 14px;
     border-radius: 4px;
+    width: 100%;
+    margin: 10px;
 }
 
 
@@ -374,6 +372,14 @@
 /* css de tipo de incidencia*/
 .tipo-incidencia-container {
     margin-top: 6px; /* o prueba con 10px o 12px si quieres más separación */
+}
+
+/**********CSS AL SELECCIONAR INCIDENCIA, SE AGRANDA LA FILA****************/
+
+.form-container .descripcion-item.incidencia-activa textarea {
+    height: 120px; /* o el valor que tú quieras */
+    transition: height 0.4s ease;
+
 }
 
 
