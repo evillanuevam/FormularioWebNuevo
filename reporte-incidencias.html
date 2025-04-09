@@ -156,10 +156,10 @@
                     </div>
                     
                     <!-- Tabla de todas las incidencias del día -->
+                    <h3>Incidencias del día</h3>
                     <div class="form-group">
-                        <label><strong>Incidencias del Día</strong></label>
-                        <table id="tabla-incidencias-dia" class="tabla-datos">
-                            <thead>
+                        <table class="table" id="tabla-incidencias-dia">
+                            <thead class="thead">
                                 <tr>
                                     <th>Hora</th>
                                     <th>Incidencia</th>
@@ -169,20 +169,18 @@
                                     <th>Verificación</th>
                                     <th>Observaciones</th>
                                     <th>Resumen Diario</th>
-                                    <th>Agregar</th>
+                                    <th>Acción</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-incidencias-dia-body">
-                                <!-- Se insertan dinámicamente -->
-                            </tbody>
+                            <tbody id="tbody-incidencias-dia"></tbody>
                         </table>
                     </div>
 
-                    <!-- Tabla del Resumen Diario -->
+                    <!-- Tabla de resumen diario -->
+                    <h3>Resumen Diario</h3>
                     <div class="form-group">
-                        <label><strong>Resumen Diario (Consolidado)</strong></label>
-                        <table id="tabla-resumen-diario" class="tabla-datos">
-                            <thead>
+                        <table class="table" id="tabla-resumen-diario">
+                            <thead class="thead">
                                 <tr>
                                     <th>Hora</th>
                                     <th>Incidencia</th>
@@ -194,11 +192,10 @@
                                     <th>Resumen Diario</th>
                                 </tr>
                             </thead>
-                            <tbody id="tabla-resumen-diario-body">
-                                <!-- Se insertan dinámicamente -->
-                            </tbody>
+                            <tbody id="tbody-resumen-diario"></tbody>
                         </table>
                     </div>
+
                                    
                 </form>
             </div>
@@ -266,7 +263,7 @@
     <script src="js/utils/config-fecha-hora.js"></script>
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
-    <script src="js/api/api-reportes.js"></script> 
+    <script src="js/api/api-reportes-incidencias.js"></script> 
 
 </body>
 </html>
