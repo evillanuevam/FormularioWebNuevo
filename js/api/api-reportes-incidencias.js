@@ -47,7 +47,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (!aeropuerto || !fecha) return;
 
         try {
-            const response = await fetch(`${API_URL}/api/Resumen/incidencias-dia?aeropuerto=${encodeURIComponent(aeropuerto)}&fecha=${fecha}`);
+            const response = await fetch(`${API_URL}/api/Reportes/GetIncidenciasConResumen?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${fecha}`);
             const datos = await response.json();
 
             tablaGeneralBody.innerHTML = "";
