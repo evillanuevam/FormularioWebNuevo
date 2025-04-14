@@ -689,6 +689,15 @@
     width: 100%;
 }
 
+/* Evitar el hover verde en submenús bloqueados */
+.submenu:hover > .submenu-toggle[style*="pointer-events: none"] {
+    background: none !important;
+    cursor: default !important;
+    box-shadow: none !important;
+    padding-left: 10px !important;
+}
+
+
 
 /*CSS RESPONSIBO PARA LA PLANTILLA ENCABEZADO Y PIE DE PAGINA*/
 /* Estilos responsivos para móviles y tablets */

@@ -104,7 +104,6 @@ async function cargarDescripcionesPorFecha() {
 // ✅ Escuchar cambios de fecha
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("fechaSeleccionada").addEventListener("change", cargarDescripcionesPorFecha);
-    cargarDescripcionesPorFecha(); // carga inicial
 
     // Alternar tabla
     const tabla = document.getElementById("tabla-descripciones");

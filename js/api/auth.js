@@ -28,23 +28,52 @@ document.addEventListener("DOMContentLoaded", function () {
 
         const paginaActual = window.location.pathname.split("/").pop();
 
-        const paginasSoloAdmin = ["administrar.html", "reporte-servicio.html"];
+        //**********************agregando para bloquear paginas*****************/
 
-        if (paginasSoloAdmin.includes(paginaActual) && rol !== "Administrador") {
-            alert("🚫 No tienes permisos para acceder a esta página.");
-            window.location.href = "parte-servicio.html";
-        }
+        const paginasSoloAdmin = [
+            "administrar.html",
+            "reporte-parte-servicios.html",
+            "reporte-incidencias.html"
+        ];
+        
+        const esAdmin = rol === "Administrador";
+        
+        // 🔒 Desactivar accesos a enlaces individuales
+        document.querySelectorAll("a[href$='.html']").forEach(link => {
+            const href = link.getAttribute("href");
+            if (paginasSoloAdmin.includes(href) && !esAdmin) {
+                link.style.pointerEvents = "none";
+                link.style.opacity = "0.5";
+                link.style.cursor = "not-allowed";
+                link.setAttribute("title", "Acceso restringido");
+            }
+        });
+        
+        // 🔒 Desactivar secciones enteras si contienen solo enlaces restringidos
+        document.querySelectorAll(".submenu").forEach(submenu => {
+            const toggle = submenu.querySelector(".submenu-toggle");
+            const enlacesInternos = submenu.querySelectorAll(".submenu-content a");
+        
+            // Verifica si TODOS los enlaces dentro son páginas restringidas
+            const todosRestringidos = [...enlacesInternos].every(enlace =>
+                paginasSoloAdmin.includes(enlace.getAttribute("href"))
+            );
+        
+            if (!esAdmin && todosRestringidos && toggle) {
+                toggle.style.pointerEvents = "none";
+                toggle.style.opacity = "0.5";
+                toggle.style.cursor = "not-allowed";
+                toggle.setAttribute("title", "Acceso restringido");
+        
+                const contenido = submenu.querySelector(".submenu-content");
+                if (contenido) contenido.style.display = "none";
+            }
+        });
+        
+
         
         // ✅ ASIGNAR EL AEROPUERTO AL ENCABEZADO Y FORMULARIOS
         document.getElementById("header-text").textContent = aeropuerto;
-
-        /*const setAeropuertoValue = (id) => {
-            const selectElement = document.getElementById(id);
-            if (selectElement) {
-                selectElement.value = aeropuerto;
-                selectElement.setAttribute("readonly", true);
-            }
-        };*/
 
         const setAeropuertoValue = (id) => {
             const selectElement = document.getElementById(id);
