@@ -43,25 +43,54 @@ document.addEventListener("DOMContentLoaded", () => {
     async function cargarIncidencias() {
         const aeropuerto = aeropuertoSelect.value;
         const fecha = fechaInput.value;
+        const token = sessionStorage.token;
 
-        if (!aeropuerto || !fecha) return;
+        if (!aeropuerto || !fecha || !token) {
+            console.warn("Faltan datos para la solicitud (aeropuerto, fecha o token)");
+            return;
+        }
 
         try {
-            const response = await fetch(`${API_URL}/api/Reportes/GetIncidenciasConResumen?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${fecha}`);
+            const response = await fetch(`${API_URL}/api/Reportes/GetIncidenciasConResumen?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${fecha}`, {
+                headers: {
+                    "Authorization": `Bearer ${token}`
+                }
+            });
+
+            if (!response.ok) {
+                const texto = await response.text();
+                console.error("Respuesta del servidor no OK:", response.status, texto);
+                throw new Error(`Error ${response.status}: ${texto}`);
+            }
+
             const datos = await response.json();
 
+            if (!tablaGeneralBody || !tablaResumenBody) {
+                console.error("Las tablas no están definidas en el HTML.");
+                return;
+            }
+            
             tablaGeneralBody.innerHTML = "";
             tablaResumenBody.innerHTML = "";
+            
 
-            datos.forEach(i => {
+            const incidencias = datos.$values; // 👈 extraemos el array real
+
+            if (!Array.isArray(incidencias)) {
+                console.error("La respuesta del servidor no contiene un array válido:", datos);
+                return;
+            }
+            
+            incidencias.forEach(i => {
                 const fila = crearFila(i, true);
                 tablaGeneralBody.appendChild(fila);
-
+            
                 if (i.enResumen) {
                     const filaResumen = crearFila(i, false);
                     tablaResumenBody.appendChild(filaResumen);
                 }
             });
+            
         } catch (error) {
             console.error("Error al cargar incidencias:", error);
         }
@@ -69,4 +98,3 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fechaInput.addEventListener("change", cargarIncidencias);
 });
-
