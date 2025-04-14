@@ -1,0 +1,16 @@
+/*estilosn para el reporte de incidencias*/
+#tabla-incidencias-dia,
+#tabla-resumen-diario {
+    margin-top: 0 !important;
+}
+
+#tabla-incidencias-dia, 
+#tabla-resumen-diario {
+    margin-bottom: 1rem; /* puedes ajustar el espacio inferior si quieres */
+}
+
+.form-group {
+    margin-top: 0 !important;
+}
+
+/*estilos de algunas columas de la tabla*/

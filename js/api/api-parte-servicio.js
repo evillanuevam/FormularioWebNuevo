@@ -252,7 +252,8 @@ function obtenerUsuarioDatos() {
             aeropuerto: aeropuertoNormalizado,
             nombre: decoded["Nombre"],
             apellido1: decoded["Apellido1"],
-            apellido2: decoded["Apellido2"]
+            apellido2: decoded["Apellido2"],
+            rol: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
         };
     } catch (error) {
         console.error("❌ Error al decodificar el token:", error);

@@ -24,9 +24,10 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (agregarBoton) {
             const tdBoton = document.createElement("td");
+            tdBoton.classList.add("accion"); //agregando nombre al <td> para el css
             const boton = document.createElement("button");
             boton.textContent = "➕ Agregar al resumen";
-            boton.className = "btn-eliminar";
+            boton.className = "btn-agregar";
             boton.onclick = () => {
                 const nuevaFila = crearFila(incidencia, false);
                 tablaResumenBody.appendChild(nuevaFila);
@@ -82,14 +83,15 @@ document.addEventListener("DOMContentLoaded", () => {
             }
             
             incidencias.forEach(i => {
-                const fila = crearFila(i, true);
-                tablaGeneralBody.appendChild(fila);
-            
                 if (i.enResumen) {
                     const filaResumen = crearFila(i, false);
                     tablaResumenBody.appendChild(filaResumen);
+                } else {
+                    const fila = crearFila(i, true);
+                    tablaGeneralBody.appendChild(fila);
                 }
             });
+            
             
         } catch (error) {
             console.error("Error al cargar incidencias:", error);
