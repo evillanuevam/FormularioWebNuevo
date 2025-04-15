@@ -100,3 +100,110 @@ document.addEventListener("DOMContentLoaded", () => {
 
     fechaInput.addEventListener("change", cargarIncidencias);
 });
+
+//funcion para exportar,
+
+function exportarExcel() {
+    const fechaInput = document.getElementById("fechaSeleccionada");
+    const fecha = fechaInput.value;
+
+    if (!fecha) {
+        alert("⚠️ Debes seleccionar una fecha antes de exportar.");
+        fechaInput.focus();
+        return;
+    }
+
+    const tabla = document.querySelector("#tabla-resumen-diario tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+
+    filas.sort((a, b) => a.children[0].textContent.localeCompare(b.children[0].textContent));
+
+    const fechaObj = new Date(fecha);
+    const fechaFormateada = `${fechaObj.getDate().toString().padStart(2, "0")}-${(fechaObj.getMonth() + 1).toString().padStart(2, "0")}-${fechaObj.getFullYear()}`;
+    
+    const aeropuerto = document.getElementById("aeropuerto").value;
+
+    const wb = XLSX.utils.book_new();
+    const ws_data = [
+        [`Aeropuerto: ${aeropuerto}`],
+        [`Fecha del resumen: ${fechaFormateada}`],
+        [],
+        ["Hora", "Incidencia", "Nombre Vigilante", "Descripción", "Acción Tomada", "Verificación", "Observaciones", "Resumen Diario"]
+    ];
+
+    filas.forEach(tr => {
+        const fila = Array.from(tr.children).map(td => td.textContent.trim());
+        ws_data.push(fila);
+    });
+
+    const ws = XLSX.utils.aoa_to_sheet(ws_data);
+    XLSX.utils.book_append_sheet(wb, ws, "Resumen Diario");
+    XLSX.writeFile(wb, `ResumenDiario_${fecha}.xlsx`);
+    mostrarNotificacion("✅ Excel exportado con éxito");
+}
+
+function exportarPDF() {
+    const fechaInput = document.getElementById("fechaSeleccionada");
+    const fecha = fechaInput.value;
+
+    if (!fecha) {
+        alert("⚠️ Debes seleccionar una fecha antes de exportar.");
+        fechaInput.focus();
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    const fechaObj = new Date(fecha);
+    const fechaFormateada = `${fechaObj.getDate().toString().padStart(2, "0")}-${(fechaObj.getMonth() + 1).toString().padStart(2, "0")}-${fechaObj.getFullYear()}`;
+    
+    const aeropuerto = document.getElementById("aeropuerto").value;
+
+    doc.setFontSize(12);
+    doc.text(`Aeropuerto: ${aeropuerto}`, 14, 15);
+    doc.text(`Fecha del resumen: ${fechaFormateada}`, 14, 22);
+
+    const tabla = document.querySelector("#tabla-resumen-diario tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+
+    filas.sort((a, b) => a.children[0].textContent.localeCompare(b.children[0].textContent));
+
+    const headers = [["Hora", "Incidencia", "Nombre Vigilante", "Descripción", "Acción Tomada", "Verificación", "Observaciones", "Resumen Diario"]];
+    const data = filas.map(tr => Array.from(tr.children).map(td => td.textContent.trim()));
+
+    doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 30,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [0, 57, 107] },
+        margin: { top: 10 }
+    });
+
+    doc.save(`ResumenDiario_${fecha}.pdf`);
+    mostrarNotificacion("✅ PDF exportado con éxito");
+}
+
+function mostrarNotificacion(mensaje) {
+    const noti = document.getElementById("notificacion-exportacion");
+
+    // Asegurarse de que esté al frente y visible
+    noti.textContent = mensaje;
+    noti.style.display = "block";
+    noti.style.opacity = "1";
+    noti.style.transform = "translateY(0)";
+    noti.style.zIndex = "99999";
+    noti.classList.add("mostrar");
+
+    // Mostrarlo en consola por si algo lo pisa
+    console.log("Mostrando notificación:", noti);
+
+    setTimeout(() => {
+        noti.classList.remove("mostrar");
+
+        setTimeout(() => {
+            noti.style.display = "none";
+        }, 400); // Debe coincidir con el transition
+    }, 4000); // Visible por 5 segundos
+}

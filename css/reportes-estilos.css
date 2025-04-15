@@ -13,4 +13,80 @@
     margin-top: 0 !important;
 }
 
-/*estilos de algunas columas de la tabla*/
+/*estilos para los botones de exportar de Incidencias*/
+.btn-export {
+    background-color: #a0d911;
+    color: #1a2732;
+    border: none;
+    padding: 10px 18px;
+    margin-left: 10px; /* ❌ Elimina esta línea */
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
+}
+
+
+.btn-export i {
+    margin-right: 8px;
+}
+
+.btn-export:hover {
+    background-color: #8fc80e;
+    transform: scale(1.05);
+}
+
+.export-buttons {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.export-buttons .btn-export {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 16px;
+    font-size: 14px;
+    font-weight: bold;
+    background-color: #003B73; /* Azul oscuro */
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.export-buttons .btn-export i {
+    margin-right: 6px;
+}
+
+.export-buttons .btn-export:hover {
+    background-color: #0050a0;
+}
+
+
+/*estilos par ala notificacion de exportacion*/
+#notificacion-exportacion {
+    position: fixed;
+    top: 80px; /* Ahora en la parte superior */
+    left: 50%;
+    transform: translateX(-50%) translateY(-20px); /* centrado horizontal */
+    background-color: #a0d911;
+    color: #1a2732;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+    z-index: 9999;
+    opacity: 0;
+    transition: opacity 0.4s ease, transform 0.4s ease;
+    
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+#notificacion-exportacion.mostrar {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+}

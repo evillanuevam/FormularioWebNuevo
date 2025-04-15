@@ -37,7 +37,15 @@ document.addEventListener("DOMContentLoaded", function () {
         ];
         
         const esAdmin = rol === "Administrador";
-        
+
+        // Si el usuario no es admin y está intentando entrar a una página restringida(tipeando)
+        if (paginasSoloAdmin.includes(paginaActual) && !esAdmin) {
+            alert("🚫 No tienes permisos para acceder a esta página.");
+            window.location.href = "parte-servicio.html"; // o a otra página segura
+            return;
+        }
+
+
         // 🔒 Desactivar accesos a enlaces individuales
         document.querySelectorAll("a[href$='.html']").forEach(link => {
             const href = link.getAttribute("href");

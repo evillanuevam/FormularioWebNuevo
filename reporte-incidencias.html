@@ -197,8 +197,17 @@
                             <tbody id="tabla-resumen-body"></tbody>
                         </table>
                     </div>
-
-                                   
+                    
+                    <div class="export-buttons">
+                        <button type="button" class="btn-export" onclick="exportarExcel()">
+                            <i class="fas fa-file-excel"></i> Exportar a Excel
+                        </button>
+                        <button type="button" class="btn-export" onclick="exportarPDF()">
+                            <i class="fas fa-file-pdf"></i> Exportar a PDF
+                        </button>
+                    </div>
+                    
+                                
                 </form>
             </div>
         </div>
@@ -234,7 +243,8 @@
                         </div>
                     </div>
                 </div>
-            </div>         
+            </div>  
+            
             <div class="footer-divider"></div> <!-- Línea divisoria -->
             <!-- Enlaces y copyright -->
             <div class="footer-links-copyright">
@@ -266,6 +276,16 @@
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
     <script src="js/api/api-reportes-incidencias.js"></script> 
+
+    <!-- XLSX para exportar a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- jsPDF y AutoTable para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <div id="notificacion-exportacion" class="notificacion-exportacion" style="display: none;">
+        Archivo exportado correctamente
+    </div>
 
 </body>
 </html>
