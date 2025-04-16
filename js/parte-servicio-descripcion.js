@@ -171,7 +171,7 @@ function agregarFila() {
         <td>
             <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
         </td>
-        <td><textarea type="text" name="detalles" placeholder="Seleccione los distintos detalles"></textarea></td>
+        <td><textarea type="text" name="detalles" placeholder="Seleccione los distintos detalles" readonly></textarea></td>
         <td>
             <select name="revisionVehiculo[]">
             <option value="">Seleccionar</option>
@@ -220,13 +220,13 @@ function abrirModal(boton) {
     const modal = document.getElementById("modalRevision");
     modal.style.display = "block";
     // Puedes aquí guardar a qué fila se está asociando para después guardar los datos si hace falta
-  }
+}
   
-  function cerrarModal() {
+function cerrarModal() {
     document.getElementById("modalRevision").style.display = "none";
-  }
+}
   
-  function guardarChecklist() {
+function guardarChecklist() {
     // Aquí podrías guardar los checks en memoria o asociarlos a la fila correspondiente
     cerrarModal();
 }
@@ -235,19 +235,27 @@ function abrirModal(boton) {
 let textareaDetallesActual = null;
 
 function abrirModal(boton) {
-  const fila = boton.closest('tr');
-  const matricula = fila.querySelector('input[name="matriculaVehiculo[]"]').value;
-  textareaDetallesActual = fila.querySelector('textarea[name="detalles"]');
+    const fila = boton.closest('tr');
+    const matricula = fila.querySelector('input[name="matriculaVehiculo[]"]').value;
+    textareaDetallesActual = fila.querySelector('textarea[name="detalles"]');
 
-  // Asigna la matrícula al título
-  const titulo = document.getElementById("tituloModal");
-  titulo.textContent = `Checklist de Revisión del Vehículo: ${matricula || '(sin matrícula)'}`;
+    // Asigna la matrícula al título
+    const titulo = document.getElementById("tituloModal");
+    titulo.textContent = `Checklist de Revisión del Vehículo: ${matricula || '(sin matrícula)'}`;
 
-  // Limpia los checkboxes del modal antes de abrirlo
-  document.querySelectorAll('#modalRevision input[type="checkbox"]').forEach(c => c.checked = false);
+    // Obtener los valores ya seleccionados desde el textarea
+    const valoresPrevios = (textareaDetallesActual.value || "")
+    .split(",")
+    .map(t => t.trim());
 
-  // Abre el modal
-  document.getElementById("modalRevision").style.display = "block";
+    // Recorrer los checkboxes del modal y marcar si coincide con los valores previos
+    document.querySelectorAll('#modalRevision input[type="checkbox"]').forEach(chk => {
+    const texto = chk.parentElement.textContent.trim();
+    chk.checked = valoresPrevios.includes(texto);
+    });
+
+    // Abre el modal
+    document.getElementById("modalRevision").style.display = "block";
 }
 
 function cerrarModal() {
