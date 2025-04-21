@@ -1,4 +1,3 @@
-
 document.addEventListener("DOMContentLoaded", function () {
     const token = sessionStorage.getItem("token");
 
@@ -182,3 +181,32 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+// ✅ Obtener datos del usuario desde el token y normalizar caracteres especiales(para todas las páginas)
+function obtenerUsuarioDatos() {
+    const token = sessionStorage.getItem("token");
+    if (!token) {
+        console.error("❌ No hay token en sessionStorage.");
+        return {};
+    }
+    try {
+        const decoded = JSON.parse(atob(token.split('.')[1]));
+        console.log("🔹 Token decodificado:", decoded);
+        
+        let aeropuertoNormalizado = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
+        
+        let tipNormalizado = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"].trim();
+
+        return {
+            tip: tipNormalizado,
+            aeropuerto: aeropuertoNormalizado,
+            nombre: decoded["Nombre"],
+            apellido1: decoded["Apellido1"],
+            apellido2: decoded["Apellido2"],
+            rol: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
+        };
+    } catch (error) {
+        console.error("❌ Error al decodificar el token:", error);
+        return {};
+    }
+}

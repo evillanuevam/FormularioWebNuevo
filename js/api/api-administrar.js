@@ -207,3 +207,31 @@ document.addEventListener("click", async function (e) {
 
 const tabPuestos = document.querySelector("[data-tab='puestos']");
 tabPuestos?.addEventListener("click", leerPuestos);
+
+//=========== CARGAR ADMINISTRAR SELECCIONADO EN LA PESTAÑA INCIDENCIAS O PUESTOS ==========
+
+document.addEventListener("DOMContentLoaded", function () {
+    const hash = window.location.hash.substring(1); // quita el "#"
+
+    if (hash) {
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        // Desactivar todas las pestañas
+        tabButtons.forEach(btn => btn.classList.remove('active'));
+        tabContents.forEach(content => content.classList.remove('active'));
+
+        // Activar la pestaña y contenido correspondiente
+        const targetButton = document.querySelector(`.tab-button[data-tab="${hash}"]`);
+        const targetContent = document.getElementById(hash);
+
+        if (targetButton && targetContent) {
+            targetButton.classList.add('active');
+            targetContent.classList.add('active');
+
+            // 👇 Ejecutar carga según el hash
+            if (hash === "incidencias") cargarIncidencias();
+            if (hash === "puestos") leerPuestos();
+        }
+    }
+});

@@ -169,7 +169,7 @@ function agregarFila() {
         <td><input type="time" name="horaVehiculo[]"></td>
         <td><input type="text" name="matriculaVehiculo[]" placeholder="Matrícula"></td>
         <td>
-            <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Detalles</button>
+            <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Checklist</button>
         </td>
         <td><textarea type="text" name="detalles" placeholder="Seleccione los distintos detalles" readonly></textarea></td>
         <td>

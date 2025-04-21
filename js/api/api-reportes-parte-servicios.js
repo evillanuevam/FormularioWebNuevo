@@ -1,19 +1,5 @@
 const API_URL = window.CONFIG.API_BASE_URL;
 
-// ✅ Obtener datos del usuario desde el token
-function obtenerUsuarioDatos() {
-    const token = sessionStorage.getItem("token");
-    if (!token) return {};
-    try {
-        const decoded = JSON.parse(atob(token.split('.')[1]));
-        let aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
-        return { aeropuerto };
-    } catch (error) {
-        console.error("❌ Error al decodificar token:", error);
-        return {};
-    }
-}
-
 // ✅ Formatear fecha
 function formatFecha(fechaISO) {
     if (!fechaISO) return "Sin fecha";

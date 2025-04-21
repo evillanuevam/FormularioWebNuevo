@@ -232,34 +232,6 @@ document.getElementById("formulario").addEventListener("submit", async function 
     }
 });
 
-// ✅ Obtener datos del usuario desde el token y normalizar caracteres especiales
-function obtenerUsuarioDatos() {
-    const token = sessionStorage.getItem("token");
-    if (!token) {
-        console.error("❌ No hay token en sessionStorage.");
-        return {};
-    }
-    try {
-        const decoded = JSON.parse(atob(token.split('.')[1]));
-        console.log("🔹 Token decodificado:", decoded);
-        
-        let aeropuertoNormalizado = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
-        
-        let tipNormalizado = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"].trim();
-
-        return {
-            tip: tipNormalizado,
-            aeropuerto: aeropuertoNormalizado,
-            nombre: decoded["Nombre"],
-            apellido1: decoded["Apellido1"],
-            apellido2: decoded["Apellido2"],
-            rol: decoded["http://schemas.microsoft.com/ws/2008/06/identity/claims/role"]
-        };
-    } catch (error) {
-        console.error("❌ Error al decodificar el token:", error);
-        return {};
-    }
-}
 
 // ✅ Obtener valor de radio (Sí/No/No definido)
 function obtenerValorRadio(nombre) {
@@ -457,7 +429,7 @@ document.addEventListener("change", async function (event) {
 });
 
 async function obtenerTiposIncidenciaDesdeAPI() {
-    const { aeropuerto } = obtenerUsuarioDatos();
+    const { aeropuerto, rol } = obtenerUsuarioDatos();
     if (!aeropuerto) return [];
 
     try {
@@ -470,16 +442,28 @@ async function obtenerTiposIncidenciaDesdeAPI() {
         if (!response.ok) throw new Error("Error al obtener incidencias");
 
         const data = await response.json();
-        console.log("✅ Tipos de incidencia desde backend:", data);
+        const lista = data.$values || [];
+        const incidencias = lista.map(i => i.nombreIncidencia);
 
-        const lista = data.$values || []; // 👈 EXTRAER ARRAY REAL
+        // ✅ Si es administrador, agregamos la opción especial
+        if (rol === "Administrador") {
+            incidencias.push("➕ Añadir más incidencias");
+        }
 
-        return lista.map(i => i.nombreIncidencia); // 🔹 Convertimos a ["Puerta", "Escalera", ...]
+        return incidencias;
     } catch (err) {
         console.error("❌ Error al obtener tipos de incidencia:", err);
         return [];
     }
 }
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("tipo-incidencia-select")) {
+        if (event.target.value === "➕ Añadir más incidencias") {
+            window.location.href = "administrar.html#incidencias";
+        }
+    }
+});
+
 
 //********************************* DESPLEGABLE PUESTOS DE VIGILANTE **************************************//
 async function obtenerPuestosVigilanteDesdeAPI() {
@@ -509,9 +493,9 @@ async function obtenerPuestosVigilanteDesdeAPI() {
 // ✅ Llenar todos los select de puestos existentes (incluye el que viene por defecto en el HTML)
 async function llenarSelectsPuestos() {
     const puestos = await obtenerPuestosVigilanteDesdeAPI();
+    const { rol } = obtenerUsuarioDatos();
 
     document.querySelectorAll("select.puesto-select").forEach(select => {
-        // Limpiar opciones previas (excepto el placeholder)
         select.innerHTML = `<option value="" disabled selected>Puesto Vigilante</option>`;
         
         puestos.forEach(puesto => {
@@ -520,8 +504,24 @@ async function llenarSelectsPuestos() {
             option.textContent = puesto;
             select.appendChild(option);
         });
+
+        // opción solo para admin
+        if (rol === "Administrador") {
+            const opcionExtra = document.createElement("option");
+            opcionExtra.value = "añadir-puesto";
+            opcionExtra.textContent = "➕ Añadir más puestos";
+            select.appendChild(opcionExtra);
+        }
     });
 }
+
+// Escucha cuando se elige esa opción
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("puesto-select") && event.target.value === "añadir-puesto") {
+        window.location.href = "administrar.html#puestos";
+    }
+});
+
 
 // ✅ Ejecutar automáticamente al cargar la página
 document.addEventListener("DOMContentLoaded", function () {

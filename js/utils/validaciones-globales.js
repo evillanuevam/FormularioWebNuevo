@@ -37,26 +37,6 @@ function soloLetras(input) {
     });
 }
 
-// Obtener datos del usuario desde el token
-function obtenerUsuarioDatos() {
-    const token = sessionStorage.getItem("token");
-    if (!token) return {};
-    try {
-        const decoded = JSON.parse(atob(token.split('.')[1]));
-        const aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
-        const tip = decoded["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
-        return {
-            tip: tip?.trim(),
-            aeropuerto,
-            nombre: decoded["Nombre"],
-            apellido1: decoded["Apellido1"],
-            apellido2: decoded["Apellido2"]
-        };
-    } catch (error) {
-        console.error("❌ Error al decodificar el token:", error);
-        return {};
-    }
-}
 
 function aplicarCapitalizacionAutomatica() {
     const elementos = document.querySelectorAll("textarea, input[type='text']");
