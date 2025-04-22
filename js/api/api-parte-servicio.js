@@ -459,7 +459,7 @@ async function obtenerTiposIncidenciaDesdeAPI() {
 document.addEventListener("change", function (event) {
     if (event.target.classList.contains("tipo-incidencia-select")) {
         if (event.target.value === "➕ Añadir más incidencias") {
-            window.location.href = "administrar.html#incidencias";
+            window.location.href = "adm-parte-servicio.html#incidencias";
         }
     }
 });
@@ -518,7 +518,7 @@ async function llenarSelectsPuestos() {
 // Escucha cuando se elige esa opción
 document.addEventListener("change", function (event) {
     if (event.target.classList.contains("puesto-select") && event.target.value === "añadir-puesto") {
-        window.location.href = "administrar.html#puestos";
+        window.location.href = "adm-parte-servicio.html#puestos";
     }
 });
 

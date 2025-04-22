@@ -315,6 +315,3 @@ input[readonly], input[disabled] {
     color: #555; /* Texto en tono gris */
     cursor: not-allowed; /* Cambia el cursor para indicar que no se puede editar */
 }
-
-
-

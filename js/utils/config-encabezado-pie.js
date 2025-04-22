@@ -88,3 +88,34 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+
+ // === FUNCIONALIDAD PARA LA BARRA LATERAL, DEJAR ACTIVADO AL DAR CLICK ===
+document.addEventListener("DOMContentLoaded", () => {
+    const submenus = document.querySelectorAll(".submenu");
+
+    submenus.forEach(menu => {
+        const toggle = menu.querySelector(".submenu-toggle");
+        const content = menu.querySelector(".submenu-content");
+        let timeoutId;
+
+        // Clic: alternar visibilidad
+        toggle.addEventListener("click", (e) => {
+            e.preventDefault();
+            menu.classList.toggle("active");
+        });
+
+        // Salir del área: cerrar después de un tiempo
+        menu.addEventListener("mouseleave", () => {
+            timeoutId = setTimeout(() => {
+                menu.classList.remove("active");
+            }, 1500); // 1.5 segundos
+        });
+
+        // Volver a entrar: cancelar cierre
+        menu.addEventListener("mouseenter", () => {
+            clearTimeout(timeoutId);
+        });
+    });
+});
+
+

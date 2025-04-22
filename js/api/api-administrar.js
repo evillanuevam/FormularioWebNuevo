@@ -4,7 +4,7 @@ const token = sessionStorage.getItem("token");
 const decoded = JSON.parse(atob(token.split(".")[1]));
 const aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
 
-// ================================== INCIDENCIAS =============================================
+// ===================================== INCIDENCIAS =============================================
 const tabla = document.getElementById("incidencias-list");
 const formularioIncidencias = document.getElementById("formulario-incidencias");
 const inputIncidencia = document.getElementById("nueva-incidencia");
@@ -208,30 +208,145 @@ document.addEventListener("click", async function (e) {
 const tabPuestos = document.querySelector("[data-tab='puestos']");
 tabPuestos?.addEventListener("click", leerPuestos);
 
-//=========== CARGAR ADMINISTRAR SELECCIONADO EN LA PESTAÑA INCIDENCIAS O PUESTOS ==========
+//=========== CARGAR LA PRIMERA PESTAÑA INCIDENCIAS, PUESTOS, ELIMINAR O LO QUE SEA ==========
 
 document.addEventListener("DOMContentLoaded", function () {
-    const hash = window.location.hash.substring(1); // quita el "#"
+    let hash = window.location.hash.substring(1); // quita el "#"
 
-    if (hash) {
-        const tabButtons = document.querySelectorAll('.tab-button');
-        const tabContents = document.querySelectorAll('.tab-content');
-
-        // Desactivar todas las pestañas
-        tabButtons.forEach(btn => btn.classList.remove('active'));
-        tabContents.forEach(content => content.classList.remove('active'));
-
-        // Activar la pestaña y contenido correspondiente
-        const targetButton = document.querySelector(`.tab-button[data-tab="${hash}"]`);
-        const targetContent = document.getElementById(hash);
-
-        if (targetButton && targetContent) {
-            targetButton.classList.add('active');
-            targetContent.classList.add('active');
-
-            // 👇 Ejecutar carga según el hash
-            if (hash === "incidencias") cargarIncidencias();
-            if (hash === "puestos") leerPuestos();
+    // Obtener el primer tab-button disponible si no hay hash
+    if (!hash) {
+        const primerBoton = document.querySelector(".tab-button");
+        if (primerBoton) {
+            hash = primerBoton.getAttribute("data-tab");
+            window.location.hash = `#${hash}`;
         }
     }
+
+    const tabButtons = document.querySelectorAll('.tab-button');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    // Desactivar todas las pestañas
+    tabButtons.forEach(btn => btn.classList.remove('active'));
+    tabContents.forEach(content => content.classList.remove('active'));
+
+    // Activar la pestaña y contenido correspondiente
+    const targetButton = document.querySelector(`.tab-button[data-tab="${hash}"]`);
+    const targetContent = document.getElementById(hash);
+
+    if (targetButton && targetContent) {
+        targetButton.classList.add('active');
+        targetContent.classList.add('active');
+
+        // 👇 Ejecutar carga según el hash (solo si aplica)
+        if (hash === "incidencias") cargarIncidencias?.();
+        if (hash === "puestos") leerPuestos?.();
+        if (hash === "eliminar") cargarUsuarios?.(); // AGREGADO 
+    }
 });
+
+// =============================== ELIMINAR USUARIO (DESACTIVAR) ========================================
+async function cargarUsuarios() {
+    const aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
+
+    try {
+        const res = await fetch(`${API_URL}/api/auth/usuarios-activos?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        const data = await res.json();
+        const lista = data.$values || data || [];
+
+
+        const contenedor = document.getElementById("lista-usuarios");
+        contenedor.innerHTML = "";
+
+        if (lista.length === 0) {
+            contenedor.innerHTML = `<tr><td colspan="5" style="text-align:center;">No hay usuarios activos.</td></tr>`;
+            return;
+        }
+
+        lista.forEach(u => {
+            const desactivable = u.rol !== "Administrador"; // 👈 Solo si NO es administrador
+            contenedor.innerHTML += `
+                <tr>
+                    <td>${u.tip}</td>
+                    <td>${u.nombre}</td>
+                    <td>${u.apellidos}</td>
+                    <td>${u.rol}</td>
+                    <td>
+                        <button 
+                            data-tip="${u.tip}" 
+                            class="btn-eliminar btn-eliminar-usuario ${!desactivable ? 'btn-administrador' : ''}" 
+                            ${!desactivable ? 'title="No se puede desactivar un Administrador"' : ''}
+                        >
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+        
+
+    } catch (err) {
+        console.error("❌ Error al cargar usuarios:", err);
+    }
+}
+
+document.addEventListener("click", async function (e) {
+    const boton = e.target.closest(".btn-eliminar-usuario");
+    if (!boton) return;
+
+    const fila = boton.closest("tr");
+    const tip = boton.dataset.tip;
+    const nombre = fila?.children[1]?.textContent ?? "el usuario";
+    const rol = fila?.children[3]?.textContent ?? "";
+
+    if (rol === "Administrador") {
+        alert("❌ No se puede desactivar un usuario Administrador.");
+        return;
+    }
+
+    if (!confirm(`¿Seguro que deseas eliminar (desactivar) a ${nombre}?`)) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/auth/desactivar/${tip}`, {
+            method: "PUT",
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        });
+
+        if (!res.ok) throw new Error("Error al desactivar usuario");
+
+        alert("✅ Usuario desactivado correctamente.");
+        await cargarUsuarios();
+
+    } catch (err) {
+        console.error("❌ Error al desactivar usuario:", err);
+    }
+});
+
+
+
+const inputBuscarTIP = document.getElementById("buscar-tip");
+inputBuscarTIP?.addEventListener("input", () => {
+    const filtro = inputBuscarTIP.value.toLowerCase();
+    const filas = document.querySelectorAll("#lista-usuarios tr");
+
+    filas.forEach(fila => {
+        const tip = fila.children[0]?.textContent.toLowerCase();
+        fila.style.display = tip.includes(filtro) ? "" : "none";
+    });
+});
+
+document.addEventListener("click", function (e) {
+    const botonAdmin = e.target.closest(".btn-administrador");
+    if (botonAdmin) {
+        alert("❌ No se puede desactivar un usuario Administrador.");
+    }
+});
+
+
+

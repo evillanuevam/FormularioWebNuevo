@@ -614,7 +614,6 @@
     z-index: 2;
 }
 
-
 /*ESTILOS SUB PESTAÑAS DE BARRA LATERAL*/
 
 
@@ -650,7 +649,6 @@
     border-right: 12px solid #1d2528; /* Color igual al fondo del submenú */
 }
 
-
 /* Elementos dentro del submenú */
 .submenu-content a {
     padding: 10px 15px;
@@ -671,14 +669,12 @@
     text-shadow: none !important; /* Evita cualquier brillo */
 }
 
-
 /* Muestra el submenú al pasar el mouse */
 .submenu:hover .submenu-content {
     display: block;
     opacity: 1;
     transform: translateX(0);
 }
-
 
 /* Mantiene el hover activo en la pestaña principal mientras el submenú está abierto */
 .submenu:hover > a {
@@ -698,9 +694,18 @@
 }
 
 
+/***************************** CSS PARA LA BARRA LAETERAL ACTIVADA ****************************/
+/* Ocultar submenús por defecto */
+.submenu .submenu-content {
+    display: none;
+    flex-direction: column;
+    padding-left: 10px;
+}
 
-/*CSS RESPONSIBO PARA LA PLANTILLA ENCABEZADO Y PIE DE PAGINA*/
-/* Estilos responsivos para móviles y tablets */
-
+/* Mostrar submenús al tener la clase 'active' */
+.submenu.active .submenu-content {
+    display: block;
+    padding-left: 10px; /* Solo se aplica cuando está visible */
+}
 
 

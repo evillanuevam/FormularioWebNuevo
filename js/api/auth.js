@@ -30,7 +30,9 @@ document.addEventListener("DOMContentLoaded", function () {
         //**********************agregando para bloquear paginas*****************/
 
         const paginasSoloAdmin = [
-            "administrar.html",
+            "adm-parte-servicio.html",
+            "adm-usuarios.html",
+            "adm-parte-patrullas.html",
             "reporte-parte-servicios.html",
             "reporte-incidencias.html"
         ];
@@ -76,9 +78,7 @@ document.addEventListener("DOMContentLoaded", function () {
                 if (contenido) contenido.style.display = "none";
             }
         });
-        
-
-        
+    
         // ✅ ASIGNAR EL AEROPUERTO AL ENCABEZADO Y FORMULARIOS
         document.getElementById("header-text").textContent = aeropuerto;
 
@@ -99,7 +99,6 @@ document.addEventListener("DOMContentLoaded", function () {
             }
           };
           
-        
         if (paginaActual === "parte-servicio.html") {
             setAeropuertoValue("aeropuerto");
             document.getElementById("nombre-vigilante").value = nombre;
@@ -113,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("tip").setAttribute("readonly", true);
         }
 
-        if (paginaActual === "administrar.html") {
+        if (paginaActual === "adm-parte-servicio.html","adm-usuarios.html","adm-parte-patrullas.html") {
             setAeropuertoValue("aeropuerto-incidencias");
             setAeropuertoValue("aeropuerto-puestos");
             // Asignar el aeropuerto a los otros selects si existen
@@ -146,7 +145,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);
         }
-
 
         // ✅ DETECTAR CAMBIO DE PESTAÑA Y ACTUALIZAR EL AEROPUERTO EN "ELIMINAR USUARIO"
         document.querySelectorAll(".tab-button").forEach(button => {

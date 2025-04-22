@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>plantilla</title>
+    <title>Administrar</title>
     <link rel="stylesheet" href="css/plantilla-estilos.css">
+    <link rel="stylesheet" href="css/global-formularios-estilos.css">
+    <link rel="stylesheet" href="css/global-tablas.css">
+    <link rel="stylesheet" href="css/form-administrar-estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="images/favico.svg" type="image/x-icon">
 
 </head>
-<script src="js/api/auth.js"></script> <!-- token y authentication-->
 
 <body id="plantilla-aena">
     <!-- Encabezado -->
@@ -45,7 +47,7 @@
 
     <!-- Contenido principal -->
     <main class="main-content" >
-        <!-- Barra lateral -->
+        <!-- barra lateral -->
         <div class="index-sidebar">
             <div class="index-header">
                 <h1 class="index-header-title">
@@ -63,6 +65,7 @@
                         <a href="adm-parte-patrullas.html">Adm. Parte Patrullas</a>
                     </div>
                 </div>
+                
                 <a href="parte-servicio.html">Parte de Servicios</a>
 
                 <!-- Menú desplegable -->
@@ -79,8 +82,7 @@
 
                 <a href="parte-equipos.html">Parte de Equipos</a>
                 <a href="inspeccion-vehiculos.html">Inspección de Vehículos</a>
-                <a href="inspeccion-suministros.html">Inspección de Suministros</a> 
-
+                <a href="inspeccion-suministros.html">Inspección de Suministros</a>
                 <!-- Menú desplegable -->
                 <div class="submenu">
                     <a href="#" class="submenu-toggle">Reportes ▾</a>
@@ -89,7 +91,6 @@
                         <a href="reporte-incidencias.html">Reporte Incidencias</a>
                     </div>
                 </div>
-
                 <a href="#">Contáctanos</a>
                 <a href="#" id="logout">Salir</a>
             </div>
@@ -97,6 +98,49 @@
         <!-- formulario -->
         <div class="index-content">
 
+            <div class="index-content">
+                
+                <div class="tabs-container">
+                    <div class="tab-button" data-tab="eliminar">Eliminar Usuario</div>
+                </div>
+
+                <!-- FORMULARIO DE ELIMINAR USUARIOS -->
+                <div id="eliminar" class="tab-content">
+                    <div class="form-container">
+                        <h1>Eliminar Usuario</h1>
+
+                        <form id="formulario-eliminar">
+                            <div class="select-container">
+                                <i class="fa-solid fa-plane"></i>
+                                <select id="aeropuerto-eliminar" name="aeropuerto" title="seleccione un aeropuerto" required>
+                                    <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                                    <input type="text" id="buscar-tip" placeholder="Buscar por TIP"> 
+                                </select> 
+                            </div>
+                        </form>
+                        <!-- TABLA SIMPLIFICADA SIN FILTROS -->
+                        <div class="table-container">
+                            <h4>Usuarios en el Aeropuerto Seleccionado</h4>
+                            <table id="tabla-usuarios">
+                                <thead>
+                                    <tr>
+                                        <th>TIP o DNI</th>
+                                        <th>Nombre</th>
+                                        <th>Apellidos</th>
+                                        <th>Rol</th>
+                                        <th>Accion</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="lista-usuarios">
+                                    <!-- Los usuarios se cargarán dinámicamente -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
     </main>
 
@@ -158,9 +202,13 @@
     </footer>
 
      <!-- llamadas a scripts -->
-     <script src="js/utils/config-encabezado-pie.js"></script>
-     <script src="js/utils/config-fecha-hora.js"></script>
-    <script src="js/parte-servicio-descripcion.js"></script>
-      
+    <script src="js/utils/config-api-url.js"></script>
+    <script src="js/utils/config-encabezado-pie.js"></script>
+
+    <script src="js/administrar.js"></script>
+    <script src="js/api/auth.js"></script> <!-- token y authentication-->
+    <script src="js/api/api-administrar.js"></script>
+    <!-- <script src="js/eliminar-usuario.js"></script> -->
+
 </body>
 </html>
