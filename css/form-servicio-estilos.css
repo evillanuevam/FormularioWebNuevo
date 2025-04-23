@@ -336,7 +336,8 @@
     background-color: #002244;
 }
 
-/*CSS DEL MODAL*/.modal {
+/*CSS DEL MODAL*/
+.modal {
   display: none;
   position: fixed;
   z-index: 9999;

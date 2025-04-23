@@ -1,6 +1,6 @@
 // ✅ utils/validaciones-globales.js
 
-// Capitalizar frases (primera letra de cada oración)
+// Capitalizar frases (primera letra de cada oración en mayuscula, tambien despues de un punto)
 function capitalizarFrase(texto) {
     if (!texto) return texto;
     texto = texto.toLowerCase();
@@ -37,9 +37,22 @@ function soloLetras(input) {
     });
 }
 
+// Funcion para Limitar a solo números y máximo 6 dígitos (ej. para TIP) usado en el registro
+function validarTIP(input) {
+    input.addEventListener("input", function () {
+        this.value = this.value.replace(/\D/g, ""); // Eliminar no números
+        if (this.value.length > 6) {
+            this.value = this.value.slice(0, 6); // Limitar a 6 dígitos
+        }
+    });
+}
 
+/*================================FUNCIONES AUTOMATICAS PARA APLICAR LAS VALIDACIONES =======================================*/
+
+
+//para la capitalizacion en tex area en tiempo real, a todos los text Area
 function aplicarCapitalizacionAutomatica() {
-    const elementos = document.querySelectorAll("textarea, input[type='text']");
+    const elementos = document.querySelectorAll("textarea");
 
     elementos.forEach(elemento => {
         elemento.addEventListener("input", function () {
@@ -50,6 +63,7 @@ function aplicarCapitalizacionAutomatica() {
     });
 }
 
+//para la capitalizacion solo letras en tiempo real (SOLO A INPUT QUE TENGAN LA CLASE "solo-letras")
 function aplicarSoloLetrasAutomatico() {
     const inputs = document.querySelectorAll("input.solo-letras");
 
@@ -58,9 +72,21 @@ function aplicarSoloLetrasAutomatico() {
     });
 }
 
+function aplicarValidacionTIP() {
+    const inputs = document.querySelectorAll("input.validar-tip");
+
+    inputs.forEach(input => {
+        validarTIP(input);
+    });
+}
+
+/*================================ LLAMAR O EJECUTAR LAS FUNCIONES AL CARGAR LA PAGINA ==============================*/
+
+/** llamar las funciones necesarias para que se aplique al cargar la pagina **/
 document.addEventListener("DOMContentLoaded", () => {
     aplicarCapitalizacionAutomatica();
     aplicarSoloLetrasAutomatico();
+    aplicarValidacionTIP();
 });
 
 

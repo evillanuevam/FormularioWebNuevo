@@ -82,7 +82,7 @@
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-id-badge"></i>
-                        <input type="text" id="tip" placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
+                        <input type="text" class="validar-tip" id="tip" placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user-shield"></i>
@@ -148,19 +148,19 @@
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Nombre" title="Ingresa tu Nombre" required>
+                        <input type="text" class="solo-letras"  placeholder="Nombre" title="Ingresa tu Nombre" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Apellido 1" title="Ingresa tu Apellido 1 " required>
+                        <input type="text" class="solo-letras" placeholder="Apellido 1" title="Ingresa tu Apellido 1 " required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user"></i>
-                        <input type="text" placeholder="Apellido 2" title="Ingresa tu Apellido 2"  required>
+                        <input type="text" class="solo-letras"  placeholder="Apellido 2" title="Ingresa tu Apellido 2"  required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-id-badge"></i>
-                        <input type="text" placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
+                        <input type="text" class="validar-tip"  placeholder="TIP" title="Ingresa tu TIP (Numero de placa)" required>
                     </div>
                     <div class="input-group">
                         <i class="fa-solid fa-user-shield"></i>
@@ -190,6 +190,8 @@
             document.getElementById('login-form').classList.remove('hidden');
         }
     </script>
+    
+    <script src="js/utils/validaciones-globales.js"></script> 
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/api/api-auth.js"></script>
 </body>

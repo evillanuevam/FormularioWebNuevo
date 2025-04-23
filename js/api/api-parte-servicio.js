@@ -2,21 +2,7 @@
 const API_URL = window.CONFIG.API_BASE_URL; // Obtener la URL de la API
 let hayVehiculosIncompletos = false; //tiene que ser let, porque const no permite reasignacion
 
-// ✅ Función para capitalizar la primera letra en tiempo real en el campo "Otros"
-function capitalizarOtros() {
-    let otrosInput = document.getElementById("otros-material");
-
-    if (otrosInput) {
-        otrosInput.addEventListener("input", function () {
-            let texto = otrosInput.value.trim();
-            if (texto.length > 0) {
-                otrosInput.value = texto.charAt(0).toUpperCase() + texto.slice(1);
-            }
-        });
-    }
-}
-
-// ✅ Modificar `toggleOtrosInput` para incluir la capitalización en tiempo real
+// Modificar `toggleOtrosInput` para incluir la capitalización en tiempo real
 function toggleOtrosInput() {
     let otrosCheckbox = document.getElementById('otros');
     let otrosInput = document.getElementById('otros-material');
@@ -24,53 +10,13 @@ function toggleOtrosInput() {
     if (otrosCheckbox.checked) {
         otrosInput.style.display = 'inline-block';
         otrosInput.focus();
-        capitalizarOtros(); // Aplicar la función al campo "Otros"
     } else {
         otrosInput.style.display = 'none';
         otrosInput.value = ''; // Limpiar el campo si se deselecciona
     }
 }
 
-// ✅ Ejecutar la capitalización cuando cargue la página
-document.addEventListener("DOMContentLoaded", function () {
-    capitalizarOtros(); // Asegurar que se aplica al cargar
-});
-
-// ✅ Función para capitalizar frases en tiempo real
-function capitalizarFrase(texto) {
-    if (!texto) return texto;
-
-    texto = texto.toLowerCase(); // Convertir todo a minúsculas
-    let resultado = "";
-    let inicioOracion = true;
-
-    for (let i = 0; i < texto.length; i++) {
-        if (inicioOracion && texto[i].match(/[a-zA-Z]/)) {
-            resultado += texto[i].toUpperCase(); // Primera letra de cada oración en mayúscula
-            inicioOracion = false;
-        } else {
-            resultado += texto[i];
-        }
-
-        if (".!?".includes(texto[i])) {
-            inicioOracion = true; // Si es un punto, la siguiente letra debe ir en mayúscula
-        }
-    }
-    return resultado;
-}
-
-// ✅ Aplicar la capitalización en tiempo real a los textarea
-document.addEventListener("DOMContentLoaded", function () {
-    document.querySelectorAll("textarea[name='descripcion-servicio'], textarea[name='descripcion-accion'], textarea[name='observaciones'], textarea[name='detalles'], textarea[name='observacionesVehiculo[]']").forEach(textarea => {
-        textarea.addEventListener("input", function () {
-            let cursorPos = this.selectionStart; // Guardar posición del cursor
-            this.value = capitalizarFrase(this.value);
-            this.setSelectionRange(cursorPos, cursorPos); // Restaurar posición del cursor
-        });
-    });
-});
-
-// ✅ Cargar datos desde el backend al cargar la página ( SI NO SE QUIERE INFORMACION AL CARGA LA PAGINA CARGARSE ESTO)
+// Cargar datos desde el backend al cargar la página ( SI NO SE QUIERE INFORMACION AL CARGA LA PAGINA CARGARSE ESTO) es necesario para mostrar informacion de descripcion del tip
 document.addEventListener("DOMContentLoaded", async function () {
     const { tip, aeropuerto } = obtenerUsuarioDatos();
     if (!tip || !aeropuerto) {
@@ -92,9 +38,9 @@ document.addEventListener("DOMContentLoaded", async function () {
             document.getElementById("horaFin").value = data.parteServicio.horaFin || "";
             document.getElementById("fechaSeleccionada").value = data.parteServicio.fechaSeleccionadaISO || ""; // 🔹 Mostrar la nueva fecha
         
-            // 🔹 Agregar esta línea para asegurarte de que los materiales se marquen
+            // Agregar esta línea para asegurarte de que los materiales se marquen
             marcarMaterialControlado(data.parteServicio.materialControlado);
-            // 🔹 Agrega aquí la llamada a seleccionarOpcion()
+            // Agrega aquí la llamada a seleccionarOpcion()
             seleccionarOpcion("normativa", data.parteServicio.leidoNormativa);
             seleccionarOpcion("accidentes", data.parteServicio.accidentesPuesto);
         }    
@@ -109,27 +55,34 @@ document.addEventListener("DOMContentLoaded", async function () {
 });
 
 
-// ✅ Validar que las horas de descripción estén dentro del rango del turno
+// Validar que las horas de descripción estén dentro del rango del turno
 function validarHorasDescripcionEnRango() {
     const horaInicio = document.getElementById("horaInicio").value;
     const horaFin = document.getElementById("horaFin").value;
-    const hoy = new Date().toISOString().split("T")[0];
+    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
 
-    if (!horaInicio || !horaFin) return true;
+    if (!horaInicio || !horaFin || !fechaSeleccionada) return true;
 
-    const inicio = new Date(`${hoy}T${horaInicio}`);
-    const fin = new Date(`${hoy}T${horaFin}`);
+    const inicio = new Date(`${fechaSeleccionada}T${horaInicio}`);
+    let fin = new Date(`${fechaSeleccionada}T${horaFin}`);
+
+    const cruzaMedianoche = horaFin <= horaInicio;
+    if (cruzaMedianoche) fin.setDate(fin.getDate() + 1);
 
     let esValido = true;
 
     const horasDescripcion = document.querySelectorAll("input[name='hora-inicio']");
-
     horasDescripcion.forEach(input => {
         const horaValor = input.value;
         if (!horaValor) return;
 
-        const horaDesc = new Date(`${hoy}T${horaValor}`);
-        if (horaDesc < inicio || horaDesc > fin) {
+        let fechaHoraDesc = new Date(`${fechaSeleccionada}T${horaValor}`);
+
+        if (cruzaMedianoche && fechaHoraDesc < inicio) {
+            fechaHoraDesc.setDate(fechaHoraDesc.getDate() + 1);
+        }
+
+        if (fechaHoraDesc < inicio || fechaHoraDesc > fin) {
             input.classList.add("hora-fuera-rango");
             esValido = false;
         } else {
@@ -151,18 +104,21 @@ document.addEventListener("input", function (event) {
         const hora = horaInput.value;
         const horaInicio = document.getElementById("horaInicio").value;
         const horaFin = document.getElementById("horaFin").value;
+        const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
 
-        if (!hora || !horaInicio || !horaFin) return;
+        if (!hora || !horaInicio || !horaFin || !fechaSeleccionada) return;
 
-        const [hDesc, mDesc] = hora.split(":").map(Number);
-        const [hIni, mIni] = horaInicio.split(":").map(Number);
-        const [hFin, mFin] = horaFin.split(":").map(Number);
+        const inicio = new Date(`${fechaSeleccionada}T${horaInicio}`);
+        let fin = new Date(`${fechaSeleccionada}T${horaFin}`);
+        let actual = new Date(`${fechaSeleccionada}T${hora}`);
 
-        const minutosDesc = hDesc * 60 + mDesc;
-        const minutosIni = hIni * 60 + mIni;
-        const minutosFin = hFin * 60 + mFin;
+        const cruzaMedianoche = horaFin < horaInicio;
+        if (cruzaMedianoche) {
+            if (actual < inicio) actual.setDate(actual.getDate() + 1);
+            fin.setDate(fin.getDate() + 1);
+        }
 
-        if (minutosDesc < minutosIni || minutosDesc > minutosFin) {
+        if (actual < inicio || actual > fin) {
             horaInput.style.border = "2px solid red";
             horaInput.style.backgroundColor = "#ffe5e5";
             horaInput.title = "⛔ Esta hora está fuera del horario del turno.";

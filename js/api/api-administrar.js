@@ -208,7 +208,7 @@ document.addEventListener("click", async function (e) {
 const tabPuestos = document.querySelector("[data-tab='puestos']");
 tabPuestos?.addEventListener("click", leerPuestos);
 
-//=========== CARGAR LA PRIMERA PESTAÑA INCIDENCIAS, PUESTOS, ELIMINAR O LO QUE SEA ==========
+//=============== CARGAR LA PRIMERA PESTAÑA INCIDENCIAS, PUESTOS, ELIMINAR O LO QUE SEA ==========================
 
 document.addEventListener("DOMContentLoaded", function () {
     let hash = window.location.hash.substring(1); // quita el "#"
@@ -244,7 +244,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 });
 
-// =============================== ELIMINAR USUARIO (DESACTIVAR) ========================================
+// ======================================== ELIMINAR USUARIO (DESACTIVAR) ========================================
 async function cargarUsuarios() {
     const aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
 
@@ -327,8 +327,6 @@ document.addEventListener("click", async function (e) {
         console.error("❌ Error al desactivar usuario:", err);
     }
 });
-
-
 
 const inputBuscarTIP = document.getElementById("buscar-tip");
 inputBuscarTIP?.addEventListener("input", () => {

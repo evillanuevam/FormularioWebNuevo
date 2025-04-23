@@ -63,34 +63,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const aeropuertoSelect = document.getElementById("aeropuerto");
     const registerButton = document.getElementById("registerButton");
 
-    // Función para capitalizar la primera letra de cada palabra(formato titulo, primera letra mayuscula EN TIEMPO REAL)
-    function capitalizarTexto(texto) {
-        return texto
-            .toLowerCase()
-            .split(" ")
-            .map(palabra => palabra.charAt(0).toUpperCase() + palabra.slice(1))
-            .join(" ");
-    }
-
-    // Validación en tiempo real para que solo ingresen letras y espacios (KEYTYPES)
-    const camposTexto = document.querySelectorAll("#register-form input[placeholder='Nombre'], #register-form input[placeholder='Apellido 1'], #register-form input[placeholder='Apellido 2']");
-    camposTexto.forEach(campo => {
-        campo.addEventListener("input", function () {
-            this.value = capitalizarTexto(this.value.replace(/[^A-Za-zÁÉÍÓÚáéíóúñÑ ]/g, "")); // Solo letras y espacios
-        });
-    });
-
-    // Validación en tiempo real para TIP (solo números y máximo 6 dígitos)
-    const campoTIP = document.querySelectorAll("#register-form input[placeholder='TIP'], #login-form input[type='text']");
-    campoTIP.forEach(campo => {
-        campo.addEventListener("input", function () {
-            this.value = this.value.replace(/\D/g, ""); // Eliminar cualquier carácter que no sea número
-            if (this.value.length > 6) {
-                this.value = this.value.slice(0, 6); // Limitar a 6 dígitos
-            }
-        });
-    });
-
     //LOGICA PARA INICIAR SESION e dirigir a parte de servicio
     if (loginForm) {
         loginForm.addEventListener("submit", async function (event) {
@@ -137,7 +109,8 @@ document.addEventListener("DOMContentLoaded", function () {
         });
 
     }
-    //LOGICA PARA REGITRARSE
+
+    //LOGICA PARA REGISTRARSE
     if (registerForm) {
         registerForm.addEventListener("submit", async function (event) {
             event.preventDefault(); // Evitar que la página se recargue
