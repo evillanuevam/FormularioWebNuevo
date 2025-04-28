@@ -54,7 +54,6 @@ document.addEventListener("DOMContentLoaded", async function () {
     }
 });
 
-
 // Validar que las horas de descripción estén dentro del rango del turno
 function validarHorasDescripcionEnRango() {
     const horaInicio = document.getElementById("horaInicio").value;
