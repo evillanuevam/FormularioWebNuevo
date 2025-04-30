@@ -27,6 +27,7 @@ function capitalizarInput(input) {
         if (texto.length > 0) {
             input.value = texto.charAt(0).toUpperCase() + texto.slice(1);
         }
+         
     });
 }
 
@@ -48,7 +49,6 @@ function validarTIP(input) {
 }
 
 /*================================FUNCIONES AUTOMATICAS PARA APLICAR LAS VALIDACIONES =======================================*/
-
 
 //para la capitalizacion en tex area en tiempo real, a todos los text Area
 function aplicarCapitalizacionAutomatica() {
