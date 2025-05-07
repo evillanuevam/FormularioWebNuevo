@@ -1,113 +1,54 @@
 const API_URL = window.CONFIG.API_BASE_URL;
 
-// ✅ Formatear fecha
-function formatFecha(fechaISO) {
-    if (!fechaISO) return "Sin fecha";
-    const fecha = new Date(fechaISO);
-    return `${fecha.getDate().toString().padStart(2, '0')}-${(fecha.getMonth() + 1).toString().padStart(2, '0')}-${fecha.getFullYear()}`;
-}
+document.addEventListener("DOMContentLoaded", () => {
+    document.getElementById("fechaSeleccionada").addEventListener("change", cargarParteCompleto);
+});
 
-// ✅ Mostrar mensaje si no hay datos
-function mostrarMensajeTabla(mensaje) {
-    const tablaBody = document.getElementById("tabla-descripciones-body");
-    if (tablaBody) {
-        tablaBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">${mensaje}</td></tr>`;
-    }
-}
-
-// ✅ Actualizar la tabla
-function actualizarDescripcionesEnTabla(descripciones) {
-    const tablaBody = document.getElementById("tabla-descripciones-body");
-    if (!tablaBody) return;
-
-    tablaBody.innerHTML = "";
-
-    if (descripciones.length === 0) {
-        mostrarMensajeTabla("No hay registros disponibles.");
-        return;
-    }
-
-    const encabezados = ["Nombre", "Fecha", "Hora", "Descripción", "Acción Tomada", "Verificación", "Es Incidencia", "Observaciones"];
-
-    descripciones.forEach(descripcion => {
-        const fila = document.createElement("tr");
-
-        if (descripcion.esIncidencia?.trim().toLowerCase() !== "no incidencia") {
-            fila.classList.add("incidencia");
-        }       
-
-        const valores = [
-            descripcion.nombre || "Sin nombre",
-            formatFecha(descripcion.fechaDescripcion),
-            descripcion.horaDescripcion || "00:00",
-            descripcion.descripcion || "Sin descripción",
-            descripcion.accionTomada || "Sin acción",
-            descripcion.verificacion || "No definido",
-            descripcion.esIncidencia || "No incidencia",
-            descripcion.observaciones || "Sin observaciones"
-        ];
-
-        fila.innerHTML = valores.map((valor, index) => `<td data-label="${encabezados[index]}">${valor}</td>`).join("");
-        tablaBody.appendChild(fila);
-    });
-}
-
-// ✅ Cargar descripciones al cambiar la fecha
-async function cargarDescripcionesPorFecha() {
+async function cargarParteCompleto() {
     const { aeropuerto } = obtenerUsuarioDatos();
-    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
+    const fecha = document.getElementById("fechaSeleccionada").value;
 
-    if (!aeropuerto) return;
+    if (!fecha || !aeropuerto) return;
 
     try {
-        const url = `${API_URL}/api/ParteServicio/GetDescripcionesDelDia?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${encodeURIComponent(fechaSeleccionada)}`;
-        const response = await fetch(url);
-
-        if (response.status === 404) {
-            mostrarMensajeTabla("No hay registros disponibles.");
-            return;
-        }
-
-        if (!response.ok) {
-            mostrarMensajeTabla("Error al cargar los datos.");
-            return;
-        }
-
-        const data = await response.json();
-
-        if (!data || !data.$values || data.$values.length === 0) {
-            mostrarMensajeTabla("No hay registros disponibles.");
-            return;
-        }
-
-        actualizarDescripcionesEnTabla(data.$values);
-    } catch (error) {
-        console.error("❌ Error cargando descripciones:", error);
-        mostrarMensajeTabla("Error al cargar los datos.");
-    }
-}
-
-// ✅ Escuchar cambios de fecha
-document.addEventListener("DOMContentLoaded", () => {
-    document.getElementById("fechaSeleccionada").addEventListener("change", cargarDescripcionesPorFecha);
-
-    // Alternar tabla
-    const tabla = document.getElementById("tabla-descripciones");
-    const boton = document.getElementById("toggle-tabla");
-
-    if (tabla && boton) {
-        //tabla.style.display = "none"; // oculta por defecto, depende de los gustos
-        boton.textContent = "Ocultar Tabla";
-        boton.addEventListener("click", function (event) {
-            event.preventDefault();
-    
-            if (tabla.style.display === "none") {
-                tabla.style.display = "table";
-                boton.textContent = "Ocultar Tabla";
-            } else {
-                tabla.style.display = "none";
-                boton.textContent = "Mostrar Tabla";
+        const url = `${API_URL}/api/Reportes/GetParteServicioCompleto?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${encodeURIComponent(fecha)}`;
+        const response = await fetch(url, {
+            headers: {
+                "Authorization": `Bearer ${sessionStorage.token}`
             }
         });
+
+        if (!response.ok) {
+            console.error("Error al obtener el parte:", await response.text());
+            return;
+        }
+
+        const parte = await response.json();
+
+        // Mostrar datos del encabezado
+        document.getElementById("nombre-vigilante").value = parte.Nombre;
+        // Puedes crear otros campos ocultos o visibles si lo necesitas
+
+        // Renderizar tabla de descripciones
+        const body = document.getElementById("tabla-descripciones-body");
+        body.innerHTML = "";
+
+        parte.Descripciones.forEach(d => {
+            const fila = document.createElement("tr");
+            fila.innerHTML = `
+                <td>${parte.Nombre}</td>
+                <td>${parte.Fecha}</td>
+                <td>${d.Hora}</td>
+                <td>${d.PuestoVigilante || 'Sin puesto'}</td>
+                <td>${d.Descripcion}</td>
+                <td>${d.AccionTomada}</td>
+                <td>${d.Verificacion}</td>
+                <td>${d.EsIncidencia}</td>
+                <td>${d.Observaciones}</td>
+            `;
+            body.appendChild(fila);
+        });
+    } catch (error) {
+        console.error("❌ Error al cargar parte:", error);
     }
-});
+}

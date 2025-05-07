@@ -101,7 +101,7 @@ document.addEventListener("DOMContentLoaded", () => {
     fechaInput.addEventListener("change", cargarIncidencias);
 });
 
-//funcion para exportar,
+//FUNCIONES PARA EXPORTAR EXCEL Y PDF
 
 function exportarExcel() {
     const fechaInput = document.getElementById("fechaSeleccionada");

@@ -7,10 +7,10 @@
     <link rel="stylesheet" href="css/plantilla-estilos.css">
     <link rel="stylesheet" href="css/global-formularios-estilos.css">
     <link rel="stylesheet" href="css/form-servicio-estilos.css">
+    <link rel="stylesheet" href="css/reportes-estilos.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link rel="icon" href="images/favico.svg" type="image/x-icon">
 </head>
-
 
 <body id="plantilla-aena">
     <!-- Encabezado -->
@@ -163,7 +163,7 @@
                             <input type="text" id="nombre-vigilante" name="nombre" placeholder="Indica tu nombre" required>
                         </div>    
 
-                    </div>
+                    </div> 
                     
                     <div class="form-group">
                         <!-- Tabla para ver las descripciones del dia -->                    
@@ -174,19 +174,30 @@
                                         <th>Nombre</th>
                                         <th>Fecha</th>
                                         <th>Hora</th>
+                                        <th>Puesto Vigilante</th>
                                         <th>Descripción</th>
                                         <th>Acción Tomada</th>
                                         <th>Verificación</th>
-                                        <th>Es Incidencia</th>
+                                        <th>Incidencia</th>
                                         <th>Observaciones</th>
                                     </tr>
                                 </thead>
+                                
                                 <tbody id="tabla-descripciones-body">
                                     <!-- Las filas se insertarán dinámicamente -->
                                 </tbody>
                             </table>
                             <button id="toggle-tabla">Mostrar Tabla</button>
                         </div>                      
+                    </div>
+
+                    <div class="export-buttons">
+                        <button type="button" class="btn-export" onclick="exportarExcel()">
+                            <i class="fas fa-file-excel"></i> Exportar a Excel
+                        </button>
+                        <button type="button" class="btn-export" onclick="exportarPDF()">
+                            <i class="fas fa-file-pdf"></i> Exportar a PDF
+                        </button>
                     </div>
                                    
                 </form>
