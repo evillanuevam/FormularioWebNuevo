@@ -164,7 +164,7 @@
                         </div>    
 
                     </div> 
-                    
+
                     <div class="form-group">
                         <!-- Tabla para ver las descripciones del dia -->                    
                         <div class="form-group">
@@ -172,8 +172,7 @@
                                 <thead>
                                     <tr>
                                         <th>Nombre</th>
-                                        <th>Fecha</th>
-                                        <th>Hora</th>
+                                        <th>Hora Servicio</th>
                                         <th>Puesto Vigilante</th>
                                         <th>Descripción</th>
                                         <th>Acción Tomada</th>
@@ -181,8 +180,7 @@
                                         <th>Incidencia</th>
                                         <th>Observaciones</th>
                                     </tr>
-                                </thead>
-                                
+                                </thead>  
                                 <tbody id="tabla-descripciones-body">
                                     <!-- Las filas se insertarán dinámicamente -->
                                 </tbody>
@@ -193,7 +191,10 @@
 
                     <div class="export-buttons">
                         <button type="button" class="btn-export" onclick="exportarExcel()">
-                            <i class="fas fa-file-excel"></i> Exportar a Excel
+                            <i class="fas fa-file-excel"></i> Exportar Vista
+                        </button>
+                        <button type="button" class="btn-export" onclick="exportarExcelCompleto()">
+                            <i class="fas fa-file-excel"></i> Exportar Completo
                         </button>
                         <button type="button" class="btn-export" onclick="exportarPDF()">
                             <i class="fas fa-file-pdf"></i> Exportar a PDF
@@ -267,6 +268,16 @@
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
     <script src="js/api/api-reportes-parte-servicios.js"></script> 
+
+    <!-- XLSX para exportar a Excel -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- jsPDF y AutoTable para PDF -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.25/jspdf.plugin.autotable.min.js"></script>
+
+    <div id="notificacion-exportacion" class="notificacion-exportacion" style="display: none;">
+        Archivo exportado correctamente
+    </div>
     
 </body>
 </html>
