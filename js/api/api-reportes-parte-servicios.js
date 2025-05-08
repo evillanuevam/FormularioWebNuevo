@@ -86,9 +86,14 @@ async function cargarParteCompleto() {
             }
         });
 
+        if (response.status === 404) {
+            mostrarMensajeTabla("No hay registros disponibles.");
+            return;
+        }
+
         if (!response.ok) {
-            mostrarMensajeTabla("Error al cargar los datos.");
             console.error("❌ Error de API:", await response.text());
+            mostrarMensajeTabla("Error al cargar los datos.");
             return;
         }
 
@@ -108,6 +113,7 @@ async function cargarParteCompleto() {
         mostrarMensajeTabla("Error al cargar los datos.");
     }
 }
+
 
 function exportarExcel() {
     const filas = document.querySelectorAll("#tabla-descripciones tbody tr");

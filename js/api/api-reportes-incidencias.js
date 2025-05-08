@@ -45,43 +45,42 @@ document.addEventListener("DOMContentLoaded", () => {
         const aeropuerto = aeropuertoSelect.value;
         const fecha = fechaInput.value;
         const token = sessionStorage.token;
-
+    
         if (!aeropuerto || !fecha || !token) {
             console.warn("Faltan datos para la solicitud (aeropuerto, fecha o token)");
             return;
         }
-
+    
         try {
             const response = await fetch(`${API_URL}/api/Reportes/GetIncidenciasConResumen?aeropuerto=${encodeURIComponent(aeropuerto)}&fechaSeleccionada=${fecha}`, {
                 headers: {
                     "Authorization": `Bearer ${token}`
                 }
             });
-
+    
+            tablaGeneralBody.innerHTML = "";
+            tablaResumenBody.innerHTML = "";
+    
+            if (response.status === 404) {
+                mostrarMensajeTablaIncidencias("No hay registros disponibles.");
+                return;
+            }
+    
             if (!response.ok) {
                 const texto = await response.text();
                 console.error("Respuesta del servidor no OK:", response.status, texto);
-                throw new Error(`Error ${response.status}: ${texto}`);
+                mostrarMensajeTablaIncidencias("Error al cargar los datos.");
+                return;
             }
-
+    
             const datos = await response.json();
-
-            if (!tablaGeneralBody || !tablaResumenBody) {
-                console.error("Las tablas no están definidas en el HTML.");
+            const incidencias = datos.$values;
+    
+            if (!Array.isArray(incidencias) || incidencias.length === 0) {
+                mostrarMensajeTablaIncidencias("No hay registros disponibles.");
                 return;
             }
-            
-            tablaGeneralBody.innerHTML = "";
-            tablaResumenBody.innerHTML = "";
-            
-
-            const incidencias = datos.$values; // 👈 extraemos el array real
-
-            if (!Array.isArray(incidencias)) {
-                console.error("La respuesta del servidor no contiene un array válido:", datos);
-                return;
-            }
-            
+    
             incidencias.forEach(i => {
                 if (i.enResumen) {
                     const filaResumen = crearFila(i, false);
@@ -91,15 +90,23 @@ document.addEventListener("DOMContentLoaded", () => {
                     tablaGeneralBody.appendChild(fila);
                 }
             });
-            
-            
+    
         } catch (error) {
             console.error("Error al cargar incidencias:", error);
+            mostrarMensajeTablaIncidencias("Error al cargar los datos.");
         }
     }
 
     fechaInput.addEventListener("change", cargarIncidencias);
 });
+
+function mostrarMensajeTablaIncidencias(mensaje) {
+    const tablaBody = document.getElementById("tabla-incidencias-body");
+    if (tablaBody) {
+        tablaBody.innerHTML = `<tr><td colspan="8" style="text-align: center;">${mensaje}</td></tr>`;
+    }
+}
+
 
 //FUNCIONES PARA EXPORTAR EXCEL Y PDF
 
@@ -180,7 +187,7 @@ function exportarPDF() {
         headStyles: { fillColor: [0, 57, 107] },
         margin: { top: 10 }
     });
-
+    
     doc.save(`Reporte_Incidencias_${fecha}.pdf`);
     mostrarNotificacion("✅ PDF exportado con éxito");
 }
