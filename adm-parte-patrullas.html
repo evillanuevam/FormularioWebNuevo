@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrar</title>
+    <title>Administrar Perimetros</title>
     <link rel="stylesheet" href="css/plantilla-estilos.css">
     <link rel="stylesheet" href="css/global-formularios-estilos.css">
     <link rel="stylesheet" href="css/global-tablas.css">
@@ -56,6 +56,7 @@
                 </h1>
             </div>   
             <div class="menu">
+
                 <!-- Menú desplegable -->
                 <div class="submenu">
                     <a href="#" class="submenu-toggle">Administrar ▾</a>
@@ -95,83 +96,103 @@
                 <a href="#" id="logout">Salir</a>
             </div>
         </div>
+        
         <!-- formulario -->
         <div class="index-content">
 
             <div class="index-content">
                 
                 <div class="tabs-container">
-                    <div class="tab-button active" data-tab="administrar">Administrar Desplegables</div>
+                    <div class="tab-button" data-tab="rondas">Rondas</div>
+                    <div class="tab-button" data-tab="fichajes">Puntos fichaje</div>
+                    <div class="tab-button" data-tab="perimetros">Puerta perimetro</div>
                 </div>
 
-                <!-- FORMUALRIO DE ADMINISTRAR DESPLEGABLES -->
-                <div id="administrar" class="tab-content active">
+                <!-- FORMULARIO DE RONDAS -->
+                <div id="rondas" class="tab-content">
                     <div class="form-container">
-                        <h1>Administrar Desplegables</h1>
-                
-                        <form id="formulario-desplegables">
+                      <h1>Administrar Rondas</h1>
+                  
+                        <form id="formulario-rondas">
                             <div class="select-container">
-                                <i class="fa-solid fa-plane"></i>
-                                <select id="aeropuerto-admin" name="aeropuerto" title="seleccione un aeropuerto" required>
-                                    <option value="" disabled selected>Seleccione un Aeropuerto</option>
-
-                                </select> 
+                            <i class="fa-solid fa-plane"></i>
+                            <select id="aeropuerto-rondas" name="aeropuerto" title="seleccione un aeropuerto" required>
+                                <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            </select>
                             </div>
-                            <!-- SECCIÓN CONTROL DE SEGURIDAD -->
-                            <fieldset class="security-section">
-                                <legend><i class="fa-solid fa-shield"></i> Control de Seguridad</legend>
-                
-                                <div class="form-group">
-                                    <label for="tipo-control">Tipo de Control:</label>
-                                    <input type="text" id="tipo-control" placeholder="Ingrese tipo de control" required>
-                                </div>
-                
-                                <div class="form-group">
-                                    <label for="nombre-control">Nombre del Control:</label>
-                                    <input type="text" id="nombre-control" placeholder="Ingrese nombre del control" required>
-                                </div>
-                            </fieldset>
-                
-                            <!-- SECCIÓN PATRULLAS -->
-                            <fieldset class="patrol-section">
-                                <legend><i class="fa-solid fa-users"></i> Patrullas</legend>
-                
-                                <div class="form-group">
-                                    <label for="categoria-patrulla"> Categoría de Patrullas:</label>
-                                    <input type="text" id="categoria-patrulla" placeholder="Ingrese categoría de patrulla" required>
-                                </div>
-                
-                                <div class="form-group">
-                                    <label for="subcategoria-patrulla"> Subcategoría de Patrullas:</label>
-                                    <input type="text" id="subcategoria-patrulla" placeholder="Ingrese subcategoría de patrulla" required>
-                                </div>
-                            </fieldset>
-                
+                    
+                            <div class="form-group">
+                            <label for="nueva-ronda">Ingrese una nueva descripción ronda:</label>
+                            <input type="text" id="nueva-ronda" class="solo-letras" placeholder="Ej: Perimetral y Plataforma, Zonas Acceso Controlado, Aparcamientos, Planta Sotano... " required>
+                            </div>                        
+                    
+                            <div class="form-group">
                             <button type="submit" class="btn-enviar"><i class="fa-solid fa-save"></i> Guardar</button>
+                            </div>
                         </form>
-                
+                        
                         <!-- TABLA DE REGISTROS -->
                         <div class="table-container">
-                            <h3>Registros Guardados</h3>
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Aeropuerto</th>
-                                        <th>Tipo de Control</th>
-                                        <th>Nombre del Control</th>
-                                        <th>Categoría Patrulla</th>
-                                        <th>Subcategoría Patrulla</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="admin-list">
-                                    <!-- Aquí se insertarán los registros dinámicamente -->
-                                </tbody>
-                            </table>
+                        <h3>Descripciones de rondas registradas</h3>
+                        <table id="tabla-rondas">
+                            <thead>
+                                <tr>
+                                    <th>Ronda</th>
+                                    <th>Usuario Aministrador</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="rondas-list">
+                                <!-- Aquí se insertarán los registros dinámicamente -->
+                            </tbody>
+                        </table>
                         </div>
                     </div>
-
                 </div>
+
+
+                <!-- FORMULARIO PUNTOS DE FICHAJE -->
+                <div id="fichajes" class="tab-content">
+                    <div class="form-container">
+                      <h1>Administrar puntos de fichajes</h1>
+                  
+                      <form id="formulario-fichajes">
+                            <div class="select-container">
+                            <i class="fa-solid fa-plane"></i>
+                            <select id="aeropuerto-fichajes" name="aeropuerto" title="seleccione un aeropuerto" required>
+                                <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            </select>
+                            </div>
+                    
+                            <div class="form-group">
+                            <label for="nueva-puesto">Ingrese un nuevo punto de fichaje</label>
+                            <input type="text" id="nueva-puesto" class="solo-letras" placeholder="Ej: Filtro pax, Filtro empleado, Bodega, Vehículos, cctv..." required>
+                            </div>                       
+                    
+                            <div class="form-group">
+                            <button type="submit" class="btn-enviar"><i class="fa-solid fa-save"></i> Guardar</button>
+                            </div>
+                      </form>
+                  
+                        <!-- TABLA DE REGISTROS -->
+                        <div class="table-container">
+                        <h3>Tipos de fichajes de vigilantes</h3>
+                        <table id="tabla-puesto">
+                            <thead>
+                                <tr>
+                                    <th>Puesto del Vigilante</th>
+                                    <th>Usuario Aministrador</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fichajes-list">
+                                <!-- Aquí se insertarán los registros dinámicamente -->
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
 
 
             </div>
@@ -238,6 +259,7 @@
      <!-- llamadas a scripts -->
     <script src="js/utils/config-api-url.js"></script>
     <script src="js/utils/config-encabezado-pie.js"></script>
+    <script src="js/utils/validaciones-globales.js"></script> 
 
     <script src="js/administrar.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->

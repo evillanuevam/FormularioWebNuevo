@@ -3,22 +3,6 @@
     margin: 20px;
 } 
 
-/* Estilo de las secciones de Administrar desplegables */
-.security-section, .patrol-section {
-    border: 2px solid #003366b6;
-    border-radius: 8px;
-    padding: 15px;
-    margin: 20px;
-    background-color: #f8f9fae3; /* Color más claro que #e9ecef */
-}
-
-.security-section legend, .patrol-section legend {
-    font-weight: bold;
-    font-size: 18px;
-    color: #003366;
-    padding: 0 10px;
-}
-
 /* Contenedor del select con ícono */
 .select-container {
     position: relative;
