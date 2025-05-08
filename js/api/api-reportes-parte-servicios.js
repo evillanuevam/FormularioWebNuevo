@@ -13,6 +13,23 @@ function mostrarMensajeTabla(mensaje) {
     }
 }
 
+function mostrarNotificacion(mensaje) {
+    const noti = document.getElementById("notificacion-exportacion");
+    noti.textContent = mensaje;
+    noti.style.display = "block";
+    noti.style.opacity = "1";
+    noti.style.transform = "translateY(0)";
+    noti.style.zIndex = "99999";
+    noti.classList.add("mostrar");
+
+    setTimeout(() => {
+        noti.classList.remove("mostrar");
+        setTimeout(() => {
+            noti.style.display = "none";
+        }, 400);
+    }, 4000);
+}
+
 function actualizarTablaParteCompleto(registros) {
     const tablaBody = document.getElementById("tabla-descripciones-body");
     if (!tablaBody) return;
@@ -83,9 +100,7 @@ async function cargarParteCompleto() {
             return;
         }
 
-        // Guardar en variable global para exportación completa
         window._parteCompleto = registros;
-
         actualizarTablaParteCompleto(registros);
 
     } catch (error) {
@@ -101,7 +116,11 @@ function exportarExcel() {
     const headers = ["Nombre", "Hora Servicio", "Puesto Vigilante", "Descripción", "Acción Tomada", "Verificación", "Incidencia", "Observaciones"];
     const rows = Array.from(filas).map(row => Array.from(row.cells).map(td => td.textContent));
 
-    exportarAExcel(["Reporte Resumido"], [headers, ...rows], "reporte-resumen");
+    const fecha = document.getElementById("fechaSeleccionada").value || "sin_fecha";
+    const nombreArchivo = `Reporte resumen parte de servicio (${fecha.split("-").reverse().join("-")})`;
+
+    exportarAExcel(["Reporte Resumido"], [headers, ...rows], nombreArchivo);
+    mostrarNotificacion("✅ Exportación de resumen exitosa");
 }
 
 function exportarExcelCompleto() {
@@ -138,7 +157,11 @@ function exportarExcelCompleto() {
         }
     });
 
-    exportarAExcel(["Reporte Completo"], [headers, ...rows], "reporte-completo");
+    const fecha = document.getElementById("fechaSeleccionada").value || "sin_fecha";
+    const nombreArchivo = `Reporte completo parte de servicio (${fecha.split("-").reverse().join("-")})`;
+
+    exportarAExcel(["Reporte Completo"], [headers, ...rows], nombreArchivo);
+    mostrarNotificacion("✅ Exportación completa exitosa");
 }
 
 function exportarAExcel(sheetNames, data, fileName) {
@@ -148,7 +171,51 @@ function exportarAExcel(sheetNames, data, fileName) {
     XLSX.writeFile(wb, `${fileName}.xlsx`);
 }
 
-// Eventos
+function exportarPDF() {
+    const fechaInput = document.getElementById("fechaSeleccionada");
+    const aeropuerto = document.getElementById("aeropuerto").value;
+    const fecha = fechaInput.value;
+
+    if (!fecha || !aeropuerto) {
+        alert("Debes seleccionar un aeropuerto y una fecha antes de exportar.");
+        return;
+    }
+
+    const { jsPDF } = window.jspdf;
+    const doc = new jsPDF();
+
+    // Formato fecha dd-MM-yyyy
+    const fechaObj = new Date(fecha);
+    const fechaFormateada = `${fechaObj.getDate().toString().padStart(2, "0")}-${(fechaObj.getMonth() + 1).toString().padStart(2, "0")}-${fechaObj.getFullYear()}`;
+
+    // Título
+    doc.setFontSize(12);
+    doc.text(`Aeropuerto: ${aeropuerto}`, 14, 15);
+    doc.text(`Fecha del reporte: ${fechaFormateada}`, 14, 22);
+
+    // Preparar datos desde tabla actual
+    const tabla = document.querySelector("#tabla-descripciones tbody");
+    const filas = Array.from(tabla.querySelectorAll("tr"));
+
+    const headers = [["Nombre", "Hora Servicio", "Puesto Vigilante", "Descripción", "Acción Tomada", "Verificación", "Incidencia", "Observaciones"]];
+    const data = filas.map(tr => Array.from(tr.children).map(td => td.textContent.trim()));
+
+    // Tabla con estilo
+    doc.autoTable({
+        head: headers,
+        body: data,
+        startY: 30,
+        styles: { fontSize: 8 },
+        headStyles: { fillColor: [0, 57, 107] }, // Azul oscuro
+        alternateRowStyles: { fillColor: [240, 240, 240] }, // Gris claro
+        margin: { top: 10 }
+    });
+
+    doc.save(`Reporte resumen parte de servicio (${fechaFormateada}).pdf`);
+    mostrarNotificacion("✅ PDF exportado con éxito");
+}
+
+
 document.addEventListener("DOMContentLoaded", () => {
     document.getElementById("fechaSeleccionada").addEventListener("change", cargarParteCompleto);
 

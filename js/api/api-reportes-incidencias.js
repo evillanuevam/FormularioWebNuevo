@@ -138,7 +138,7 @@ function exportarExcel() {
 
     const ws = XLSX.utils.aoa_to_sheet(ws_data);
     XLSX.utils.book_append_sheet(wb, ws, "Resumen Diario");
-    XLSX.writeFile(wb, `ResumenDiario_${fecha}.xlsx`);
+    XLSX.writeFile(wb, `Reporte_Incidencias_${fecha}.xlsx`);
     mostrarNotificacion("✅ Excel exportado con éxito");
 }
 
@@ -181,7 +181,7 @@ function exportarPDF() {
         margin: { top: 10 }
     });
 
-    doc.save(`ResumenDiario_${fecha}.pdf`);
+    doc.save(`Reporte_Incidencias_${fecha}.pdf`);
     mostrarNotificacion("✅ PDF exportado con éxito");
 }
 
