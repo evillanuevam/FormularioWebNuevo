@@ -113,11 +113,16 @@ document.addEventListener("DOMContentLoaded", function () {
         }
 
         if (paginaActual === "adm-parte-servicio.html","adm-usuarios.html","adm-parte-patrullas.html") {
+            // Adm. Parte de servicio 
             setAeropuertoValue("aeropuerto-incidencias");
             setAeropuertoValue("aeropuerto-puestos");
-            // Asignar el aeropuerto a los otros selects si existen
+            // Adm. Usuarios
             setAeropuertoValue("aeropuerto-admin");
             setAeropuertoValue("aeropuerto-eliminar");
+            // Adm. Parte de patrullas
+            setAeropuertoValue("aeropuerto-rondas");
+            setAeropuertoValue("aeropuerto-fichajes");
+            setAeropuertoValue("aeropuerto-puertas");
         }
 
         if (["patrullas-perimetro.html", "patrullas-otras-zonas.html", "parte-equipos.html", 

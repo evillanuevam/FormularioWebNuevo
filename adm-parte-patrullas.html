@@ -105,7 +105,7 @@
                 <div class="tabs-container">
                     <div class="tab-button" data-tab="rondas">Rondas</div>
                     <div class="tab-button" data-tab="fichajes">Puntos fichaje</div>
-                    <div class="tab-button" data-tab="perimetros">Puerta perimetro</div>
+                    <div class="tab-button" data-tab="puertas">Puerta perimetro</div>
                 </div>
 
                 <!-- FORMULARIO DE RONDAS -->
@@ -137,7 +137,7 @@
                         <table id="tabla-rondas">
                             <thead>
                                 <tr>
-                                    <th>Ronda</th>
+                                    <th>Rondas</th>
                                     <th>Usuario Aministrador</th>
                                     <th>Eliminar</th>
                                 </tr>
@@ -154,7 +154,7 @@
                 <!-- FORMULARIO PUNTOS DE FICHAJE -->
                 <div id="fichajes" class="tab-content">
                     <div class="form-container">
-                      <h1>Administrar puntos de fichajes</h1>
+                      <h1>Administrar Puntos de Fichajes</h1>
                   
                       <form id="formulario-fichajes">
                             <div class="select-container">
@@ -165,8 +165,8 @@
                             </div>
                     
                             <div class="form-group">
-                            <label for="nueva-puesto">Ingrese un nuevo punto de fichaje</label>
-                            <input type="text" id="nueva-puesto" class="solo-letras" placeholder="Ej: Filtro pax, Filtro empleado, Bodega, Vehículos, cctv..." required>
+                            <label for="nueva-fichaje">Ingrese una inspección puntos de fichaje:</label>
+                            <input type="text" id="nueva-fichaje" class="solo-letras" placeholder="Ej: Entrada principal, Salida Norte, Torre de Control..." required>
                             </div>                       
                     
                             <div class="form-group">
@@ -176,16 +176,59 @@
                   
                         <!-- TABLA DE REGISTROS -->
                         <div class="table-container">
-                        <h3>Tipos de fichajes de vigilantes</h3>
-                        <table id="tabla-puesto">
+                        <h3>Tipos inspección puntos de fichaje</h3>
+                        <table id="tabla-fichajes">
                             <thead>
                                 <tr>
-                                    <th>Puesto del Vigilante</th>
+                                    <th>Puntos de fichaje</th>
                                     <th>Usuario Aministrador</th>
                                     <th>Eliminar</th>
                                 </tr>
                             </thead>
                             <tbody id="fichajes-list">
+                                <!-- Aquí se insertarán los registros dinámicamente -->
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- FORMULARIO PUERTAS DE PERIMETRO -->
+                <div id="puertas" class="tab-content">
+                    <div class="form-container">
+                        <h1>Administrar Puertas de Perímetros</h1>
+                    
+                        <form id="formulario-puertas">
+                            <div class="select-container">
+                            <i class="fa-solid fa-plane"></i>
+                            <select id="aeropuerto-puertas" name="aeropuerto" title="seleccione un aeropuerto" required>
+                                <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            </select>
+                            </div>
+                    
+                            <div class="form-group">
+                            <label for="nueva-puerta">Ingrese una inspección de puertas de perímetros:</label>
+                            <input type="text" id="nueva-puerta" class="solo-letras" placeholder="Ej: P10, P11, P13, P15, P15R, P17..." required>
+                            </div>                       
+                    
+                            <div class="form-group">
+                            <button type="submit" class="btn-enviar"><i class="fa-solid fa-save"></i> Guardar</button>
+                            </div>
+                        </form>
+                    
+                        <!-- TABLA DE REGISTROS -->
+                        <div class="table-container">
+                        <h3>Tipos inspección de puertas de perímetros</h3>
+                        <table id="tabla-puertas">
+                            <thead>
+                                <tr>
+                                    <th>Puertas de Perímetros</th>
+                                    <th>Usuario Aministrador</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                            </thead>
+                            <tbody id="puertas-list">
                                 <!-- Aquí se insertarán los registros dinámicamente -->
                             </tbody>
                         </table>
