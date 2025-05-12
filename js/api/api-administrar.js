@@ -237,10 +237,14 @@ document.addEventListener("DOMContentLoaded", function () {
         targetButton.classList.add('active');
         targetContent.classList.add('active');
 
-        // 👇 Ejecutar carga según el hash (solo si aplica)
+        // 👇 Ejecutar carga según el hash (solo si aplica) - AGREGAR AQUI PARA QUE SE CARGE LOS DATOS AL INCIAR
         if (hash === "incidencias") cargarIncidencias?.();
         if (hash === "puestos") leerPuestos?.();
-        if (hash === "eliminar") cargarUsuarios?.(); // AGREGADO 
+        if (hash === "eliminar") cargarUsuarios?.(); 
+        if (hash === "rondas") leerRondas?.();
+        if (hash === "fichajes") leerFichajes?.();
+        if (hash === "puertas") leerPuertas?.();
+
     }
 });
 
@@ -370,10 +374,16 @@ formRondas?.addEventListener("submit", async e => {
             body: JSON.stringify(nueva)
         });
         if (!res.ok) throw new Error("Error al guardar ronda");
+
+        // Mostrar alerta de éxito
+        alert("✅ Ronda guardada correctamente.");
+
         inputRonda.value = "";
         await leerRondas();
+
     } catch (err) {
         console.error("❌ Error al guardar ronda:", err);
+        alert("❌ No se pudo guardar la ronda.");
     }
 });
 
@@ -408,7 +418,7 @@ async function leerRondas() {
 document.addEventListener("click", async e => {
     if (e.target.closest(".eliminar-ronda")) {
         const id = e.target.closest("button").dataset.id;
-        if (!confirm("¿Eliminar esta ronda?")) return;
+        if (!confirm("❌ ¿Eliminar esta ronda?")) return;
         try {
             const res = await fetch(`${API_URL}/api/Administrar/eliminar-ronda/${id}`, {
                 method: "DELETE",
@@ -444,6 +454,10 @@ formFichajes?.addEventListener("submit", async e => {
             body: JSON.stringify(nueva)
         });
         if (!res.ok) throw new Error("Error al guardar fichaje");
+
+        // ✅ Mostrar alerta de éxito
+        alert("✅ Punto de fichaje guardada correctamente.");
+
         inputFichaje.value = "";
         await leerFichajes();
     } catch (err) {
@@ -482,7 +496,7 @@ async function leerFichajes() {
 document.addEventListener("click", async e => {
     if (e.target.closest(".eliminar-fichaje")) {
         const id = e.target.closest("button").dataset.id;
-        if (!confirm("¿Eliminar este punto de fichaje?")) return;
+        if (!confirm("❌ ¿Eliminar este punto de fichaje?")) return;
         try {
             const res = await fetch(`${API_URL}/api/Administrar/eliminar-fichaje/${id}`, {
                 method: "DELETE",
@@ -518,7 +532,11 @@ formPuertas?.addEventListener("submit", async e => {
             body: JSON.stringify(nueva)
         });
         if (!res.ok) throw new Error("Error al guardar puerta");
+
+        // ✅ Mostrar alerta de éxito
+        alert("✅ Puerta de perimetro guardada correctamente.");
         inputPuerta.value = "";
+
         await leerPuertas();
     } catch (err) {
         console.error("❌ Error al guardar puerta:", err);
@@ -556,7 +574,7 @@ async function leerPuertas() {
 document.addEventListener("click", async e => {
     if (e.target.closest(".eliminar-puerta")) {
         const id = e.target.closest("button").dataset.id;
-        if (!confirm("¿Eliminar esta puerta de perímetro?")) return;
+        if (!confirm("❌ ¿Eliminar esta puerta de perímetro?")) return;
         try {
             const res = await fetch(`${API_URL}/api/Administrar/eliminar-puerta/${id}`, {
                 method: "DELETE",
@@ -570,5 +588,4 @@ document.addEventListener("click", async e => {
 });
 
 document.querySelector("[data-tab='puertas']")?.addEventListener("click", leerPuertas);
-
 
