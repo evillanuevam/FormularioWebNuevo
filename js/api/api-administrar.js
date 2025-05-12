@@ -347,4 +347,228 @@ document.addEventListener("click", function (e) {
 });
 
 
+/** ========================== ADMINISTAR PARTE DE PATRULLAS =========================== */
+
+// =============================== RONDAS =====================================
+const formRondas = document.getElementById("formulario-rondas");
+const inputRonda = document.getElementById("nueva-ronda");
+const listaRondas = document.getElementById("rondas-list");
+
+formRondas?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const nueva = {
+        descripcion: inputRonda.value.trim(),
+        aeropuerto
+    };
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/guardar-ronda`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(nueva)
+        });
+        if (!res.ok) throw new Error("Error al guardar ronda");
+        inputRonda.value = "";
+        await leerRondas();
+    } catch (err) {
+        console.error("❌ Error al guardar ronda:", err);
+    }
+});
+
+async function leerRondas() {
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/leer-rondas?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const lista = data.$values || data || [];
+        listaRondas.innerHTML = "";
+
+        if (lista.length === 0) {
+            listaRondas.innerHTML = `<tr><td colspan="3">No hay registros.</td></tr>`;
+            return;
+        }
+
+        lista.forEach(r => {
+            listaRondas.innerHTML += `
+                <tr>
+                    <td>${r.descripcion}</td>
+                    <td>${r.usuario?.nombre ?? "—"}</td>
+                    <td><button data-id="${r.id}" class="btn-eliminar eliminar-ronda"><i class="fa fa-trash"></i></button></td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        console.error("❌ Error al leer rondas:", err);
+    }
+}
+
+document.addEventListener("click", async e => {
+    if (e.target.closest(".eliminar-ronda")) {
+        const id = e.target.closest("button").dataset.id;
+        if (!confirm("¿Eliminar esta ronda?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/Administrar/eliminar-ronda/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await leerRondas();
+        } catch (err) {
+            console.error("❌ Error al eliminar ronda:", err);
+        }
+    }
+});
+
+document.querySelector("[data-tab='rondas']")?.addEventListener("click", leerRondas);
+
+// ============================ FICHAJES ====================================
+const formFichajes = document.getElementById("formulario-fichajes");
+const inputFichaje = document.getElementById("nueva-fichaje");
+const listaFichajes = document.getElementById("fichajes-list");
+
+formFichajes?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const nueva = {
+        descripcion: inputFichaje.value.trim(),
+        aeropuerto
+    };
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/guardar-fichaje`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(nueva)
+        });
+        if (!res.ok) throw new Error("Error al guardar fichaje");
+        inputFichaje.value = "";
+        await leerFichajes();
+    } catch (err) {
+        console.error("❌ Error al guardar fichaje:", err);
+    }
+});
+
+async function leerFichajes() {
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/leer-fichajes?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const lista = data.$values || data || [];
+        listaFichajes.innerHTML = "";
+
+        if (lista.length === 0) {
+            listaFichajes.innerHTML = `<tr><td colspan="3">No hay registros.</td></tr>`;
+            return;
+        }
+
+        lista.forEach(f => {
+            listaFichajes.innerHTML += `
+                <tr>
+                    <td>${f.descripcion}</td>
+                    <td>${f.usuario?.nombre ?? "—"}</td>
+                    <td><button data-id="${f.id}" class="btn-eliminar eliminar-fichaje"><i class="fa fa-trash"></i></button></td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        console.error("❌ Error al leer fichajes:", err);
+    }
+}
+
+document.addEventListener("click", async e => {
+    if (e.target.closest(".eliminar-fichaje")) {
+        const id = e.target.closest("button").dataset.id;
+        if (!confirm("¿Eliminar este punto de fichaje?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/Administrar/eliminar-fichaje/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await leerFichajes();
+        } catch (err) {
+            console.error("❌ Error al eliminar fichaje:", err);
+        }
+    }
+});
+
+document.querySelector("[data-tab='fichajes']")?.addEventListener("click", leerFichajes);
+
+// ============================ PUERTAS ====================================
+const formPuertas = document.getElementById("formulario-puertas");
+const inputPuerta = document.getElementById("nueva-puerta");
+const listaPuertas = document.getElementById("puertas-list");
+
+formPuertas?.addEventListener("submit", async e => {
+    e.preventDefault();
+    const nueva = {
+        identificador: inputPuerta.value.trim(),
+        aeropuerto
+    };
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/guardar-puerta`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(nueva)
+        });
+        if (!res.ok) throw new Error("Error al guardar puerta");
+        inputPuerta.value = "";
+        await leerPuertas();
+    } catch (err) {
+        console.error("❌ Error al guardar puerta:", err);
+    }
+});
+
+async function leerPuertas() {
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/leer-puertas?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await res.json();
+        const lista = data.$values || data || [];
+        listaPuertas.innerHTML = "";
+
+        if (lista.length === 0) {
+            listaPuertas.innerHTML = `<tr><td colspan="3">No hay registros.</td></tr>`;
+            return;
+        }
+
+        lista.forEach(p => {
+            listaPuertas.innerHTML += `
+                <tr>
+                    <td>${p.identificador}</td>
+                    <td>${p.usuario?.nombre ?? "—"}</td>
+                    <td><button data-id="${p.id}" class="btn-eliminar eliminar-puerta"><i class="fa fa-trash"></i></button></td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        console.error("❌ Error al leer puertas:", err);
+    }
+}
+
+document.addEventListener("click", async e => {
+    if (e.target.closest(".eliminar-puerta")) {
+        const id = e.target.closest("button").dataset.id;
+        if (!confirm("¿Eliminar esta puerta de perímetro?")) return;
+        try {
+            const res = await fetch(`${API_URL}/api/Administrar/eliminar-puerta/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            await leerPuertas();
+        } catch (err) {
+            console.error("❌ Error al eliminar puerta:", err);
+        }
+    }
+});
+
+document.querySelector("[data-tab='puertas']")?.addEventListener("click", leerPuertas);
+
 
