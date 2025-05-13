@@ -211,7 +211,8 @@
 /*CSS para la tabla de formularion de servicio*/
 /* Estilo para la cabecera de la tabla */
 #tabla-descripciones thead th,
-#tabla-inspeccion-vehiculos thead th {
+#tabla-inspeccion-vehiculos thead th,
+#tabla-inspeccion-proveedores thead th {
     font-weight: bold;  /* Poner en negrita */
     background-color: #003366;  /* Color azul oscuro */
     color: white;  /* Texto en blanco */
@@ -221,13 +222,15 @@
 
 /* Estilo para las filas de la tabla */
 #tabla-descripciones tbody tr,
-#tabla-inspeccion-vehiculos tbody tr {
+#tabla-inspeccion-vehiculos tbody tr,
+#tabla-inspeccion-proveedores tbody tr {
     border-bottom: 1px solid #ddd;
 }
 
 /* Estilo para las celdas de la tabla */
 #tabla-descripciones td,
-#tabla-inspeccion-vehiculos td {
+#tabla-inspeccion-vehiculos td,
+#tabla-inspeccion-proveedores td {
     padding: 10px;
     text-align: center;
 }
@@ -240,7 +243,8 @@
 
 /* Bordes redondeados en la tabla */
 #tabla-descripciones,
-#tabla-inspeccion-vehiculos {
+#tabla-inspeccion-vehiculos,
+#tabla-inspeccion-proveedores {
     border-collapse: collapse;
     width: 100%;
     border-radius: 5px;
@@ -298,6 +302,39 @@
     text-align: center;
 }
 
+/*ESPACIO DE INSPECCION DE PROVEDORES*/
+
+#tabla-inspeccion-proveedores th:nth-child(1),
+#tabla-inspeccion-proveedores td:nth-child(1) {
+    width: 12%; /* Hora */
+}
+
+#tabla-inspeccion-proveedores th:nth-child(2),
+#tabla-inspeccion-proveedores td:nth-child(2) {
+    width: 20%; /* Proveedor */
+}
+
+#tabla-inspeccion-proveedores th:nth-child(3),
+#tabla-inspeccion-proveedores td:nth-child(3) {
+    width: 15%; /* Fecha expiración */
+}
+
+#tabla-inspeccion-proveedores th:nth-child(4),
+#tabla-inspeccion-proveedores td:nth-child(4) {
+    width: 12%; /* Estado */
+}
+
+#tabla-inspeccion-proveedores th:nth-child(5),
+#tabla-inspeccion-proveedores td:nth-child(5) {
+    width: 35%; /* Observaciones */
+}
+
+#tabla-inspeccion-proveedores th:nth-child(6),
+#tabla-inspeccion-proveedores td:nth-child(6) {
+    width: 5%; /* Botón eliminar */
+    text-align: center;
+}
+
 
 
 /*CSS para el formulario responsivo*/
@@ -327,12 +364,14 @@
 }
 
 
-.btn-agregar.btn-vehiculo {
+.btn-agregar.btn-vehiculo,
+.btn-agregar.btn-proveedor {
     background-color: #003366;
     color: white;
 }
 
-.btn-agregar.btn-vehiculo:hover {
+.btn-agregar.btn-vehiculo:hover, 
+.btn-agregar.btn-proveedor:hover{
     background-color: #002244;
 }
 
@@ -383,6 +422,27 @@
 
 }
 
+.grupo-inspeccion {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.boton-toggle {
+  background-color: #003366;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  width: fit-content;
+}
+
+.boton-toggle:hover {
+  background-color: #002244;
+}
 
 
 /* ✅ RESPONSIVE PARA DISPOSITIVOS PEQUEÑOS */

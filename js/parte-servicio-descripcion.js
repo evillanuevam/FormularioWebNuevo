@@ -282,3 +282,40 @@ function guardarChecklist() {
 
 
 
+//********************************** TABLA INSPECCION DE PROVEEDORES *****************************/
+
+function agregarFilaProveedor() {
+  const tabla = document.querySelector("#tabla-inspeccion-proveedores tbody");
+  const fila = document.createElement("tr");
+  fila.innerHTML = `
+    <td><input type="time" name="horaProveedor[]"></td>
+    <td><input type="text" name="nombreProveedor[]" placeholder="Nombre del proveedor"></td>
+    <td><input type="date" name="fechaExpiracionProveedor[]"></td>
+    <td>
+      <select name="estadoProveedor[]">
+        <option value="">Seleccionar</option>
+        <option value="OK">OK</option>
+        <option value="NO OK">NO OK</option>
+      </select>
+    </td>
+    <td><textarea name="observacionesProveedor[]" placeholder="Observaciones (opcional)"></textarea></td>
+    <td>
+      <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
+        <i class="fa fa-trash"></i>
+      </button>
+    </td>
+  `;
+  tabla.appendChild(fila);
+}
+
+
+document.getElementById("toggle-tabla-proveedores").addEventListener("click", function () {
+  const contenedor = document.getElementById("contenedor-tabla-proveedores");
+  if (contenedor.style.display === "none" || contenedor.style.display === "") {
+    contenedor.style.display = "block";
+    this.textContent = "Ocultar Tabla de Inspeccion de Proveedores";
+  } else {
+    contenedor.style.display = "none";
+    this.textContent = "Mostrar Tabla de Inspeccion de Proveedores";
+  }
+});
