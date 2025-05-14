@@ -324,7 +324,14 @@
                             <tbody>
                             <tr>
                                 <td><input type="time" name="horaProveedor[]"></td>
-                                <td><input type="text" name="nombreProveedor[]" placeholder="Nombre del proveedor"></td>
+                                
+                                <td>
+                                <select name="nombreProveedor[]" class="select-proveedor" required>
+                                    <option value="" disabled selected>Seleccione un proveedor</option>
+                                    <!-- Opciones se insertan por JS -->
+                                </select>
+                                </td>
+
                                 <td><input type="date" name="fechaExpiracionProveedor[]"></td>
                                 <td>
                                 <select name="estadoProveedor[]">

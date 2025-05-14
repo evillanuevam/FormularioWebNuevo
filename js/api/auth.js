@@ -116,6 +116,7 @@ document.addEventListener("DOMContentLoaded", function () {
             // Adm. Parte de servicio 
             setAeropuertoValue("aeropuerto-incidencias");
             setAeropuertoValue("aeropuerto-puestos");
+            setAeropuertoValue("aeropuerto-proveedores");
             // Adm. Usuarios
             setAeropuertoValue("aeropuerto-admin");
             setAeropuertoValue("aeropuerto-eliminar");

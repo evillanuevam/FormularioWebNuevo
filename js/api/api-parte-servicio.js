@@ -483,3 +483,44 @@ document.addEventListener("DOMContentLoaded", function () {
     llenarSelectsPuestos();
 });
 
+//******************************* DESPLEGABLE INSPECCION DE VEHICULOS***************************************/
+
+async function obtenerProveedoresDesdeAPI() {
+  try {
+    const res = await fetch(`${API_URL}/api/Administrar/leer-proveedores?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    const data = await res.json();
+    const lista = data.$values || data || [];
+
+    const selects = document.querySelectorAll(".select-proveedor");
+    selects.forEach(select => {
+      select.innerHTML = `<option value="" disabled selected>Seleccione un proveedor</option>`;
+      lista.forEach(p => {
+        const opcion = document.createElement("option");
+        opcion.value = p.nombreProveedor;
+        opcion.textContent = p.nombreProveedor;
+        select.appendChild(opcion);
+      });
+
+      // Si el usuario es administrador, agregamos la opción especial
+      if (decoded["Rol"] === "Administrador") {
+        const opcionAdmin = document.createElement("option");
+        opcionAdmin.value = "nuevo_proveedor";
+        opcionAdmin.textContent = "➕ Añadir nuevo proveedor";
+        select.appendChild(opcionAdmin);
+
+        // Evento para redirigir si selecciona esa opción
+        select.addEventListener("change", function () {
+          if (this.value === "nuevo_proveedor") {
+            window.location.href = "administrar.html#proveedores";
+          }
+        });
+      }
+    });
+
+  } catch (err) {
+    console.error("❌ Error al cargar proveedores:", err);
+  }
+}
+
