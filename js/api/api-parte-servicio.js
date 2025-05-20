@@ -470,7 +470,7 @@ async function llenarSelectsPuestos() {
     });
 }
 
-// Escucha cuando se elige esa opción
+// cuando se eleige la opcion de añador puestos, para redirigir
 document.addEventListener("change", function (event) {
     if (event.target.classList.contains("puesto-select") && event.target.value === "añadir-puesto") {
         window.location.href = "adm-parte-servicio.html#puestos";
@@ -483,44 +483,64 @@ document.addEventListener("DOMContentLoaded", function () {
     llenarSelectsPuestos();
 });
 
-//******************************* DESPLEGABLE INSPECCION DE VEHICULOS***************************************/
+//******************************* DESPLEGABLE INSPECCION DE PROVEEDORES ***************************************/
+
+// ============================ DESPLEGABLE PROVEEDORES ===============================
 
 async function obtenerProveedoresDesdeAPI() {
-  try {
-    const res = await fetch(`${API_URL}/api/Administrar/leer-proveedores?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-    const data = await res.json();
-    const lista = data.$values || data || [];
+    const { aeropuerto } = obtenerUsuarioDatos();
+    if (!aeropuerto) return [];
 
-    const selects = document.querySelectorAll(".select-proveedor");
-    selects.forEach(select => {
-      select.innerHTML = `<option value="" disabled selected>Seleccione un proveedor</option>`;
-      lista.forEach(p => {
-        const opcion = document.createElement("option");
-        opcion.value = p.nombreProveedor;
-        opcion.textContent = p.nombreProveedor;
-        select.appendChild(opcion);
-      });
-
-      // Si el usuario es administrador, agregamos la opción especial
-      if (decoded["Rol"] === "Administrador") {
-        const opcionAdmin = document.createElement("option");
-        opcionAdmin.value = "nuevo_proveedor";
-        opcionAdmin.textContent = "➕ Añadir nuevo proveedor";
-        select.appendChild(opcionAdmin);
-
-        // Evento para redirigir si selecciona esa opción
-        select.addEventListener("change", function () {
-          if (this.value === "nuevo_proveedor") {
-            window.location.href = "administrar.html#proveedores";
-          }
+    try {
+        const response = await fetch(`${API_URL}/api/Administrar/leer-proveedores?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: {
+                Authorization: `Bearer ${sessionStorage.getItem("token")}`
+            }
         });
-      }
-    });
 
-  } catch (err) {
-    console.error("❌ Error al cargar proveedores:", err);
-  }
+        if (!response.ok) throw new Error("Error al obtener proveedores");
+
+        const data = await response.json();
+        const lista = data.$values || [];
+        return lista.map(p => p.nombreProveedor);
+    } catch (err) {
+        console.error("❌ Error al obtener proveedores:", err);
+        return [];
+    }
 }
 
+async function llenarSelectsProveedores() {
+    const proveedores = await obtenerProveedoresDesdeAPI();
+    const { rol } = obtenerUsuarioDatos();
+
+    document.querySelectorAll("select.select-proveedor").forEach(select => {
+        select.innerHTML = `<option value="" disabled selected>Seleccione un proveedor</option>`;
+
+        proveedores.forEach(nombre => {
+            const option = document.createElement("option");
+            option.value = nombre;
+            option.textContent = nombre;
+            select.appendChild(option);
+        });
+
+        // Solo si el usuario es administrador, añade la opción extra
+        if (rol === "Administrador") {
+            const extra = document.createElement("option");
+            extra.value = "añadir-proveedor";
+            extra.textContent = "➕ Añadir nuevo proveedor";
+            select.appendChild(extra);
+        }
+    });
+}
+
+// Redirigir si se elige la opción de añadir nuevo proveedor
+document.addEventListener("change", function (event) {
+    if (event.target.classList.contains("select-proveedor") && event.target.value === "añadir-proveedor") {
+        window.location.href = "adm-parte-servicio.html#proveedores";
+    }
+});
+
+// Ejecutar al cargar página
+document.addEventListener("DOMContentLoaded", function () {
+    llenarSelectsProveedores();
+});

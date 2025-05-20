@@ -252,109 +252,109 @@
 
                     <!-- Grupo completo: Inspección de Vehículos -->
                     <div class="grupo-inspeccion">
-                    <button type="button" id="toggle-tabla-vehiculos" class="boton-toggle">
-                        Mostrar Tabla de Inspeccion de Vehículos
-                    </button>
-
-                    <div id="contenedor-tabla-vehiculos" style="display: none;">
-                        <div class="form-group">
-                        <table id="tabla-inspeccion-vehiculos" class="tabla-inspeccion-vehiculos">
-                            <thead>
-                            <tr>
-                                <th>Hora</th>
-                                <th>Matrícula</th>
-                                <th>Revisión</th>
-                                <th>Revisión</th>
-                                <th>Estado</th>
-                                <th>Observaciones</th>
-                                <th>Eliminar</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="time" name="horaVehiculo[]"></td>
-                                <td><input type="text" name="matriculaVehiculo[]" placeholder="Matrícula"></td>
-                                <td>
-                                <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Checklist</button>
-                                </td>
-                                <td><textarea name="detalles" placeholder="Seleccione los distintos detalles" readonly></textarea></td>
-                                <td>
-                                <select name="revisionVehiculo[]">
-                                    <option value="">Seleccionar</option>
-                                    <option value="OK">OK</option>
-                                    <option value="NO OK">NO OK</option>
-                                </select>
-                                </td>
-                                <td><textarea name="observacionesVehiculo[]" placeholder="Observación (opcional)"></textarea></td>
-                                <td>
-                                <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <button type="button" class="btn-agregar btn-vehiculo" onclick="agregarFila()">
-                            <i class="fas fa-plus-circle"></i> Agregar Vehículo
+                        <button type="button" id="toggle-tabla-vehiculos" class="boton-toggle">
+                            Mostrar Tabla de Inspeccion de Vehículos
                         </button>
+
+                        <div id="contenedor-tabla-vehiculos" style="display: none;">
+                            <div class="form-group">
+                            <table id="tabla-inspeccion-vehiculos" class="tabla-inspeccion-vehiculos">
+                                <thead>
+                                <tr>
+                                    <th>Hora</th>
+                                    <th>Matrícula</th>
+                                    <th>Revisión</th>
+                                    <th>Revisión</th>
+                                    <th>Estado</th>
+                                    <th>Observaciones</th>
+                                    <th>Eliminar</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td><input type="time" name="horaVehiculo[]"></td>
+                                    <td><input type="text" name="matriculaVehiculo[]" placeholder="Matrícula"></td>
+                                    <td>
+                                    <button type="button" class="btn-detalles" onclick="abrirModal(this)">🛠 Checklist</button>
+                                    </td>
+                                    <td><textarea name="detalles" placeholder="Seleccione los distintos detalles" readonly></textarea></td>
+                                    <td>
+                                    <select name="revisionVehiculo[]">
+                                        <option value="">Seleccionar</option>
+                                        <option value="OK">OK</option>
+                                        <option value="NO OK">NO OK</option>
+                                    </select>
+                                    </td>
+                                    <td><textarea name="observacionesVehiculo[]" placeholder="Observación (opcional)"></textarea></td>
+                                    <td>
+                                    <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
+                                        <i class="fa fa-trash"></i>
+                                    </button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+
+                            <button type="button" class="btn-agregar btn-vehiculo" onclick="agregarFila()">
+                                <i class="fas fa-plus-circle"></i> Agregar Vehículo
+                            </button>
+                            </div>
                         </div>
-                    </div>
                     </div>
 
                     <!-- Grupo completo: Inspección de Proveedores -->
                     <div class="grupo-inspeccion">
-                    <button type="button" id="toggle-tabla-proveedores" class="boton-toggle">
-                        Mostrar Tabla de Inspeccion de Proveedores
-                    </button>
-
-                    <div id="contenedor-tabla-proveedores" style="display: none;">
-                        <div class="form-group">
-                        <table id="tabla-inspeccion-proveedores" class="tabla-inspeccion-proveedores">
-                            <thead>
-                            <tr>
-                                <th>Hora</th>
-                                <th>Proveedor</th>
-                                <th>Fecha expiracion proveedor</th>
-                                <th>Estado</th>
-                                <th>Observaciones</th>
-                                <th>Eliminar</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td><input type="time" name="horaProveedor[]"></td>
-                                
-                                <td>
-                                <select name="nombreProveedor[]" class="select-proveedor" required>
-                                    <option value="" disabled selected>Seleccione un proveedor</option>
-                                    <!-- Opciones se insertan por JS -->
-                                </select>
-                                </td>
-
-                                <td><input type="date" name="fechaExpiracionProveedor[]"></td>
-                                <td>
-                                <select name="estadoProveedor[]">
-                                    <option value="">Seleccionar</option>
-                                    <option value="OK">OK</option>
-                                    <option value="NO OK">NO OK</option>
-                                </select>
-                                </td>
-                                <td><textarea name="observacionesProveedor[]" placeholder="Observación (opcional)"></textarea></td>
-                                <td>
-                                <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
-                                    <i class="fa fa-trash"></i>
-                                </button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-
-                        <button type="button" class="btn-agregar btn-proveedor" onclick="agregarFilaProveedor()">
-                            <i class="fas fa-plus-circle"></i> Agregar Proveedor
+                        <button type="button" id="toggle-tabla-proveedores" class="boton-toggle">
+                            Mostrar Tabla de Inspeccion de Proveedores
                         </button>
+
+                        <div id="contenedor-tabla-proveedores" style="display: none;">
+                            <div class="form-group">
+                            <table id="tabla-inspeccion-proveedores" class="tabla-inspeccion-proveedores">
+                                <thead>
+                                    <tr>
+                                        <th>Hora</th>
+                                        <th>Proveedor</th>
+                                        <th>Fecha expiracion proveedor</th>
+                                        <th>Estado</th>
+                                        <th>Observaciones</th>
+                                        <th>Eliminar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><input type="time" name="horaProveedor[]"></td>
+                                        
+                                        <td>
+                                        <select name="nombreProveedor[]" class="select-proveedor" required>
+                                            <option value="" disabled selected>Seleccione un proveedor</option>
+                                            <!-- Opciones se insertan por JS -->
+                                        </select>
+                                        </td>
+
+                                        <td><input type="date" name="fechaExpiracionProveedor[]"></td>
+                                        <td>
+                                        <select name="estadoProveedor[]">
+                                            <option value="">Seleccionar</option>
+                                            <option value="OK">OK</option>
+                                            <option value="NO OK">NO OK</option>
+                                        </select>
+                                        </td>
+                                        <td><textarea name="observacionesProveedor[]" placeholder="Observación (opcional)"></textarea></td>
+                                        <td>
+                                        <button type="button" class="btn-eliminar" onclick="eliminarFila(this)">
+                                            <i class="fa fa-trash"></i>
+                                        </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+
+                            <button type="button" class="btn-agregar btn-proveedor" onclick="agregarFilaProveedor()">
+                                <i class="fas fa-plus-circle"></i> Agregar Proveedor
+                            </button>
+                            </div>
                         </div>
-                    </div>
                     </div>
 
 

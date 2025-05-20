@@ -208,6 +208,103 @@ document.addEventListener("click", async function (e) {
 const tabPuestos = document.querySelector("[data-tab='puestos']");
 tabPuestos?.addEventListener("click", leerPuestos);
 
+//========================================== Proveedores ===================================================
+const formularioProveedores = document.getElementById("formulario-proveedores");
+const proveedoresList = document.getElementById("proveedores-list");
+
+formularioProveedores?.addEventListener("submit", async function (e) {
+    e.preventDefault();
+    const aeropuerto = document.getElementById("aeropuerto-proveedores").value;
+    const proveedor = document.getElementById("nueva-proveedor").value.trim();
+
+    if (!proveedor) return alert("⚠️ Ingrese un proveedor válido");
+
+    try {
+        const response = await fetch(`${API_URL}/api/Administrar/guardar-proveedor?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(proveedor)
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+            alert("❌ " + (data?.mensaje || "Error al guardar el proveedor"));
+            return;
+        }
+
+        alert("✅ Proveedor guardado correctamente.");
+        document.getElementById("nueva-proveedor").value = "";
+        await leerProveedores();
+    } catch (err) {
+        console.error("❌ No se pudo guardar el proveedor:", err);
+    }
+});
+
+async function leerProveedores() {
+    const { aeropuerto } = obtenerUsuarioDatos();
+    if (!aeropuerto) return;
+
+    try {
+        const res = await fetch(`${API_URL}/api/Administrar/leer-proveedores?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        const data = await res.json();
+        const lista = data.$values || [];
+        proveedoresList.innerHTML = "";
+
+        if (lista.length === 0) {
+            proveedoresList.innerHTML = `<tr><td colspan="3" style="text-align:center;">No hay proveedores registrados.</td></tr>`;
+            return;
+        }
+
+        lista.forEach(p => {
+            proveedoresList.innerHTML += `
+                <tr>
+                    <td>${p.nombreProveedor}</td>
+                    <td>${p.usuario?.nombre ?? "—"}</td>
+                    <td>
+                        <button data-id="${p.id}" class="btn-eliminar eliminar-proveedor">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+        });
+    } catch (err) {
+        console.error("❌ Error al leer proveedores:", err);
+    }
+}
+
+document.addEventListener("click", async function (e) {
+    if (e.target.closest(".eliminar-proveedor")) {
+        const id = e.target.closest("button").dataset.id;
+        const confirmar = confirm("❌¿Seguro que deseas eliminar este proveedor?");
+        if (!confirmar) return;
+
+        try {
+            const res = await fetch(`${API_URL}/api/Administrar/eliminar-proveedor/${id}`, {
+                method: "DELETE",
+                headers: { Authorization: `Bearer ${token}` }
+            });
+
+            if (!res.ok) throw new Error("❌ Error al eliminar proveedor");
+
+            alert("✅ Proveedor eliminado correctamente.");
+            await leerProveedores();
+        } catch (err) {
+            console.error(err);
+        }
+    }
+});
+
+document.querySelector("[data-tab='proveedores']")?.addEventListener("click", leerProveedores);
+
+
 //=============== CARGAR LA PRIMERA PESTAÑA INCIDENCIAS, PUESTOS, ELIMINAR O LO QUE SEA ==========================
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -244,6 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hash === "rondas") leerRondas?.();
         if (hash === "fichajes") leerFichajes?.();
         if (hash === "puertas") leerPuertas?.();
+        if (hash === "proveedores") leerProveedores?.();
 
     }
 });
