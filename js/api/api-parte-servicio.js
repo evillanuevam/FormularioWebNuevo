@@ -1,6 +1,7 @@
 //variables globales
 const API_URL = window.CONFIG.API_BASE_URL; // Obtener la URL de la API
 let hayVehiculosIncompletos = false; //tiene que ser let, porque const no permite reasignacion
+let hayProveedoresIncompletos = false;
 
 // Modificar `toggleOtrosInput` para incluir la capitalización en tiempo real
 function toggleOtrosInput() {
@@ -96,9 +97,52 @@ function validarHorasDescripcionEnRango() {
     return esValido;
 }
 
-// ✅ Validación en tiempo real al escribir hora
+
+//validar que la hora de la inspeccion de proveedores este dentro del rango de  hora del turno.
+function validarHorasProveedoresEnRango() {
+    const horaInicio = document.getElementById("horaInicio").value;
+    const horaFin = document.getElementById("horaFin").value;
+    const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
+
+    if (!horaInicio || !horaFin || !fechaSeleccionada) return true;
+
+    const inicio = new Date(`${fechaSeleccionada}T${horaInicio}`);
+    let fin = new Date(`${fechaSeleccionada}T${horaFin}`);
+
+    const cruzaMedianoche = horaFin <= horaInicio;
+    if (cruzaMedianoche) fin.setDate(fin.getDate() + 1);
+
+    let esValido = true;
+
+    const horasProveedor = document.querySelectorAll("input[name='horaProveedor[]']");
+    horasProveedor.forEach(input => {
+        const horaValor = input.value;
+        if (!horaValor) return;
+
+        let fechaHora = new Date(`${fechaSeleccionada}T${horaValor}`);
+        if (cruzaMedianoche && fechaHora < inicio) {
+            fechaHora.setDate(fechaHora.getDate() + 1);
+        }
+
+        if (fechaHora < inicio || fechaHora > fin) {
+            input.classList.add("hora-fuera-rango");
+            esValido = false;
+        } else {
+            input.classList.remove("hora-fuera-rango");
+        }
+    });
+
+    if (!esValido) {
+        alert("⚠️ Hay horas de proveedores fuera del rango del turno. Corrígelas antes de enviar.");
+    }
+
+    return esValido;
+}
+
+
+// ✅ Validación en tiempo real al escribir hora (ahora incluye proveedores)
 document.addEventListener("input", function (event) {
-    if (event.target && event.target.matches("input[name='hora-inicio'], input[name='horaVehiculo[]']")) {
+    if (event.target && event.target.matches("input[name='hora-inicio'], input[name='horaVehiculo[]'], input[name='horaProveedor[]']")) {
         const horaInput = event.target;
         const hora = horaInput.value;
         const horaInicio = document.getElementById("horaInicio").value;
@@ -129,11 +173,14 @@ document.addEventListener("input", function (event) {
     }
 });
 
-// ✅ Enviar el formulario
+
+// ✅ Enviar el formulario ( PRINCIPAL PARA ENVIAR DATOS A LA BASE DE DATOS)
 document.getElementById("formulario").addEventListener("submit", async function (event) {
     event.preventDefault();
 
     if (!validarHorasDescripcionEnRango()) return; // 🔒 Detener si hay errores
+    if (!validarHorasProveedoresEnRango()) return;
+
 
     const fechaSeleccionada = document.getElementById("fechaSeleccionada").value;
     console.log("📌 FechaSeleccionada antes de enviar:", fechaSeleccionada);
@@ -147,6 +194,13 @@ document.getElementById("formulario").addEventListener("submit", async function 
         return;
     }
 
+    const proveedores = obtenerProveedores();
+
+    if (hayProveedoresIncompletos && proveedores.length === 0) {
+        alert("⚠️ Tabla de proveedores incompleta. Ingrese todos los campos obligatorios o elimine la fila.");
+        return;
+    }
+
     const parteServicio = {
         fechaRegistro: new Date().toISOString(),
         fechaSeleccionada: fechaSeleccionada,
@@ -157,7 +211,8 @@ document.getElementById("formulario").addEventListener("submit", async function 
         accidentesPuesto: obtenerValorRadio("accidentes"),
         usuario: obtenerUsuarioDatos(),
         descripciones: obtenerDescripciones(),
-        vehiculos: vehiculos // ya lo obtuviste arriba
+        vehiculos: vehiculos, // ya lo obtuviste arriba
+        proveedores: obtenerProveedores() // 👈 ✅ asegúrate de que esta línea esté incluida
     };
 
     console.log("📤 Enviando datos al backend:", JSON.stringify(parteServicio, null, 2));
@@ -344,6 +399,53 @@ function obtenerVehiculos() {
     return vehiculos;
 }
 
+//funcion para obtener vehiculos.
+function obtenerProveedores() {
+    const contenedor = document.getElementById("contenedor-tabla-proveedores");
+    if (!contenedor || contenedor.style.display === "none") return [];
+
+    const filas = document.querySelectorAll("#tabla-inspeccion-proveedores tbody tr");
+    const proveedores = [];
+    hayProveedoresIncompletos = false; // Reiniciar estado
+
+    filas.forEach(fila => {
+        fila.style.border = "";
+        fila.style.backgroundColor = "";
+
+        const horaInput = fila.querySelector("input[name='horaProveedor[]']");
+        const nombreInput = fila.querySelector("select[name='nombreProveedor[]']");
+        const fechaExpiracionInput = fila.querySelector("input[name='fechaExpiracionProveedor[]']");
+        const estadoSelect = fila.querySelector("select[name='estadoProveedor[]']");
+        const observacionesInput = fila.querySelector("textarea[name='observacionesProveedor[]']");
+
+        const hora = horaInput?.value;
+        const nombreProveedor = nombreInput?.value?.trim();
+        const fechaExpiracion = fechaExpiracionInput?.value;
+        const estado = estadoSelect?.value?.trim();
+        const observaciones = observacionesInput?.value?.trim() || "Sin observaciones";
+
+        const esCompleto = hora && nombreProveedor && fechaExpiracion && estado;
+
+        if (esCompleto) {
+            proveedores.push({
+                hora: hora.length === 5 ? `${hora}:00` : hora,
+                nombreProveedor,
+                fechaExpiracionProveedor: fechaExpiracion,
+                estado,
+                observaciones
+            });
+        } else {
+            hayProveedoresIncompletos = true;
+            fila.style.border = "2px solid red";
+            fila.style.backgroundColor = "#ffe5e5";
+        }
+    });
+
+    return proveedores;
+}
+
+
+
 //******************************* DESPLEGABLE INCIDENCIA***************************************/
 
 //mostrar el desplegable al dar check en en recuadro de incidencia.
@@ -411,12 +513,14 @@ async function obtenerTiposIncidenciaDesdeAPI() {
         return [];
     }
 }
+
 document.addEventListener("change", function (event) {
     if (event.target.classList.contains("tipo-incidencia-select")) {
         if (event.target.value === "➕ Añadir más incidencias") {
             window.location.href = "adm-parte-servicio.html#incidencias";
         }
     }
+
 });
 
 
@@ -477,13 +581,12 @@ document.addEventListener("change", function (event) {
     }
 });
 
-
 // ✅ Ejecutar automáticamente al cargar la página
 document.addEventListener("DOMContentLoaded", function () {
     llenarSelectsPuestos();
 });
 
-//******************************* DESPLEGABLE INSPECCION DE PROVEEDORES ***************************************/
+//******************************* DESPLEGABLE INSPECCION DE PROVEEDORES **************************************/
 
 // ============================ DESPLEGABLE PROVEEDORES ===============================
 
@@ -509,11 +612,13 @@ async function obtenerProveedoresDesdeAPI() {
     }
 }
 
-async function llenarSelectsProveedores() {
+async function llenarSelectsProveedores(selectEspecifico = null) {
     const proveedores = await obtenerProveedoresDesdeAPI();
     const { rol } = obtenerUsuarioDatos();
 
-    document.querySelectorAll("select.select-proveedor").forEach(select => {
+    const selects = selectEspecifico ? [selectEspecifico] : document.querySelectorAll("select.select-proveedor");
+
+    selects.forEach(select => {
         select.innerHTML = `<option value="" disabled selected>Seleccione un proveedor</option>`;
 
         proveedores.forEach(nombre => {
@@ -523,7 +628,6 @@ async function llenarSelectsProveedores() {
             select.appendChild(option);
         });
 
-        // Solo si el usuario es administrador, añade la opción extra
         if (rol === "Administrador") {
             const extra = document.createElement("option");
             extra.value = "añadir-proveedor";

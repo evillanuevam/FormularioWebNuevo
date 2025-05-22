@@ -280,16 +280,19 @@ function guardarChecklist() {
   cerrarModal();
 }
 
-
-
 //********************************** TABLA INSPECCION DE PROVEEDORES *****************************/
 
 function agregarFilaProveedor() {
   const tabla = document.querySelector("#tabla-inspeccion-proveedores tbody");
   const fila = document.createElement("tr");
+
   fila.innerHTML = `
     <td><input type="time" name="horaProveedor[]"></td>
-    <td><input type="text" name="nombreProveedor[]" placeholder="Nombre del proveedor"></td>
+    <td>
+      <select name="nombreProveedor[]" class="select-proveedor" required>
+        <option value="" disabled selected>Seleccione un proveedor</option>
+      </select>
+    </td>
     <td><input type="date" name="fechaExpiracionProveedor[]"></td>
     <td>
       <select name="estadoProveedor[]">
@@ -305,8 +308,14 @@ function agregarFilaProveedor() {
       </button>
     </td>
   `;
+
   tabla.appendChild(fila);
+
+  // 👇 Llenar dinámicamente SOLO ese select nuevo
+  const nuevoSelect = fila.querySelector(".select-proveedor");
+  llenarSelectsProveedores(nuevoSelect);
 }
+
 
 
 document.getElementById("toggle-tabla-proveedores").addEventListener("click", function () {
