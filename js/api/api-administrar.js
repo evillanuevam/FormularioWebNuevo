@@ -112,7 +112,7 @@ const puestosList = document.getElementById("puestos-list");
 
 formularioPuestos?.addEventListener("submit", async function (e) {
     e.preventDefault();
-    const aeropuerto = document.getElementById("aeropuerto-puestos").value;
+    const aeropuerto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
     const puesto = document.getElementById("nueva-puesto").value.trim();
 
     if (!puesto) return alert("⚠️ Ingrese un puesto válido");
@@ -334,7 +334,7 @@ document.addEventListener("DOMContentLoaded", function () {
         targetButton.classList.add('active');
         targetContent.classList.add('active');
 
-        // 👇 Ejecutar carga según el hash (solo si aplica) - AGREGAR AQUI PARA QUE SE CARGE LOS DATOS AL INCIAR
+        // Ejecutar carga según el hash (solo si aplica)
         if (hash === "incidencias") cargarIncidencias?.();
         if (hash === "puestos") leerPuestos?.();
         if (hash === "eliminar") cargarUsuarios?.(); 
@@ -342,9 +342,26 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hash === "fichajes") leerFichajes?.();
         if (hash === "puertas") leerPuertas?.();
         if (hash === "proveedores") leerProveedores?.();
-
     }
+
+    // ✅ Llenar automáticamente los <select> de aeropuerto si existen
+    const aeropuertoTexto = decodeURIComponent(escape(decoded["Aeropuerto"])).normalize("NFC").trim();
+    const selectsAero = [
+        "aeropuerto-puestos",
+        "aeropuerto-proveedores",
+        "aeropuerto-rondas",
+        "aeropuerto-fichajes",
+        "aeropuerto-puertas"
+    ];
+
+    selectsAero.forEach(id => {
+        const select = document.getElementById(id);
+        if (select) {
+            select.innerHTML = `<option value="${aeropuertoTexto}" selected>${aeropuertoTexto}</option>`;
+        }
+    });
 });
+
 
 // ======================================== ELIMINAR USUARIO (DESACTIVAR) ========================================
 async function cargarUsuarios() {
