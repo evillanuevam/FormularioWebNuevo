@@ -1,3 +1,32 @@
+document.addEventListener("DOMContentLoaded", async function () {
+    // Pintar cuadrícula
+    const gridOverlay = document.querySelector(".grid-overlay");
+    const filas = 7;
+    const columnas = 15;
+    const letras = "ABCDEFGHIJKLMNO".split("");
+    for (let f = 1; f <= filas; f++) {
+        for (let c = 0; c < columnas; c++) {
+            const cell = document.createElement("div");
+            const id = `${f}${letras[c]}`;
+            cell.classList.add("grid-cell");
+            cell.dataset.id = id;
+            cell.addEventListener("click", function () {
+                this.classList.toggle("selected");
+                this.textContent = this.classList.contains("selected") ? id : "";
+            });
+            gridOverlay.appendChild(cell);
+        }
+    }
+
+    // Llamar funciones del archivo API sin importar nada
+    await window.apiPatrullas.cargarRondas();
+    await window.apiPatrullas.cargarPuntosFichaje();
+    await window.apiPatrullas.cargarPuertasPerimetro();
+});
+
+
+/*** 
+//LO QIUE SE TENIA PRIMERO AL INICIO 
 document.addEventListener("DOMContentLoaded", function () {
     // ====================================
     // GENERACIÓN DE CUADRÍCULA EN EL PLANO
@@ -339,5 +368,5 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 
-
 });
+***/

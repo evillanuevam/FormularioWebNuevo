@@ -316,8 +316,6 @@ function agregarFilaProveedor() {
   llenarSelectsProveedores(nuevoSelect);
 }
 
-
-
 document.getElementById("toggle-tabla-proveedores").addEventListener("click", function () {
   const contenedor = document.getElementById("contenedor-tabla-proveedores");
   if (contenedor.style.display === "none" || contenedor.style.display === "") {

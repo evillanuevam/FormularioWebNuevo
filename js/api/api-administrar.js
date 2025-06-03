@@ -308,7 +308,7 @@ document.querySelector("[data-tab='proveedores']")?.addEventListener("click", le
 //=============== CARGAR LA PRIMERA PESTAÑA INCIDENCIAS, PUESTOS, ELIMINAR O LO QUE SEA ==========================
 
 document.addEventListener("DOMContentLoaded", function () {
-    let hash = window.location.hash.substring(1); // quita el "#"
+    let hash = window.location.hash.substring(1); // 
 
     // Obtener el primer tab-button disponible si no hay hash
     if (!hash) {
