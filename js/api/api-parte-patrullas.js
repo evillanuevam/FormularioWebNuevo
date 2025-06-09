@@ -114,3 +114,5 @@ window.apiPatrullas = (() => {
         cargarPuertasPerimetro
     };
 })();
+
+
