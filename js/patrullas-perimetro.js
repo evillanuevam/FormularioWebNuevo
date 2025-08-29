@@ -22,11 +22,11 @@ document.addEventListener("DOMContentLoaded", async function () {
     await window.apiPatrullas.cargarRondas();
     await window.apiPatrullas.cargarPuntosFichaje();
     await window.apiPatrullas.cargarPuertasPerimetro();
-
-    // Botón de guardar fichajes
+    
+    // BOTON PARA GUARDAR LOS FICHAJES
     document.getElementById("btn-guardar-fichajes")?.addEventListener("click", async (e) => {
         e.preventDefault();
-        await guardarFichajes(); // ✅ Tu función ya está lista
+        await guardarFichajes(); // ✅ funcion para el boton de guardar fichajes
     });
 });
 
