@@ -58,6 +58,7 @@ window.apiPatrullas = (() => {
                         </select>
                     </td>
                     <td><textarea placeholder="Ingrese observaciones"></textarea></td>
+                    <td class="celda-coordenadas"></td> <!-- ✅ Nueva columna para mostrar coordenadas -->
                 `;
                 tbody.appendChild(fila);
             });

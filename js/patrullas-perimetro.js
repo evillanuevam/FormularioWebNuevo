@@ -13,6 +13,8 @@ document.addEventListener("DOMContentLoaded", async function () {
             cell.addEventListener("click", function () {
                 this.classList.toggle("selected");
                 this.textContent = this.classList.contains("selected") ? id : "";
+                // Actualizar coordenadas en cada fila
+                actualizarCoordenadasEnTabla();
             });
             gridOverlay.appendChild(cell);
         }
@@ -48,11 +50,13 @@ async function guardarFichajes() {
     });
 
     if (data.length === 0) return alert("⚠️ No hay filas válidas para guardar.");
-
+    
     const coordenadas = obtenerCoordenadasSeleccionadas();
+    const rondaSeleccionada = document.getElementById("rondas").value;
 
     const payload = {
         coordenadasPlano: coordenadas,
+        rondaSeleccionada: rondaSeleccionada,
         fichajes: data
     };
 
@@ -68,6 +72,7 @@ async function guardarFichajes() {
 
         if (res.ok) {
             alert("✅ Fichajes guardados correctamente");
+            limpiarFormularioFichaje(); // ✅ LIMPIA TODO
         } else {
             alert("❌ Error al guardar fichajes");
         }
@@ -85,3 +90,46 @@ function obtenerCoordenadasSeleccionadas() {
         .map(cell => cell.dataset.id)
         .join(",");
 }
+
+//***************************************** FUNCION DE LIMPIEZA DE LA PAGINA ********************************************/
+
+function limpiarFormularioFichaje() {
+    // Limpiar inputs de hora, selects y textareas
+    document.querySelectorAll("#tabla-inspeccion tbody tr").forEach(fila => {
+        const inputHora = fila.children[1].querySelector("input");
+        const selectEstado = fila.children[2].querySelector("select");
+        const textarea = fila.children[3].querySelector("textarea");
+
+        if (inputHora) inputHora.value = "";
+        if (selectEstado) selectEstado.selectedIndex = 0; // primera opción
+        if (textarea) textarea.value = "";
+    });
+
+    // Limpiar coordenadas seleccionadas en el plano
+    document.querySelectorAll(".grid-cell.selected").forEach(cell => {
+        cell.classList.remove("selected");
+        cell.textContent = "";
+    });
+
+    // Opcional: resetear select de rondas
+    const selectRonda = document.getElementById("rondas");
+    if (selectRonda) selectRonda.selectedIndex = 0;
+
+    document.querySelectorAll(".celda-coordenadas").forEach(celda => {
+    celda.textContent = "";
+});
+
+
+}
+
+// AGREGAR CORDENADAS EN MI TABLA DE PUNTOS DE FICHAJE
+function actualizarCoordenadasEnTabla() {
+    const coordenadas = obtenerCoordenadasSeleccionadas();
+    const celdas = document.querySelectorAll(".celda-coordenadas");
+
+    celdas.forEach(celda => {
+        celda.textContent = coordenadas; // Esto sí lo actualiza
+    });
+
+}
+
