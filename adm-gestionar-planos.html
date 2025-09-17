@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionar Planos</title>
+    <link rel="stylesheet" href="css/plantilla-estilos.css">
+    <link rel="stylesheet" href="css/global-formularios-estilos.css">
+    <link rel="stylesheet" href="css/global-tablas.css">
+    <link rel="stylesheet" href="css/form-administrar-estilos.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link rel="icon" href="images/favico.svg" type="image/x-icon">
+
+</head>
+
+<body id="plantilla-aena">
+    <!-- Encabezado -->
+    <header class="header header-blue" id="header">
+        <div class="header-container">
+            <!-- Botón de alternar barra lateral -->
+            <button id="toggle-sidebar" class="toggle-button" title="Abrir/Cerrar menú">
+                <i class="fa fa-bars"></i>
+            </button>
+
+            <div class="header-left">
+                <img src="images/aena.svg" alt="Logo AENA" class="header-logo">
+                <div class="header-line-and-text">
+                    <div class="separator"></div> <!-- Línea -->
+                    <span id="header-text" class="header-text">Formulario de Partes</span>
+                </div>
+            </div>
+            <div class="language-dropdown">
+                <button class="language-button" onclick="toggleLanguages()">
+                    <i class="fa fa-comment"></i> ES <i class="fa fa-chevron-down"></i>
+                </button>
+                <div class="language-bar hidden" id="languageBar">
+                    <a href="#" class="language-option selected">ESPAÑOL</a>
+                    <a href="#" class="language-option">ENGLISH</a>
+                    <a href="#" class="language-option">CATALÀ</a>
+                    <a href="#" class="language-option">EUSKARA</a>
+                    <a href="#" class="language-option">GALEGO</a>
+                    <a href="#" class="language-option">VALENCIÀ</a>
+                </div>
+            </div>
+        </div>
+    </header>  
+
+    <!-- Contenido principal -->
+    <main class="main-content" >
+        <!-- barra lateral -->
+        <div class="index-sidebar">
+            <div class="index-header">
+                <h1 class="index-header-title">
+                    <img src="images/airplane_animation.gif" alt="Logo AENA" class="header-logo"> FORMULARIOS 
+                    <span class="index-header-subtitle">DE PARTES</span>
+                </h1>
+            </div>   
+            <div class="menu">
+
+                <!-- Menú desplegable -->
+                <div class="submenu">
+                    <a href="#" class="submenu-toggle">Administrar ▾</a>
+                    <div class="submenu-content">
+                        <a href="adm-usuarios.html">Adm. Usuarios</a>
+                        <a href="adm-parte-servicio.html">Adm. Parte Servicios</a>
+                        <a href="adm-parte-patrullas.html">Adm. Parte Patrullas</a>
+                        <a href="adm-gestionar-planos.html">Gestionar Planos</a>
+                    </div>
+                </div>
+                
+                <a href="parte-servicio.html">Parte de Servicios</a>
+
+                <!-- Menú desplegable -->
+                <div class="submenu">
+                    <a href="#" class="submenu-toggle">Parte de Patrullas ▾</a>
+                    <div class="submenu-content">
+                        <a href="patrullas-perimetro.html">Perímetro</a>
+                        <a href="patrullas-otras-zonas.html">Otras Zonas</a>
+                        <a href="patrullas-acreditaciones.html">Acreditaciones</a>
+                        <a href="patrullas-control-indigentes.html">Control de Indigentes</a>
+                        <a href="patrullas-alarmas-puertas.html">Alarmas y Puertas</a>
+                    </div>
+                </div>
+
+                <a href="parte-equipos.html">Parte de Equipos</a>
+                <a href="inspeccion-vehiculos.html">Inspección de Vehículos</a>
+                <a href="inspeccion-suministros.html">Inspección de Suministros</a>
+                <!-- Menú desplegable -->
+                <div class="submenu">
+                    <a href="#" class="submenu-toggle">Reportes ▾</a>
+                    <div class="submenu-content">
+                        <a href="reporte-parte-servicios.html">Reporte Parte Servicios</a>
+                        <a href="reporte-incidencias.html">Reporte Incidencias</a>
+                    </div>
+                </div>
+                <a href="#">Contáctanos</a>
+                <a href="#" id="logout">Salir</a>
+            </div>
+        </div>
+        
+        <!-- formulario -->
+        <div class="index-content">
+
+            <div class="index-content">
+                
+                <div class="tabs-container">
+                    <div class="tab-button" data-tab="perimetro">Perimetro</div>
+                    <div class="tab-button" data-tab="otras-zonas">Otras Zonas</div>
+                </div>
+
+                <!-- FORMULARIO PERIMETRO -->
+                <div id="perimetro" class="tab-content">
+                    <div class="form-container">
+                      <h1>Getionar Plano del Perimetro</h1>
+                  
+                        <form class="formulario-subida-imagen" enctype="multipart/form-data">
+
+                            <div class="select-container">
+                                <i class="fa-solid fa-plane"></i>
+                                <select id="aeropuerto-perimetro" name="aeropuerto" title="Seleccione un aeropuerto" required>
+                                    <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="file-plano">Subir imagen del plano (PNG, JPG):</label>
+                                <input type="file" id="file-plano" accept=".png, .jpg, .jpeg" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn-enviar">
+                                    <i class="fa-solid fa-upload"></i> Subir imagen
+                                </button>
+                            </div>
+                        </form>
+               
+                        <!-- VISTA PREVIA DEL PLANO -->
+                        <div class="form-group">
+                            <h3>Vista previa del plano:</h3>
+                            <img class="preview-imagen-plano" src="" alt="Plano del aeropuerto">
+
+                        </div>
+
+
+                    </div>
+                </div>
+
+
+                <!-- FORMULARIO OTRAS ZONAS -->
+                <div id="otras-zonas" class="tab-content">
+                    <div class="form-container">
+                        <h1>Gestionar Plano Otras Zonas</h1>
+
+                        <form class="formulario-subida-imagen" enctype="multipart/form-data">
+
+                            <div class="select-container">
+                                <i class="fa-solid fa-plane"></i>
+                                <select id="aeropuerto-otras-zonas" name="aeropuerto" title="Seleccione un aeropuerto" required>
+                                    <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="file-otras-zonas">Subir imagen del plano (PNG, JPG):</label>
+                                <input type="file" id="file-otras-zonas" accept=".png, .jpg, .jpeg" required>
+                            </div>
+
+                            <div class="form-group">
+                                <button type="submit" class="btn-enviar">
+                                    <i class="fa-solid fa-upload"></i> Subir imagen
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- VISTA PREVIA DEL PLANO -->
+                        <div class="form-group">
+                            <h3>Vista previa del plano:</h3>
+                            <img class="preview-imagen-plano" src="" alt="Plano del aeropuerto">
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+        </div>
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="footer">
+        <div class="footer-container">
+            <!-- Redes sociales -->
+            <div class="footer-social">
+                <div class="social-box">
+                    <p>Síguenos en:</p>
+                    <div class="social-icons">
+                        <div class="social-item">
+                            <a href="https://twitter.com/aena" target="_blank" aria-label="Twitter">
+                                <i class="fab fa-x-twitter"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="http://www.facebook.com/Aena.es" target="_blank" aria-label="Facebook">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="https://www.instagram.com/aena.es/" target="_blank" aria-label="Instagram">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                        <div class="social-item">
+                            <a href="https://www.linkedin.com/company/aena" target="_blank" aria-label="LinkedIn">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>        
+            <div class="footer-divider"></div> <!-- Línea divisoria -->
+            <!-- Enlaces y copyright -->
+            <div class="footer-links-copyright">
+                <div class="footer-links">
+                    <nav>
+                        <ul>
+                            <li><a href="#">Mapa Web</a></li>
+                            <li><a href="#">Contacto</a></li>
+                            <li><a href="#">Cookies</a></li>
+                            <li><a href="#">Aviso Legal</a></li>
+                            <li><a href="#">Política de Privacidad</a></li>
+                            <li><a href="#">Accesibilidad</a></li>
+                            <li><a href="#">Trámites y Reclamaciones</a></li>
+                            <li><a href="#">Canal de Denuncias</a></li>
+                        </ul>
+                    </nav>
+                </div>
+                <div class="footer-copyright">
+                    <p>Copyright © 2025 Aena</p>
+                </div>
+                <div class="scroll-progress" id="scrollProgress"></div> <!-- Línea verde dinámica -->
+                <a href="#top" class="scroll-to-top">SUBIR</a>      
+            </div>
+        </div>
+    </footer>
+
+     <!-- llamadas a scripts -->
+    <script src="js/utils/config-api-url.js"></script>
+    <script src="js/utils/config-encabezado-pie.js"></script>
+    <script src="js/utils/validaciones-globales.js"></script> 
+
+    <script src="js/administrar.js"></script>
+    <script src="js/api/auth.js"></script> <!-- token y authentication-->
+    <script src="js/api/api-administrar.js"></script>
+
+</body>
+</html>

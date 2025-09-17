@@ -82,8 +82,8 @@ window.apiPatrullas = (() => {
                     <div class="radio-group">
                         <input type="radio" name="${name}" value="ok" id="${name}-ok">
                         <label for="${name}-ok">✅</label>
-                        <input type="radio" name="${name}" value="nok" id="${name}-nok">
-                        <label for="${name}-nok">❌</label>
+                        <input type="radio" name="${name}" value="no ok" id="${name}-no ok">
+                        <label for="${name}-no ok">❌</label>
                     </div>
                 `;
 

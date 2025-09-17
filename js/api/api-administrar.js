@@ -351,7 +351,9 @@ document.addEventListener("DOMContentLoaded", function () {
         "aeropuerto-proveedores",
         "aeropuerto-rondas",
         "aeropuerto-fichajes",
-        "aeropuerto-puertas"
+        "aeropuerto-puertas",
+        "aeropuerto-perimetro",
+        "aeropuerto-otras-zonas"
     ];
 
     selectsAero.forEach(id => {
@@ -703,4 +705,101 @@ document.addEventListener("click", async e => {
 });
 
 document.querySelector("[data-tab='puertas']")?.addEventListener("click", leerPuertas);
+
+//========================================= LEER IMAGENES ==============================================
+
+document.addEventListener("DOMContentLoaded", () => {
+    const formulario = document.getElementById("formulario-perimetro");
+    const inputArchivo = document.getElementById("file-plano");
+    const selectAeropuerto = document.getElementById("aeropuerto-perimetro");
+    const vistaPrevia = document.getElementById("vista-previa-plano");
+
+    // ✅ Evitar errores si el formulario no está en la pestaña activa
+    if (!formulario || !inputArchivo || !selectAeropuerto || !vistaPrevia) {
+        console.warn("⚠️ Elementos de formulario de plano no encontrados en el DOM.");
+        return;
+    }
+
+    // Vista previa inmediata al seleccionar archivo
+    inputArchivo.addEventListener("change", () => {
+        const archivo = inputArchivo.files[0];
+        if (archivo) {
+            const lector = new FileReader();
+            lector.onload = e => {
+                vistaPrevia.src = e.target.result;
+            };
+            lector.readAsDataURL(archivo);
+        }
+    });
+
+    // Mostrar la imagen ya subida al cambiar el aeropuerto
+    selectAeropuerto.addEventListener("change", () => {
+        const codigo = selectAeropuerto.value;
+        if (!codigo) {
+            vistaPrevia.src = "";
+            return;
+        }
+
+        const posiblesExtensiones = [".png", ".jpg", ".jpeg"];
+        const baseURL = `${API_URL}/planos/`;
+
+        let encontrada = false;
+
+        posiblesExtensiones.forEach(ext => {
+            const url = `${baseURL}${codigo}${ext}`;
+            fetch(url, { method: "HEAD" }).then(res => {
+                if (res.ok && !encontrada) {
+                    vistaPrevia.src = url;
+                    encontrada = true;
+                }
+            });
+        });
+    });
+
+    // Subida de imagen al hacer submit
+    formulario.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const archivo = inputArchivo.files[0];
+        const aeropuertoCodigo = selectAeropuerto.value;
+
+        if (!archivo) {
+            alert("⚠️ Selecciona un archivo de imagen.");
+            return;
+        }
+
+        if (!aeropuertoCodigo) {
+            alert("⚠️ Selecciona un aeropuerto.");
+            return;
+        }
+
+        const formData = new FormData();
+        formData.append("archivo", archivo);
+        formData.append("aeropuertoCodigo", aeropuertoCodigo);
+
+        try {
+            const res = await fetch(`${API_URL}/api/Plano/subir-imagen`, {
+                method: "POST",
+                headers: {
+                    Authorization: `Bearer ${token}`
+                },
+                body: formData
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                alert("✅ Imagen subida correctamente");
+                console.log("Nombre guardado:", data.nombreArchivo);
+
+                vistaPrevia.src = `${API_URL}/planos/${data.nombreArchivo}`;
+            } else {
+                const err = await res.text();
+                alert("❌ Error al subir la imagen:\n" + err);
+            }
+        } catch (error) {
+            console.error("❌ Error de red:", error);
+            alert("❌ Error al conectar con el servidor");
+        }
+    });
+});
 

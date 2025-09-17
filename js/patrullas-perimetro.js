@@ -30,11 +30,24 @@ document.addEventListener("DOMContentLoaded", async function () {
         e.preventDefault();
         await guardarFichajes(); // ✅ funcion para el boton de guardar fichajes
     });
+
+    //BOTON PARA GUARDAR PUERTAS DE PERIMETRO
+    document.getElementById("btn-guardar-puertas")?.addEventListener("click", async (e) => {
+    e.preventDefault();
+    await guardarPuertasPerimetro(); // ✅ funcion para el boton de guardar puertas
+});
+
 });
 
 async function guardarFichajes() {
     const filas = document.querySelectorAll("#tabla-inspeccion tbody tr");
     const data = [];
+
+    const rondaSeleccionada = document.getElementById("rondas").value.trim();
+    if (!rondaSeleccionada) {
+        alert("⚠️ Debes seleccionar una ronda antes de guardar.");
+        return;
+    }
 
     filas.forEach(fila => {
         const descripcion = fila.children[0].textContent;
@@ -42,17 +55,14 @@ async function guardarFichajes() {
         const estado = fila.children[2].querySelector("select").value;
         const observaciones = fila.children[3].querySelector("textarea").value;
 
-        // Solo guardar si la fila está completamente llena (excepto observaciones)
         if (descripcion && hora && estado !== "Seleccione...") {
             data.push({ puntoFichaje: descripcion, hora, estado, observaciones });
-
         }
     });
 
     if (data.length === 0) return alert("⚠️ No hay filas válidas para guardar.");
-    
+
     const coordenadas = obtenerCoordenadasSeleccionadas();
-    const rondaSeleccionada = document.getElementById("rondas").value;
 
     const payload = {
         coordenadasPlano: coordenadas,
@@ -132,4 +142,121 @@ function actualizarCoordenadasEnTabla() {
     });
 
 }
+
+//Funcion para leer los datos y enviarlos a Backend
+async function guardarPuertasPerimetro() {
+    const filas = document.querySelectorAll("#tabla-puertas tbody tr");
+    const puertas = [];
+
+    // Validar que se haya seleccionado una ronda
+    const rondaSeleccionada = document.getElementById("rondas").value.trim();
+    if (!rondaSeleccionada) {
+        alert("⚠️ Debes seleccionar una ronda antes de guardar.");
+        return;
+    }
+
+    filas.forEach((fila, i) => {
+        const identificador = fila.children[0].textContent.trim();
+
+        const estadoPuerta = fila.querySelector(`input[name="estado-${i}"]:checked`)?.value || "";
+        const aperturaPuerta = fila.querySelector(`input[name="apertura-${i}"]:checked`)?.value || "";
+        const tipoCerradura = fila.querySelector("select")?.value || "";
+        const aperturaCerradura = fila.querySelector(`input[name="apertura-c-${i}"]:checked`)?.value || "";
+        const estadoCerradura = fila.querySelector(`input[name="estado-c-${i}"]:checked`)?.value || "";
+        const observaciones = fila.querySelector("textarea")?.value || "";
+
+        // Validar que TODOS los campos obligatorios estén llenos
+        const filaValida = (
+            estadoPuerta &&
+            aperturaPuerta &&
+            tipoCerradura &&
+            aperturaCerradura &&
+            estadoCerradura
+        );
+
+        if (identificador && filaValida) {
+            puertas.push({
+                identificadorPuerta: identificador,
+                estadoGeneralPuerta: estadoPuerta,
+                aperturaCierrePuerta: aperturaPuerta,
+                tipoCerradura: tipoCerradura,
+                aperturaCierreCerradura: aperturaCerradura,
+                estadoGeneralCerradura: estadoCerradura,
+                observaciones: observaciones.trim()
+            });
+        }
+    });
+
+    if (puertas.length === 0) {
+        alert("⚠️ No hay inspecciones completas para guardar.");
+        return;
+    }
+
+    const coordenadas = obtenerCoordenadasSeleccionadas();
+
+    const payload = {
+        coordenadasPlano: coordenadas,
+        rondaSeleccionada: rondaSeleccionada,
+        puertas: puertas
+    };
+
+    try {
+        const res = await fetch(`${API_URL}/api/PartePatrullas/guardar-puertas`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify(payload)
+        });
+
+        if (res.ok) {
+            alert("✅ Puertas guardadas correctamente");
+            limpiarFormularioPuertas();
+        } else {
+            const err = await res.json();
+            alert("❌ Error al guardar puertas:\n" + err.detalle);
+        }
+    } catch (error) {
+        console.error("❌ Error en guardarPuertasPerimetro:", error);
+        alert("❌ Error de red");
+    }
+}
+
+
+//Limpiar tambien  puertas de perimetro
+function limpiarFormularioPuertas() {
+    const filas = document.querySelectorAll("#tabla-puertas tbody tr");
+    filas.forEach((fila, i) => {
+        // Limpiar radios
+        fila.querySelectorAll(`input[name="estado-${i}"]`).forEach(r => r.checked = false);
+        fila.querySelectorAll(`input[name="apertura-${i}"]`).forEach(r => r.checked = false);
+        fila.querySelectorAll(`input[name="estado-c-${i}"]`).forEach(r => r.checked = false);
+        fila.querySelectorAll(`input[name="apertura-c-${i}"]`).forEach(r => r.checked = false);
+
+        // Limpiar select
+        const select = fila.querySelector("select");
+        if (select) select.selectedIndex = 0;
+
+        // Limpiar textarea
+        const textarea = fila.querySelector("textarea");
+        if (textarea) textarea.value = "";
+    });
+
+    // ✅ Limpiar coordenadas seleccionadas
+    document.querySelectorAll(".grid-cell.selected").forEach(cell => {
+        cell.classList.remove("selected");
+        cell.textContent = "";
+    });
+
+    // ✅ Limpiar texto de coordenadas en las filas
+    document.querySelectorAll(".celda-coordenadas").forEach(celda => {
+        celda.textContent = "";
+    });
+
+    // ✅ Opcional: resetear el select de rondas también aquí
+    const selectRonda = document.getElementById("rondas");
+    if (selectRonda) selectRonda.selectedIndex = 0;
+}
+
 

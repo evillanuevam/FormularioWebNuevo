@@ -112,7 +112,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("tip").setAttribute("readonly", true);
         }
 
-        if (paginaActual === "adm-parte-servicio.html","adm-usuarios.html","adm-parte-patrullas.html") {
+        if (paginaActual === "adm-parte-servicio.html","adm-usuarios.html","adm-parte-patrullas.html","adm-gestionar-planos") {
             // Adm. Parte de servicio 
             setAeropuertoValue("aeropuerto-incidencias");
             setAeropuertoValue("aeropuerto-puestos");
@@ -124,6 +124,10 @@ document.addEventListener("DOMContentLoaded", function () {
             setAeropuertoValue("aeropuerto-rondas");
             setAeropuertoValue("aeropuerto-fichajes");
             setAeropuertoValue("aeropuerto-puertas");
+            // Gestionar planos perimetro
+            setAeropuertoValue("aeropuerto-perimetro");
+            // Gestionar planos de otras zonas
+            setAeropuertoValue("aeropuerto-otras-zonas");
         }
 
         if (["patrullas-perimetro.html", "patrullas-otras-zonas.html", "parte-equipos.html", 
