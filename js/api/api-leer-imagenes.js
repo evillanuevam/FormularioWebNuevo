@@ -1,4 +1,3 @@
-const token = sessionStorage.getItem("token");
 
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS de leer imágenes cargado");
@@ -30,7 +29,7 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!res.ok) throw new Error("No existe imagen");
 
             const data = await res.json();
-            const urlImagen = `${API_URL}/planos/${data.nombre}`;
+            const urlImagen = `${API_URL}/planos/${data.nombre}?v=${new Date().getTime()}`;
             vistaPrevia.src = urlImagen;
             console.log("✅ Imagen encontrada:", data.nombre);
         } catch (error) {
@@ -63,10 +62,12 @@ document.addEventListener("DOMContentLoaded", () => {
             return;
         }
 
+        const { tip } = obtenerUsuarioDatos();
         const formData = new FormData();
         formData.append("archivo", archivo);
         formData.append("aeropuertoCodigo", aeropuertoCodigo);
-        formData.append("tip", usuario.tip); // 👈 Aquí ya lo tienes correcto
+        formData.append("tip", tip);
+
 
         try {
             const res = await fetch(`${API_URL}/api/Plano/subir-imagen`, {
@@ -81,7 +82,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
                 alert("✅ Imagen subida correctamente");
 
-                vistaPrevia.src = `${API_URL}/planos/${data.nombreArchivo}`;
+                vistaPrevia.src = `${API_URL}/planos/${data.nombreArchivo}?v=${new Date().getTime()}`;
                 console.log("📸 Imagen subida como:", data.nombreArchivo);
             } else {
                 const err = await res.text();
