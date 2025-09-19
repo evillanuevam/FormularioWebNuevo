@@ -1,3 +1,5 @@
+const token = sessionStorage.getItem("token");
+
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS de leer imágenes cargado");
 
@@ -64,6 +66,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const formData = new FormData();
         formData.append("archivo", archivo);
         formData.append("aeropuertoCodigo", aeropuertoCodigo);
+        formData.append("tip", usuario.tip); // 👈 Aquí ya lo tienes correcto
 
         try {
             const res = await fetch(`${API_URL}/api/Plano/subir-imagen`, {
