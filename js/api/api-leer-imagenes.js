@@ -1,5 +1,3 @@
-//========================================= LEER IMAGENES PERIMETRO ==============================================
-
 document.addEventListener("DOMContentLoaded", () => {
     console.log("✅ JS de leer imágenes cargado");
 
@@ -9,54 +7,37 @@ document.addEventListener("DOMContentLoaded", () => {
     const vistaPrevia = document.getElementById("vista-previa-plano");
 
     if (!formulario || !inputArchivo || !selectAeropuerto || !vistaPrevia) {
-        console.warn("⚠️ Elementos de formulario de plano no encontrados en el DOM.");
+        console.warn("⚠️ Elementos no encontrados.");
         return;
     }
 
-    // Fecha de hoy en formato YYYYMMDD
-    const obtenerFechaHoy = () => {
-        const hoy = new Date();
-        const yyyy = hoy.getFullYear();
-        const mm = String(hoy.getMonth() + 1).padStart(2, "0");
-        const dd = String(hoy.getDate()).padStart(2, "0");
-        return `${yyyy}${mm}${dd}`;
-    };
-
-    // Mostrar imagen al cambiar aeropuerto
-    const mostrarImagenActual = () => {
+    // Mostrar imagen ya guardada al cambiar el aeropuerto
+    selectAeropuerto.addEventListener("change", () => {
         const codigo = selectAeropuerto.value;
         if (!codigo) {
             vistaPrevia.src = "";
             return;
         }
 
-        const fecha = obtenerFechaHoy();
-        const posiblesExtensiones = [".jpg", ".jpeg", ".png"];
-        const baseURL = `${API_URL}/planos/`;
+        cargarImagenSiExiste(codigo);
+    });
 
-        let encontrada = false;
+    async function cargarImagenSiExiste(codigo) {
+        try {
+            const res = await fetch(`${API_URL}/api/Plano/obtener-nombre/${codigo}`);
+            if (!res.ok) throw new Error("No existe imagen");
 
-        posiblesExtensiones.forEach(ext => {
-            const url = `${baseURL}${codigo}_perimetro_${fecha}${ext}`;
+            const data = await res.json();
+            const urlImagen = `${API_URL}/planos/${data.nombre}`;
+            vistaPrevia.src = urlImagen;
+            console.log("✅ Imagen encontrada:", data.nombre);
+        } catch (error) {
+            vistaPrevia.src = "";
+            console.warn("⚠️ No hay imagen para mostrar.");
+        }
+    }
 
-            fetch(url, { method: "HEAD" })
-                .then(res => {
-                    if (res.ok && !encontrada) {
-                        vistaPrevia.src = url;
-                        encontrada = true;
-                    }
-                })
-                .catch(() => {
-                    // Silenciar errores 404
-                });
-        });
-
-    };
-
-    // Mostrar imagen ya existente al cargar la página
-    selectAeropuerto.addEventListener("change", mostrarImagenActual);
-
-    // Mostrar vista previa inmediata
+    // Vista previa inmediata
     inputArchivo.addEventListener("change", () => {
         const archivo = inputArchivo.files[0];
         if (archivo) {
@@ -68,7 +49,7 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     });
 
-    // Subida de imagen
+    // Subir imagen
     formulario.addEventListener("submit", async (e) => {
         e.preventDefault();
 
@@ -76,7 +57,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const aeropuertoCodigo = selectAeropuerto.value;
 
         if (!archivo || !aeropuertoCodigo) {
-            alert("⚠️ Completa todos los campos.");
+            alert("⚠️ Selecciona archivo y aeropuerto.");
             return;
         }
 
@@ -97,21 +78,20 @@ document.addEventListener("DOMContentLoaded", () => {
                 const data = await res.json();
                 alert("✅ Imagen subida correctamente");
 
-                // Actualizar vista previa con nombre correcto
                 vistaPrevia.src = `${API_URL}/planos/${data.nombreArchivo}`;
-                console.log("Nombre guardado:", data.nombreArchivo);
+                console.log("📸 Imagen subida como:", data.nombreArchivo);
             } else {
                 const err = await res.text();
-                alert("❌ Error al subir la imagen:\n" + err);
+                alert("❌ Error:\n" + err);
             }
-        } catch (error) {
-            console.error("❌ Error de red:", error);
-            alert("❌ Error al conectar con el servidor");
+        } catch (err) {
+            console.error("❌ Error de red:", err);
+            alert("❌ Fallo al conectar con el servidor.");
         }
     });
 
-    // Mostrar imagen directamente al cargar la página (si ya hay aeropuerto seleccionado)
+    // ⚡ Cargar imagen automáticamente si ya hay un aeropuerto seleccionado
     if (selectAeropuerto.value) {
-        mostrarImagenActual();
+        cargarImagenSiExiste(selectAeropuerto.value);
     }
 });
