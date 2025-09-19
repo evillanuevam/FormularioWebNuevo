@@ -113,7 +113,7 @@
                     <div class="form-container">
                       <h1>Getionar Plano del Perimetro</h1>
                   
-                        <form class="formulario-subida-imagen" enctype="multipart/form-data">
+                        <form id="formulario-perimetro" class="formulario-subida-imagen" enctype="multipart/form-data">
 
                             <div class="select-container">
                                 <i class="fa-solid fa-plane"></i>
@@ -127,20 +127,21 @@
                                 <input type="file" id="file-plano" accept=".png, .jpg, .jpeg" required>
                             </div>
 
+                            <!-- VISTA PREVIA DEL PLANO -->
+                            <div class="form-group">
+                                <h3>Vista previa del plano:</h3>
+                                <img id="vista-previa-plano" class="preview-imagen-plano" src="" alt="Plano del aeropuerto">
+
+                            </div>
+
                             <div class="form-group">
                                 <button type="submit" class="btn-enviar">
                                     <i class="fa-solid fa-upload"></i> Subir imagen
                                 </button>
                             </div>
+
                         </form>
                
-                        <!-- VISTA PREVIA DEL PLANO -->
-                        <div class="form-group">
-                            <h3>Vista previa del plano:</h3>
-                            <img class="preview-imagen-plano" src="" alt="Plano del aeropuerto">
-
-                        </div>
-
 
                     </div>
                 </div>
@@ -250,6 +251,7 @@
     <script src="js/administrar.js"></script>
     <script src="js/api/auth.js"></script> <!-- token y authentication-->
     <script src="js/api/api-administrar.js"></script>
+    <script src="js/api/api-leer-imagenes.js"></script>
 
 </body>
 </html>
