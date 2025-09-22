@@ -259,4 +259,26 @@ function limpiarFormularioPuertas() {
     if (selectRonda) selectRonda.selectedIndex = 0;
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+    const imgPlano = document.getElementById("imagen-plano-perimetro");
+    const { aeropuerto } = obtenerUsuarioDatos();
+
+    if (!imgPlano || !aeropuerto) return;
+
+    // Obtener la imagen más reciente del tipo "perimetro" para el aeropuerto
+    fetch(`${API_URL}/api/Plano/obtener-nombre/${encodeURIComponent(aeropuerto)}`)
+        .then(res => {
+            if (!res.ok) throw new Error("No se encontró imagen");
+            return res.json();
+        })
+        .then(data => {
+            const urlImagen = `${API_URL}/planos/${data.nombre}?v=${new Date().getTime()}`;
+            imgPlano.src = urlImagen;
+            console.log("✅ Imagen de plano cargada:", data.nombre);
+        })
+        .catch(err => {
+            console.warn("⚠️ No se pudo cargar el plano:", err.message);
+        });
+});
+
 
