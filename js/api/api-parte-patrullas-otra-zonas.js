@@ -1,0 +1,1 @@
+const API_URL = window.CONFIG.API_BASE_URL;
