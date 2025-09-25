@@ -88,7 +88,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
         };
 
-        // ------------------ FORMULARIOS SEGUN PAGINA ------------------
+        // ------------------ ASIGNAR A LOS FORMULARIOS SEGUN PAGINA (que se visualice aeropuerto, usuario, etc) ------------------
         if (paginaActual === "parte-servicio.html") {
             setAeropuertoValue("aeropuerto");
             document.getElementById("nombre-vigilante").value = usuarioActual["Nombre"];
@@ -126,7 +126,7 @@ document.addEventListener("DOMContentLoaded", function () {
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);
         }
 
-        if (paginaActual === "reporte-parte-servicios.html" || paginaActual === "reporte-incidencias.html") {
+        if (paginaActual === "reporte-parte-servicios.html" || paginaActual === "reporte-incidencias.html" || paginaActual === "reporte-parte-patrullas.html") {
             setAeropuertoValue("aeropuerto");
             document.getElementById("nombre-vigilante").value = usuarioActual["Nombre"];
             document.getElementById("nombre-vigilante").setAttribute("readonly", true);

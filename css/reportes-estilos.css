@@ -90,3 +90,50 @@
     opacity: 1;
     transform: translateX(-50%) scale(1.05);
 }
+
+/********************* ESTILOS PARTA EL CAMBIO DE PESTAÑAS DEL REPORTE DE PARTE DE PATRULLAS ***************/
+.form-container .tabs-container {
+    display: flex ;
+    justify-content: center;
+    border-bottom: 3px solid #ccc;
+    width: 100%;
+    max-width: 100%; /* Que ocupe el mismo ancho que el form */
+}
+
+.form-container .tab-button {
+    flex: 1 ;
+    background-color: #e9ecef ;
+    color: #004085 ;
+    border: 1px solid #ccc ;
+    padding: 15px ;
+    text-align: center ;
+    font-size: 16px ;
+    font-weight: bold ;
+    cursor: pointer ;
+    transition: background-color 0.3s, color 0.3s ;
+    border-radius: 10px 10px 0 0 ;
+    margin-right: 2px ;
+    position: relative ;
+    top: 3px ;
+}
+
+.form-container .tab-button.active {
+    background: #004085b9 ;
+    color: white ;
+    transform: scale(1.01) ;
+}
+
+.form-container .tab-content {
+    display: none;
+    width: 100%;
+    margin-top: 0;
+    border: none;
+}
+
+.form-container .tab-content.active {
+    display: block;
+}
+
+.form-container button:hover {
+    background-color: none;
+}

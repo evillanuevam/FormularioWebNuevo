@@ -160,7 +160,6 @@ function limpiarFormularioFichaje() {
 }
 
 
-
 // AGREGAR CORDENADAS EN MI TABLA DE PUNTOS DE FICHAJE
 function actualizarCoordenadasEnTabla() {
     const coordenadas = obtenerCoordenadasSeleccionadas();
