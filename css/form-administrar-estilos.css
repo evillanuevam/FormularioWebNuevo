@@ -197,5 +197,147 @@ input[type="file"] {
 }
 
 
+/******************************************Categorias Patrullas***************************** */
+
+/* Celda de tabla con subcategorías y botón */
+.celda-subcats {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+}
+
+/* Texto de subcategorías dentro de la celda */
+.celda-subcats .subcats-texto {
+    flex: 1;
+}
+
+/* ====== Modal Subcategorías ====== */
+
+/* Contenedor del input + botón Agregar */
+.modal-subcat-add {
+    margin-top: 15px;  /* Espacio respecto a la lista */
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+/* Lista de subcategorías */
+.modal-subcat-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ====== Modal base ====== */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.5);
+    z-index: 9999;
+}
+
+.modal-box {
+    background: #fff;
+    width: 680px;
+    max-width: 95%;
+    margin: 6rem auto;
+    border-radius: 8px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.25);
+    overflow: hidden;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: #0e3b5a;
+    color: #fff;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-weight: 600;
+}
+
+.modal-close {
+    background: #c0392b;
+    border: none;
+    color: #fff;
+    padding: 6px 10px;
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+/* ====== Cuerpo del modal ====== */
+.modal-body {
+    padding: 16px;
+}
+
+.modal-subcat-list {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 12px 0;
+    max-height: 320px;
+    overflow: auto;
+}
+
+.modal-subcat-list li {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 6px 8px;
+    border-bottom: 1px solid #eee;
+}
+
+/* ====== Bloque de agregar subcategorias ====== */
+.modal-subcat-add {
+    margin-top: 15px;  /* Espacio respecto a la lista */
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.modal-subcat-add input {
+    flex: 1;
+    padding: 8px;
+}
+
+/* ====== Botón de gestión (tuerquita) ====== */
+.btn-icon {
+    background: #0e3b5a;         /* azul oscuro */
+    color: #fff;
+    border: none;
+    border-radius: 50%;          /* forma circular */
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: background 0.2s;
+    font-size: 14px;             /* tamaño del ícono */
+    padding: 0;
+}
+
+.btn-icon:hover {
+    background: #145a8d;         /* azul un poco más claro al pasar el ratón */
+}
+
+.btn-icon i {
+    pointer-events: none;        /* evita que el clic sea sobre el ícono */
+}
+
+/* ====== Botón de agregar subcategoría en el formulario ====== */
+.btn-agregar-subcat {
+    margin-top: 8px;    /* espacio respecto al input de arriba */
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
 
 

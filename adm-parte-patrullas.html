@@ -107,6 +107,7 @@
                     <div class="tab-button" data-tab="rondas">Rondas</div>
                     <div class="tab-button" data-tab="fichajes">Puntos fichaje</div>
                     <div class="tab-button" data-tab="puertas">Puerta perimetro</div>
+                    <div class="tab-button" data-tab="categorias-patrullas">Categorias patrullas</div>
                 </div>
 
                 <!-- FORMULARIO DE RONDAS -->
@@ -237,7 +238,84 @@
                     </div>
                 </div>
 
+                <!-- FORMULARIO CATEGORIAS DE PATRULLAS -->
+                <div id="categorias-patrullas" class="tab-content">
+                    <div class="form-container">
+                        <h1>Administrar Categorias de Patrullas</h1>
 
+                        <form id="formulario-categorias-patrullas">
+                        <div class="select-container">
+                            <i class="fa-solid fa-plane"></i>
+                            <select id="aeropuerto-categorias-patrullas" name="aeropuerto" required>
+                            <option value="" disabled selected>Seleccione un Aeropuerto</option>
+                            </select>
+                        </div>
+
+                        <!-- Input principal -->
+                        <div class="form-group">
+                            <label for="nueva-categoria-patrulla">Nombre de la categoria:</label>
+                            <input type="text" id="nueva-categoria-patrulla" placeholder="Ej: Zonas Criticas, Accesos, Aparcamientos..." required>
+                        </div>
+
+                        <!-- Subcategorias dinámicas -->
+                        <div class="form-group">
+                            <label>Subcategorias:</label>
+                            <div id="subcategorias-container-patrullas">
+                            <input type="text" class="subcategoria-input" placeholder="Ej: Terminal T1">
+                            </div>
+                            <div class="form-group">
+                            <button type="button" id="agregar-subcategoria-patrullas" class="btn-enviar">
+                                <i class="fa-solid fa-plus"></i> Agregar subcategoria
+                            </button>
+                            </div>
+
+                        </div>
+
+                        <div class="form-group">
+                            <button type="submit" class="btn-enviar">
+                            <i class="fa-solid fa-save"></i> Guardar
+                            </button>
+                        </div>
+                        </form>
+
+                        <!-- TABLA DE REGISTROS -->
+                        <div class="table-container">
+                        <h3>Categorias y Subcategorias de Patrullas registradas</h3>
+                        <table id="tabla-categorias-patrullas">
+                            <thead>
+                            <tr>
+                                <th>Categoria</th>
+                                <th>Subcategorias</th>
+                                <th>Usuario Administrador</th>
+                                <th>Eliminar</th>
+                            </tr>
+                            </thead>
+                            <tbody id="categorias-patrullas-list">
+                            <!-- registros dinamicos -->
+                            </tbody>
+                        </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Modal: Gestionar subcategorias -->
+                <div id="modal-subcats" class="modal-overlay">
+                    <div class="modal-box">
+                        <div class="modal-header">
+                        <h3 id="modal-subcats-title">Subcategorias</h3>
+                        <button id="modal-subcats-close" class="modal-close">X</button>
+                        </div>
+                        <div class="modal-body">
+                        <ul id="lista-subcats" class="modal-subcat-list">
+                            <!-- items dinamicos -->
+                        </ul>
+                        <div class="modal-subcat-add">
+                            <input type="text" id="nueva-subcat-input" placeholder="Ej: Terminal T3">
+                            <button id="nueva-subcat-add" class="btn-enviar">Agregar</button>
+                        </div>
+                        </div>
+                    </div>
+                </div>
 
             </div>
         </div>

@@ -43,11 +43,25 @@ async function guardarFichajes() {
     const filas = document.querySelectorAll("#tabla-inspeccion tbody tr");
     const data = [];
 
+
     const rondaSeleccionada = document.getElementById("rondas").value.trim();
     if (!rondaSeleccionada) {
         alert("⚠️ Debes seleccionar una ronda antes de guardar.");
         return;
     }
+
+    const categoriaId = document.getElementById("categoria-patrulla").value;
+    if (!categoriaId) {
+        alert("⚠️ Debes seleccionar una categoría de patrulla.");
+        return;
+    }
+
+    const subcategoriaId = document.getElementById("subcategoria-patrulla").value;
+    if (!subcategoriaId) {
+        alert("⚠️ Debes seleccionar una subcategoría de patrulla.");
+        return;
+    }
+
 
     filas.forEach(fila => {
         const descripcion = fila.children[0].textContent;
@@ -67,8 +81,13 @@ async function guardarFichajes() {
     const payload = {
         coordenadasPlano: coordenadas,
         rondaSeleccionada: rondaSeleccionada,
-        fichajes: data
+        fichajes: data,
+
+        // 🔹 nuevos campos
+        categoriaPatrullaId: Number(document.getElementById("categoria-patrulla").value),
+        subcategoriaPatrullaId: Number(document.getElementById("subcategoria-patrulla").value)
     };
+
 
     try {
         const res = await fetch(`${API_URL}/api/PartePatrullas/guardar-fichajes`, {
@@ -121,16 +140,26 @@ function limpiarFormularioFichaje() {
         cell.textContent = "";
     });
 
-    // Opcional: resetear select de rondas
+    // Resetear selects
     const selectRonda = document.getElementById("rondas");
     if (selectRonda) selectRonda.selectedIndex = 0;
 
+    const selectCategoria = document.getElementById("categoria-patrulla");
+    if (selectCategoria) selectCategoria.selectedIndex = 0;
+
+    const selectSubcategoria = document.getElementById("subcategoria-patrulla");
+    if (selectSubcategoria) {
+        selectSubcategoria.innerHTML = `<option value="" disabled selected>Seleccione una subcategoría</option>`;
+        selectSubcategoria.disabled = true; // se desactiva hasta que se elija categoría otra vez
+    }
+
+    // Limpiar coordenadas en tabla
     document.querySelectorAll(".celda-coordenadas").forEach(celda => {
-    celda.textContent = "";
-});
-
-
+        celda.textContent = "";
+    });
 }
+
+
 
 // AGREGAR CORDENADAS EN MI TABLA DE PUNTOS DE FICHAJE
 function actualizarCoordenadasEnTabla() {
@@ -154,6 +183,19 @@ async function guardarPuertasPerimetro() {
         alert("⚠️ Debes seleccionar una ronda antes de guardar.");
         return;
     }
+
+    const categoriaId = document.getElementById("categoria-patrulla").value;
+    if (!categoriaId) {
+        alert("⚠️ Debes seleccionar una categoría de patrulla.");
+        return;
+    }
+
+    const subcategoriaId = document.getElementById("subcategoria-patrulla").value;
+    if (!subcategoriaId) {
+        alert("⚠️ Debes seleccionar una subcategoría de patrulla.");
+        return;
+    }
+
 
     filas.forEach((fila, i) => {
         const identificador = fila.children[0].textContent.trim();
@@ -197,8 +239,13 @@ async function guardarPuertasPerimetro() {
     const payload = {
         coordenadasPlano: coordenadas,
         rondaSeleccionada: rondaSeleccionada,
-        puertas: puertas
+        puertas: puertas,
+
+        // 🔹 nuevos campos
+        categoriaPatrullaId: Number(document.getElementById("categoria-patrulla").value),
+        subcategoriaPatrullaId: Number(document.getElementById("subcategoria-patrulla").value)
     };
+
 
     try {
         const res = await fetch(`${API_URL}/api/PartePatrullas/guardar-puertas`, {
@@ -243,21 +290,31 @@ function limpiarFormularioPuertas() {
         if (textarea) textarea.value = "";
     });
 
-    // ✅ Limpiar coordenadas seleccionadas
+    // Limpiar coordenadas seleccionadas en el plano
     document.querySelectorAll(".grid-cell.selected").forEach(cell => {
         cell.classList.remove("selected");
         cell.textContent = "";
     });
 
-    // ✅ Limpiar texto de coordenadas en las filas
+    // Limpiar texto de coordenadas en las filas
     document.querySelectorAll(".celda-coordenadas").forEach(celda => {
         celda.textContent = "";
     });
 
-    // ✅ Opcional: resetear el select de rondas también aquí
+    // Resetear selects
     const selectRonda = document.getElementById("rondas");
     if (selectRonda) selectRonda.selectedIndex = 0;
+
+    const selectCategoria = document.getElementById("categoria-patrulla");
+    if (selectCategoria) selectCategoria.selectedIndex = 0;
+
+    const selectSubcategoria = document.getElementById("subcategoria-patrulla");
+    if (selectSubcategoria) {
+        selectSubcategoria.innerHTML = `<option value="" disabled selected>Seleccione una subcategoría</option>`;
+        selectSubcategoria.disabled = true;
+    }
 }
+
 
 document.addEventListener("DOMContentLoaded", () => {
     const imgPlano = document.getElementById("imagen-plano-perimetro");
@@ -279,6 +336,24 @@ document.addEventListener("DOMContentLoaded", () => {
         .catch(err => {
             console.warn("⚠️ No se pudo cargar el plano:", err.message);
         });
+});
+
+
+document.addEventListener("DOMContentLoaded", () => {
+    // cargar categorías al iniciar
+    apiPatrullas.cargarCategorias();
+
+    // cuando cambie la categoría, cargar subcategorías
+    const selCategoria = document.getElementById("categoria-patrulla");
+    const selSubcategoria = document.getElementById("subcategoria-patrulla");
+
+    selCategoria?.addEventListener("change", () => {
+        const catId = selCategoria.value;
+        if (catId) {
+            selSubcategoria.disabled = true;
+            apiPatrullas.cargarSubcategorias(catId);
+        }
+    });
 });
 
 

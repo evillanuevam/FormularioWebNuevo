@@ -109,11 +109,57 @@ window.apiPatrullas = (() => {
         }
     }
 
+    async function cargarCategorias() {
+        try {
+            const res = await fetch(`${API_URL}/api/PartePatrullas/categorias-patrullas?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await res.json();
+            const select = document.getElementById("categoria-patrulla");
+
+            select.innerHTML = `<option value="" disabled selected>Seleccione una categoría</option>`;
+            (data.$values || data || []).forEach(c => {
+                const option = document.createElement("option");
+                option.value = c.id ?? c.Id;
+                option.textContent = c.nombreCategoria ?? c.NombreCategoria;
+                select.appendChild(option);
+            });
+        } catch (err) {
+            console.error("❌ Error al cargar categorías:", err);
+        }
+    }
+
+    async function cargarSubcategorias(categoriaId) {
+        try {
+            const res = await fetch(`${API_URL}/api/PartePatrullas/subcategorias-patrulla?categoriaId=${categoriaId}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            const data = await res.json();
+            const select = document.getElementById("subcategoria-patrulla");
+
+            select.innerHTML = `<option value="" disabled selected>Seleccione una subcategoría</option>`;
+            (data.$values || data || []).forEach(s => {
+                const option = document.createElement("option");
+                option.value = s.id ?? s.Id;
+                option.textContent = s.nombreSubcategoria ?? s.NombreSubcategoria;
+                select.appendChild(option);
+            });
+
+            select.disabled = false;
+        } catch (err) {
+            console.error("❌ Error al cargar subcategorías:", err);
+        }
+    }
+
+
     return {
         cargarRondas,
         cargarPuntosFichaje,
-        cargarPuertasPerimetro
+        cargarPuertasPerimetro,
+        cargarCategorias,
+        cargarSubcategorias
     };
+
 })();
 
 

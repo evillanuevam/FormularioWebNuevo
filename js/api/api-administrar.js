@@ -342,6 +342,8 @@ document.addEventListener("DOMContentLoaded", function () {
         if (hash === "fichajes") leerFichajes?.();
         if (hash === "puertas") leerPuertas?.();
         if (hash === "proveedores") leerProveedores?.();
+        if (hash === "categorias-patrullas") leerCategoriasPatrullas?.();
+
     }
 
     // ✅ Llenar automáticamente los <select> de aeropuerto si existen
@@ -705,4 +707,315 @@ document.addEventListener("click", async e => {
 });
 
 document.querySelector("[data-tab='puertas']")?.addEventListener("click", leerPuertas);
+
+// ============================ CATEGORIAS DE PATRULLAS ====================================
+const formCategoriasPat = document.getElementById("formulario-categorias-patrullas");
+const inputCategoriaPat = document.getElementById("nueva-categoria-patrulla");
+const contenedorSubsPat = document.getElementById("subcategorias-container-patrullas");
+const btnAgregarSubPat = document.getElementById("agregar-subcategoria-patrullas");
+const tablaCategoriasPatBody = document.getElementById("categorias-patrullas-list");
+
+// el select de aeropuerto lo rellena auth.js (aeropuerto-categorias-patrullas)
+
+btnAgregarSubPat?.addEventListener("click", () => {
+    const input = document.createElement("input");
+    input.type = "text";
+    input.className = "subcategoria-input";
+    input.placeholder = "Ej: Terminal T2";
+    contenedorSubsPat.appendChild(input);
+});
+
+function recogerSubcategoriasPat() {
+    return Array.from(document.querySelectorAll("#subcategorias-container-patrullas .subcategoria-input"))
+        .map(i => i.value.trim())
+        .filter(v => v.length > 0);
+}
+
+formCategoriasPat?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const nombreCategoria = inputCategoriaPat.value.trim();
+    if (!nombreCategoria) {
+        alert("Ingrese el nombre de la categoria.");
+        return;
+    }
+
+    const subcategorias = recogerSubcategoriasPat();
+    if (subcategorias.length === 0) {
+        alert("Agregue al menos una subcategoria.");
+        return;
+    }
+
+    try {
+        const resp = await fetch(`${API_URL}/api/Administrar/guardar-categoria-patrulla`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                aeropuerto,
+                nombreCategoria,
+                subcategorias
+            })
+        });
+
+        const data = await resp.json();
+        if (!resp.ok) {
+            alert(data?.mensaje || "Error al guardar la categoria");
+            return;
+        }
+
+        alert("✅ Categoria guardada correctamente.");
+        inputCategoriaPat.value = "";
+        contenedorSubsPat.innerHTML = `<input type="text" class="subcategoria-input" placeholder="Ej: Terminal T1">`;
+        await leerCategoriasPatrullas();
+    } catch (err) {
+        console.error("Error guardando categoria:", err);
+        alert("No se pudo guardar la categoria.");
+    }
+});
+
+async function leerCategoriasPatrullas() {
+    if (!tablaCategoriasPatBody) return;
+
+    tablaCategoriasPatBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando...</td></tr>`;
+
+    try {
+        const resp = await fetch(`${API_URL}/api/Administrar/leer-categorias-patrullas?aeropuerto=${encodeURIComponent(aeropuerto)}`, {
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const data = await resp.json();
+        const lista = data.$values || data || [];
+
+        if (!Array.isArray(lista) || lista.length === 0) {
+            tablaCategoriasPatBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">No hay registros.</td></tr>`;
+            return;
+        }
+
+        tablaCategoriasPatBody.innerHTML = "";
+        lista.forEach(row => {
+            let subs = row.subcategorias ?? row.Subcategorias ?? [];
+            if (subs.$values) subs = subs.$values;
+
+            const subNombres = Array.isArray(subs)
+                ? subs.map(s => {
+                    if (typeof s === "string") return s;
+                    if (s && s.nombreSubcategoria) return s.nombreSubcategoria;
+                    if (s && s.NombreSubcategoria) return s.NombreSubcategoria;
+                    return "";
+                }).filter(Boolean)
+                : [];
+
+            const subTxt = subNombres.join(", ");
+            const userTxt = row.usuario?.nombre || row.Usuario?.Nombre || "—";
+            const nombreCat = row.nombreCategoria || row.NombreCategoria;
+
+            tablaCategoriasPatBody.innerHTML += `
+                <tr>
+                    <td>${nombreCat}</td>
+                    <td class="celda-subcats">
+                        <div class="subcats-texto">${subTxt || "—"}</div>
+                        <button class="btn-icon gestionar-subcats"
+                                data-id="${row.id}"
+                                data-nombre="${nombreCat}"
+                                title="Gestionar subcategorias">
+                            <i class="fa-solid fa-gear"></i>
+                        </button>
+
+
+                    </td>
+                    <td>${userTxt}</td>
+                    <td>
+                        <button class="btn-eliminar eliminar-categoria-pat" data-id="${row.id}">
+                            <i class="fa fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+            `;
+
+        });
+
+    } catch (err) {
+        console.error("Error cargando categorias:", err);
+        tablaCategoriasPatBody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Error al cargar.</td></tr>`;
+    }
+}
+
+document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".eliminar-categoria-pat");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    if (!id) return;
+
+    if (!confirm("❌ Eliminar la categoria y sus subcategorias?")) return;
+
+    try {
+        const resp = await fetch(`${API_URL}/api/Administrar/eliminar-categoria-patrulla/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+        });
+
+        if (!resp.ok) {
+            const t = await resp.text();
+            throw new Error(t || "Error al eliminar");
+        }
+
+        await leerCategoriasPatrullas();
+    } catch (err) {
+        console.error("Error eliminando categoria:", err);
+        alert("No se pudo eliminar la categoria.");
+    }
+});
+
+// cargar al hacer click en la pestaña
+document.querySelector("[data-tab='categorias-patrullas']")?.addEventListener("click", leerCategoriasPatrullas);
+
+// ================== MODAL SUBCATEGORIAS ==================
+let modalCategoriaId = null;
+
+const modalSub = document.getElementById("modal-subcats");
+const modalTitle = document.getElementById("modal-subcats-title");
+const modalClose = document.getElementById("modal-subcats-close");
+const listaSubcats = document.getElementById("lista-subcats");
+const nuevaSubcatInput = document.getElementById("nueva-subcat-input");
+const nuevaSubcatAddBtn = document.getElementById("nueva-subcat-add");
+
+function abrirModalSubcats(categoriaId, nombreCategoria) {
+    modalCategoriaId = Number(categoriaId);
+    modalTitle.textContent = `Subcategorias de ${nombreCategoria}`;
+    modalSub.style.display = "block";
+    nuevaSubcatInput.value = "";
+    cargarSubcatsModal();
+}
+
+function cerrarModalSubcats() {
+    modalSub.style.display = "none";
+    modalCategoriaId = null;
+}
+
+async function cargarSubcatsModal() {
+  listaSubcats.innerHTML = `<li style="padding:8px;">Cargando...</li>`;
+  try {
+    const url = `${API_URL}/api/Administrar/leer-subcategorias-patrulla/${modalCategoriaId}`;
+    const resp = await fetch(url, { headers: { Authorization: `Bearer ${token}` } });
+
+    if (!resp.ok) {
+      // mostrar texto del error y salir sin intentar parsear JSON
+      const errTxt = await resp.text();
+      console.error("leer-subcategorias-patrulla", resp.status, errTxt);
+      listaSubcats.innerHTML = `<li style="padding:8px;">Error al cargar</li>`;
+      return;
+    }
+
+    // ahora sí es 200 => parseamos seguro
+    const raw = await resp.text();
+    let data = [];
+    try { data = raw ? JSON.parse(raw) : []; } catch { data = []; }
+
+    let items = Array.isArray(data) ? data : (data?.$values || []);
+    if (!Array.isArray(items)) items = [];
+
+    if (items.length === 0) {
+      listaSubcats.innerHTML = `<li style="padding:8px;">Sin subcategorias</li>`;
+      return;
+    }
+
+    listaSubcats.innerHTML = "";
+    items.forEach(s => {
+      const id = s.id ?? s.Id;
+      const name = s.nombreSubcategoria ?? s.NombreSubcategoria ?? "";
+      const li = document.createElement("li");
+      li.style.display = "flex";
+      li.style.alignItems = "center";
+      li.style.justifyContent = "space-between";
+      li.style.padding = "6px 8px";
+      li.style.borderBottom = "1px solid #eee";
+      li.innerHTML = `
+        <span>${name}</span>
+        <button class="btn-eliminar eliminar-subcat" data-id="${id}">
+          <i class="fa fa-trash"></i>
+        </button>
+      `;
+      listaSubcats.appendChild(li);
+    });
+  } catch (e) {
+    console.error("Error leyendo subcategorias:", e);
+    listaSubcats.innerHTML = `<li style="padding:8px;">Error al cargar</li>`;
+  }
+}
+
+
+// abrir modal desde tabla
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".gestionar-subcats");
+    if (!btn) return;
+    const id = btn.dataset.id;
+    const nombre = btn.dataset.nombre || "";
+    abrirModalSubcats(id, nombre);
+});
+
+// cerrar modal
+modalClose?.addEventListener("click", cerrarModalSubcats);
+window.addEventListener("click", (e) => {
+    if (e.target === modalSub) cerrarModalSubcats();
+});
+
+// agregar subcategoria
+nuevaSubcatAddBtn?.addEventListener("click", async () => {
+    const nombre = (nuevaSubcatInput.value || "").trim();
+    if (!nombre) {
+        alert("Ingrese un nombre de subcategoria.");
+        return;
+    }
+    try {
+        const resp = await fetch(`${API_URL}/api/Administrar/agregar-subcategoria-patrulla/${modalCategoriaId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${token}`
+            },
+            body: JSON.stringify({ nombreSubcategoria: nombre })
+        });
+        const txt = await resp.text();
+        if (!resp.ok) {
+            alert(txt || "Error al agregar subcategoria");
+            return;
+        }
+        nuevaSubcatInput.value = "";
+        await cargarSubcatsModal();
+        await leerCategoriasPatrullas(); // refrescar tabla principal
+    } catch (e) {
+        console.error("Error agregando subcategoria:", e);
+        alert("No se pudo agregar subcategoria.");
+    }
+});
+
+// eliminar subcategoria
+document.addEventListener("click", async (e) => {
+    const btn = e.target.closest(".eliminar-subcat");
+    if (!btn) return;
+
+    const id = btn.dataset.id;
+    if (!confirm("❌ Eliminar esta subcategoria?")) return;
+
+    try {
+        const resp = await fetch(`${API_URL}/api/Administrar/eliminar-subcategoria-patrulla/${id}`, {
+            method: "DELETE",
+            headers: { Authorization: `Bearer ${token}` }
+        });
+        const txt = await resp.text();
+        if (!resp.ok) {
+            alert(txt || "Error al eliminar subcategoria");
+            return;
+        }
+        await cargarSubcatsModal();
+        await leerCategoriasPatrullas();
+    } catch (e) {
+        console.error("Error eliminando subcategoria:", e);
+        alert("No se pudo eliminar subcategoria.");
+    }
+});
+
 
