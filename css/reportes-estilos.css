@@ -28,7 +28,6 @@
     box-shadow: 2px 2px 5px rgba(0,0,0,0.2);
 }
 
-
 .btn-export i {
     margin-right: 8px;
 }
@@ -65,7 +64,6 @@
     background-color: #0050a0;
 }
 
-
 /*estilos par ala notificacion de exportacion*/
 #notificacion-exportacion {
     position: fixed;
@@ -100,6 +98,22 @@
     max-width: 100%; /* Que ocupe el mismo ancho que el form */
 }
 
+.form-container .tab-content {
+    display: none;
+    width: 100%;
+    margin-top: 0px;
+    border: none;
+}
+
+.form-container #tabla-fichajes, #tabla-puertas {
+    margin-top: -1px;
+}
+
+
+.form-container .tab-content.active {
+    display: block;
+}
+
 .form-container .tab-button {
     flex: 1 ;
     background-color: #e9ecef ;
@@ -117,23 +131,16 @@
     top: 3px ;
 }
 
+.form-container .tab-button:hover {
+    background-color: #e9ecef; /* el mismo color de fondo normal */
+    color: #004085; /* mantiene el texto */
+}
+
+/* Activa (la que está seleccionada con JS) */
 .form-container .tab-button.active {
-    background: #004085b9 ;
-    color: white ;
-    transform: scale(1.01) ;
+    background-color: #004085b9;  /* Azul fuerte */
+    color: #fff;                /* Texto blanco */
+    border-bottom: 2px solid #004085b9; /* se integra con el contenedor */
 }
 
-.form-container .tab-content {
-    display: none;
-    width: 100%;
-    margin-top: 0;
-    border: none;
-}
 
-.form-container .tab-content.active {
-    display: block;
-}
-
-.form-container button:hover {
-    background-color: none;
-}
