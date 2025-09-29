@@ -1,7 +1,5 @@
-// ====== CONFIG BASICA ======
-const API_URL = window.CONFIG?.API_BASE_URL || "";
-if (!API_URL) console.error("CONFIG.API_BASE_URL no definido. Revisa utils/config-api-url.js");
 
+//funcionalidad para intercalar las pestañas inspeccion de fichaje y inspecciones de Puertas en el reporte de patrulas.
 document.addEventListener("DOMContentLoaded", () => {
     const tabButtons = document.querySelectorAll(".tab-button");
     const tabContents = document.querySelectorAll(".tab-content");
@@ -21,13 +19,17 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
+// ====== CONFIG BASICA ======
+const API_URL = window.CONFIG?.API_BASE_URL || "";
+if (!API_URL) console.error("CONFIG.API_BASE_URL no definido. Revisa utils/config-api-url.js");
+
 const token = sessionStorage.getItem("token") || "";
 const authHeaders = token ? { Authorization: `Bearer ${token}` } : {};
 
-// Endpoints propuestos (ajusta si tus rutas son otras)
+// Endpoints
 const EP_RONDAS        = `${API_URL}/api/Administrar/leer-rondas`;
 const EP_CATEGORIAS    = `${API_URL}/api/Administrar/leer-categorias-patrullas`;
-const EP_SUBCATEGORIAS = `${API_URL}/api/Administrar/leer-subcategorias-patrullas?categoriaId=`;
+const EP_SUBCATEGORIAS = `${API_URL}/api/Administrar/leer-subcategorias-patrulla`;
 
 const EP_REP_FICHAJES  = `${API_URL}/api/ReportesPatrullas/leer-fichajes`;
 const EP_REP_PUERTAS   = `${API_URL}/api/ReportesPatrullas/leer-puertas`;
@@ -37,7 +39,6 @@ const unwrap = (data) => {
   if (!data) return [];
   if (Array.isArray(data)) return data;
   if (data.$values) return data.$values;
-  // a veces vienen envueltos en { items: { $values: [...] } }
   for (const k of Object.keys(data)) {
     if (data[k]?.$values) return data[k].$values;
   }
@@ -45,11 +46,11 @@ const unwrap = (data) => {
 };
 
 function obtenerFiltros() {
-  const aeropuerto = document.getElementById("aeropuerto")?.value || "";
-  const usuario = document.getElementById("nombre-vigilante")?.value || "";
-  const fecha = document.getElementById("fechaSeleccionada")?.value || "";
-  const ronda = document.getElementById("ronda")?.value || "";
-  const categoria = document.getElementById("categoria")?.value || "";
+  const aeropuerto   = document.getElementById("aeropuerto")?.value || "";
+  const usuario      = document.getElementById("nombre-vigilante")?.value || "";
+  const fecha        = document.getElementById("fechaSeleccionada")?.value || "";
+  const ronda        = document.getElementById("ronda")?.value || "";
+  const categoria    = document.getElementById("categoria")?.value || "";
   const subcategoria = document.getElementById("subcategoria")?.value || "";
   return { aeropuerto, usuario, fecha, ronda, categoria, subcategoria };
 }
@@ -68,10 +69,9 @@ function recargarPestanaActiva() {
   if (tabId === "puertas")  cargarPuertas();
 }
 
-// ====== INICIAL: hidratar usuario/aeropuerto y combos ======
+// ====== INICIAL: hidratar usuario/aeropuerto ======
 async function hidratarCabeceraDesdeToken() {
   try {
-    // requiere api/auth.js
     const datos = (typeof obtenerUsuarioDatos === "function") ? obtenerUsuarioDatos() : null;
     if (datos) {
       const { nombre, aeropuerto } = datos;
@@ -88,16 +88,18 @@ async function hidratarCabeceraDesdeToken() {
   }
 }
 
+// ====== CARGA DE COMBOS ======
 async function cargarRondas() {
   const sel = document.getElementById("ronda");
   if (!sel) return;
   sel.innerHTML = `<option value="">Todas</option>`;
   try {
-    const res = await fetch(EP_RONDAS, { headers: authHeaders });
+    const { aeropuerto } = obtenerFiltros();
+    const res = await fetch(`${EP_RONDAS}?aeropuerto=${encodeURIComponent(aeropuerto)}`, { headers: authHeaders });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = unwrap(await res.json());
     data.forEach(r => {
-      const nombre = r?.nombre || r?.descripcion || r?.ronda || r;
+      const nombre = r?.descripcion || r?.nombre || r?.ronda || r;
       if (nombre) {
         const opt = document.createElement("option");
         opt.value = nombre;
@@ -115,14 +117,14 @@ async function cargarCategorias() {
   if (!sel) return;
   sel.innerHTML = `<option value="">Todas</option>`;
   try {
-    const res = await fetch(EP_CATEGORIAS, { headers: authHeaders });
+    const { aeropuerto } = obtenerFiltros();
+    const res = await fetch(`${EP_CATEGORIAS}?aeropuerto=${encodeURIComponent(aeropuerto)}`, { headers: authHeaders });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = unwrap(await res.json());
-    // Suponemos { id, nombre }
     data.forEach(c => {
       const opt = document.createElement("option");
       opt.value = c?.id ?? "";
-      opt.textContent = c?.nombre ?? "";
+      opt.textContent = c?.nombreCategoria ?? "";
       sel.appendChild(opt);
     });
   } catch (e) {
@@ -134,19 +136,17 @@ async function cargarSubcategorias() {
   const catId = document.getElementById("categoria")?.value || "";
   const sel = document.getElementById("subcategoria");
   if (!sel) return;
-
   sel.innerHTML = `<option value="">Todas</option>`;
-  if (!catId) return; // si no hay categoria, dejamos "Todas"
+  if (!catId) return;
 
   try {
-    const res = await fetch(`${EP_SUBCATEGORIAS}${encodeURIComponent(catId)}`, { headers: authHeaders });
+    const res = await fetch(`${EP_SUBCATEGORIAS}/${catId}`, { headers: authHeaders });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     const data = unwrap(await res.json());
-    // Suponemos { id, nombre }
     data.forEach(s => {
       const opt = document.createElement("option");
       opt.value = s?.id ?? "";
-      opt.textContent = s?.nombre ?? "";
+      opt.textContent = s?.nombreSubcategoria ?? "";
       sel.appendChild(opt);
     });
   } catch (e) {
@@ -154,7 +154,7 @@ async function cargarSubcategorias() {
   }
 }
 
-// ====== CARGA DE TABLAS PREVIEW ======
+// ====== CARGA DE TABLAS ======
 async function cargarFichajes() {
   const f = obtenerFiltros();
   const tbodyId = "tabla-fichajes-body";
@@ -176,7 +176,7 @@ async function cargarFichajes() {
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
 
     const payload = await res.json();
-    const vista = unwrap(payload?.vista ?? payload); // por si devuelves { cabecera, vista, completo }
+    const vista = unwrap(payload?.vista ?? payload);
     const tbody = document.getElementById(tbodyId);
     tbody.innerHTML = "";
 
@@ -272,17 +272,99 @@ document.addEventListener("DOMContentLoaded", async () => {
   await hidratarCabeceraDesdeToken();
   await cargarRondas();
   await cargarCategorias();
-  await cargarSubcategorias(); // empieza vacia: "Todas"
+  await cargarSubcategorias();
 
   // cambios de filtros -> recargar pestaña activa
   ["fechaSeleccionada","ronda","categoria","subcategoria"].forEach(id => {
     const el = document.getElementById(id);
     if (el) el.addEventListener("change", async () => {
-      if (id === "categoria") await cargarSubcategorias(); // dependiente
+      if (id === "categoria") await cargarSubcategorias();
       recargarPestanaActiva();
     });
   });
 
-  // carga inicial en la pestaña por defecto
+  // carga inicial
   recargarPestanaActiva();
 });
+
+// ==================== PARA EXPORTAR EXCEL Y PDF DESDE EL BACKEND ================================
+
+async function exportarVista(tipo) {
+    const f = obtenerFiltros();
+    if (!f.fecha) {
+        alert("Seleccione una fecha antes de exportar");
+        return;
+    }
+
+    const url = `${API_URL}/api/ReportesPatrullas/exportar-vista?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+    await descargarArchivo(url, `Reporte_${tipo}_vista.xlsx`);
+}
+
+// 🔹 COMPLETOS POR TABLA
+async function exportarCompletoFichajes() {
+    const f = obtenerFiltros();
+    if (!f.fecha) {
+        alert("Seleccione una fecha antes de exportar");
+        return;
+    }
+
+    const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-fichajes?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+    await descargarArchivo(url, `Reporte_fichajes_completo.xlsx`);
+}
+
+async function exportarCompletoPuertas() {
+    const f = obtenerFiltros();
+    if (!f.fecha) {
+        alert("Seleccione una fecha antes de exportar");
+        return;
+    }
+
+    const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-puertas?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+    await descargarArchivo(url, `Reporte_puertas_completo.xlsx`);
+}
+
+// 🔹 PDF
+async function exportarPdf(tipo) {
+    const f = obtenerFiltros();
+    if (!f.fecha) {
+        alert("Seleccione una fecha antes de exportar");
+        return;
+    }
+
+    const url = `${API_URL}/api/ReportesPatrullas/exportar-pdf?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+    await descargarArchivo(url, `Reporte_${tipo}.pdf`);
+}
+
+// 🔹 Helper común para descargar archivos binarios
+async function descargarArchivo(url, nombreArchivo) {
+    try {
+        const res = await fetch(url, { headers: authHeaders });
+        if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+
+        const blob = await res.blob();
+        const link = document.createElement("a");
+        link.href = URL.createObjectURL(blob);
+        link.download = nombreArchivo;
+        link.click();
+        URL.revokeObjectURL(link.href);
+    } catch (e) {
+        console.error("Error exportando archivo:", e);
+        alert("❌ Error al exportar el archivo");
+    }
+}
+
+// ========== EXPORTACIONES FICHAJES ==========
+async function exportarVistaFichajes() {
+    await exportarVista("fichajes");
+}
+async function exportarPdfFichajes() {
+    await exportarPdf("fichajes");
+}
+
+// ========== EXPORTACIONES PUERTAS ==========
+async function exportarVistaPuertas() {
+    await exportarVista("puertas");
+}
+async function exportarPdfPuertas() {
+    await exportarPdf("puertas");
+}

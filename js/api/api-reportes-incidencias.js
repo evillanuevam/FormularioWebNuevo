@@ -108,7 +108,7 @@ function mostrarMensajeTablaIncidencias(mensaje) {
 }
 
 
-//FUNCIONES PARA EXPORTAR EXCEL Y PDF
+//FUNCIONES PARA EXPORTAR EXCEL Y PDF (probando desde el front- navegador del usuario)
 
 function exportarExcel() {
     const fechaInput = document.getElementById("fechaSeleccionada");
