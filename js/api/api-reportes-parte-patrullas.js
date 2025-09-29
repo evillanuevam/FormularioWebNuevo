@@ -297,7 +297,8 @@ async function exportarVista(tipo) {
     }
 
     const url = `${API_URL}/api/ReportesPatrullas/exportar-vista?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url, `Reporte_${tipo}_vista.xlsx`);
+    await descargarArchivo(url);
+
 }
 
 // 🔹 COMPLETOS POR TABLA
@@ -309,7 +310,7 @@ async function exportarCompletoFichajes() {
     }
 
     const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-fichajes?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url, `Reporte_fichajes_completo.xlsx`);
+    await descargarArchivo(url);
 }
 
 async function exportarCompletoPuertas() {
@@ -320,7 +321,7 @@ async function exportarCompletoPuertas() {
     }
 
     const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-puertas?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url, `Reporte_puertas_completo.xlsx`);
+    await descargarArchivo(url);
 }
 
 // 🔹 PDF
@@ -332,16 +333,35 @@ async function exportarPdf(tipo) {
     }
 
     const url = `${API_URL}/api/ReportesPatrullas/exportar-pdf?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url, `Reporte_${tipo}.pdf`);
+    await descargarArchivo(url);
+
 }
 
-// 🔹 Helper común para descargar archivos binarios
-async function descargarArchivo(url, nombreArchivo) {
+// 🔹 Helper común para descargar archivos binarios (respeta el nombre del backend)
+async function descargarArchivo(url) {
     try {
         const res = await fetch(url, { headers: authHeaders });
         if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
 
         const blob = await res.blob();
+
+        // Leer nombre real desde Content-Disposition
+        const disposition = res.headers.get("Content-Disposition");
+        let nombreArchivo = null;
+
+        if (disposition && disposition.includes("filename=")) {
+            const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+            if (match && match[1]) {
+                nombreArchivo = decodeURIComponent(match[1].replace(/['"]/g, ""));
+            }
+        }
+
+        // Si el backend no mandó nombre, usa un fallback pero más claro
+        if (!nombreArchivo) {
+            nombreArchivo = `Reporte_generico_${Date.now()}.xlsx`;
+        }
+
+        // Descargar con ese nombre
         const link = document.createElement("a");
         link.href = URL.createObjectURL(blob);
         link.download = nombreArchivo;
@@ -352,6 +372,8 @@ async function descargarArchivo(url, nombreArchivo) {
         alert("❌ Error al exportar el archivo");
     }
 }
+
+
 
 // ========== EXPORTACIONES FICHAJES ==========
 async function exportarVistaFichajes() {
