@@ -289,89 +289,91 @@ document.addEventListener("DOMContentLoaded", async () => {
 
 // ==================== PARA EXPORTAR EXCEL Y PDF DESDE EL BACKEND ================================
 
+// VISTA (Excel)
 async function exportarVista(tipo) {
-    const f = obtenerFiltros();
-    if (!f.fecha) {
-        alert("Seleccione una fecha antes de exportar");
-        return;
-    }
+  const f = obtenerFiltros();
+  if (!f.fecha) return alert("Seleccione una fecha antes de exportar");
 
-    const url = `${API_URL}/api/ReportesPatrullas/exportar-vista?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url);
-
+  const url = `${API_URL}/api/ReportesPatrullas/exportar-vista?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+  await descargarArchivo(url, "xlsx");
 }
 
-// 🔹 COMPLETOS POR TABLA
+// COMPLETOS (Excel)
 async function exportarCompletoFichajes() {
-    const f = obtenerFiltros();
-    if (!f.fecha) {
-        alert("Seleccione una fecha antes de exportar");
-        return;
-    }
+  const f = obtenerFiltros();
+  if (!f.fecha) return alert("Seleccione una fecha antes de exportar");
 
-    const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-fichajes?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url);
+  const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-fichajes?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+  await descargarArchivo(url, "xlsx");
 }
 
 async function exportarCompletoPuertas() {
-    const f = obtenerFiltros();
-    if (!f.fecha) {
-        alert("Seleccione una fecha antes de exportar");
-        return;
-    }
+  const f = obtenerFiltros();
+  if (!f.fecha) return alert("Seleccione una fecha antes de exportar");
 
-    const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-puertas?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url);
+  const url = `${API_URL}/api/ReportesPatrullas/exportar-completo-puertas?fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+  await descargarArchivo(url, "xlsx");
 }
 
-// 🔹 PDF
+// PDF
 async function exportarPdf(tipo) {
-    const f = obtenerFiltros();
-    if (!f.fecha) {
-        alert("Seleccione una fecha antes de exportar");
-        return;
-    }
+  const f = obtenerFiltros();
+  if (!f.fecha) return alert("Seleccione una fecha antes de exportar");
 
-    const url = `${API_URL}/api/ReportesPatrullas/exportar-pdf?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
-    await descargarArchivo(url);
-
+  const url = `${API_URL}/api/ReportesPatrullas/exportar-pdf?tipo=${tipo}&fecha=${f.fecha}&aeropuerto=${encodeURIComponent(f.aeropuerto)}&ronda=${encodeURIComponent(f.ronda)}&categoriaId=${f.categoria}&subcategoriaId=${f.subcategoria}`;
+  await descargarArchivo(url, "pdf");
 }
 
 // 🔹 Helper común para descargar archivos binarios (respeta el nombre del backend)
-async function descargarArchivo(url) {
-    try {
-        const res = await fetch(url, { headers: authHeaders });
-        if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
+async function descargarArchivo(url, fallbackExt) {
+  try {
+    const res = await fetch(url, { headers: authHeaders });
+    if (!res.ok) throw new Error(`Error HTTP ${res.status}`);
 
-        const blob = await res.blob();
+    const blob = await res.blob();
 
-        // Leer nombre real desde Content-Disposition
-        const disposition = res.headers.get("Content-Disposition");
-        let nombreArchivo = null;
-
-        if (disposition && disposition.includes("filename=")) {
-            const match = disposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-            if (match && match[1]) {
-                nombreArchivo = decodeURIComponent(match[1].replace(/['"]/g, ""));
-            }
-        }
-
-        // Si el backend no mandó nombre, usa un fallback pero más claro
-        if (!nombreArchivo) {
-            nombreArchivo = `Reporte_generico_${Date.now()}.xlsx`;
-        }
-
-        // Descargar con ese nombre
-        const link = document.createElement("a");
-        link.href = URL.createObjectURL(blob);
-        link.download = nombreArchivo;
-        link.click();
-        URL.revokeObjectURL(link.href);
-    } catch (e) {
-        console.error("Error exportando archivo:", e);
-        alert("❌ Error al exportar el archivo");
+    // 1) Intentar obtener el nombre desde Content-Disposition
+    const cd = res.headers.get("Content-Disposition");
+    let nombre = null;
+    if (cd) {
+      // Primero intentar con filename*=UTF-8'' (prioritario)
+      const mUtf8 = cd.match(/filename\*=(?:UTF-8'')([^;]+)/i);
+      if (mUtf8) {
+        nombre = decodeURIComponent(mUtf8[1].trim());
+      } else {
+        // Si no existe, intentar con filename="..."
+        const m = cd.match(/filename="?([^"]+)"?/i);
+        if (m) nombre = m[1].trim();
+      }
     }
+
+
+    // 2) Si no hay nombre, armar uno decente usando Content-Type o el fallback
+    if (!nombre) {
+      const ct = (res.headers.get("Content-Type") || "").toLowerCase();
+      let ext = (fallbackExt || "").toLowerCase();
+
+      if (!ext) {
+        if (ct.includes("pdf")) ext = "pdf";
+        else if (ct.includes("spreadsheet") || ct.includes("excel")) ext = "xlsx";
+        else ext = "bin";
+      }
+
+      nombre = `Reporte_${Date.now()}.${ext}`;
+    }
+
+    // 3) Disparar la descarga
+    const link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = nombre;
+    link.click();
+    URL.revokeObjectURL(link.href);
+  } catch (e) {
+    console.error("Error exportando archivo:", e);
+    alert("❌ Error al exportar el archivo");
+  }
 }
+
 
 
 
