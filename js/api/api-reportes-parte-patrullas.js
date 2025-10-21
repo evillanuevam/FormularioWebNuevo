@@ -347,7 +347,6 @@ async function descargarArchivo(url, fallbackExt) {
       }
     }
 
-
     // 2) Si no hay nombre, armar uno decente usando Content-Type o el fallback
     if (!nombre) {
       const ct = (res.headers.get("Content-Type") || "").toLowerCase();
