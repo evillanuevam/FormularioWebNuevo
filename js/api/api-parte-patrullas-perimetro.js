@@ -67,6 +67,7 @@ window.apiPatrullas = (() => {
         }
     }
 
+    //funcion que se utilizara en la pagina de patrullas-perimetro.html, en inspeccion de puntos de fichaje
     async function cargarPuertasPerimetro() {
         try {
             const res = await fetch(`${API_URL}/api/Administrar/leer-puertas?aeropuerto=${encodeURIComponent(aeropuerto)}`, {

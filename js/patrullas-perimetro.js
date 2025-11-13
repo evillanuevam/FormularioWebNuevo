@@ -20,7 +20,7 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
     }
 
-    // Llamar funciones del archivo API sin importar nada
+    // Llamar funciones del archivo API sin importar nada (fichero: api-parte-patrullas-perimetro.js)
     await window.apiPatrullas.cargarRondas();
     await window.apiPatrullas.cargarPuntosFichaje();
     await window.apiPatrullas.cargarPuertasPerimetro();
