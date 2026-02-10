@@ -2,5 +2,5 @@
 window.CONFIG = {
     //API_BASE_URL: "https://localhost:7187"  //local
     //API_BASE_URL: "https://formulariowebbackendapi.onrender.com" //url fija de Render
-    API_BASE_URL: "https://availability-league-mil-only.trycloudflare.com"  //url dinamica de cloudflare
+    API_BASE_URL: "https://scheduled-veterinary-slow-jesse.trycloudflare.com"  //url dinamica de cloudflare
 };
