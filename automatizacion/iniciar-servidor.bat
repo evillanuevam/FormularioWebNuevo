@@ -1,6 +1,6 @@
 @echo off
 echo [1/4] Iniciando Cloudflare Tunnel...
-start powershell -NoExit -Command "cloudflared tunnel --url https://localhost:7187"
+start powershell -NoExit -Command "while ($true) { cloudflared tunnel --url http://127.0.0.1:5141 --protocol http2; Write-Host 'Cloudflare fallo. Reintentando en 10 segundos...'; Start-Sleep -Seconds 10 }"
 timeout /t 10 > nul
 
 echo [2/4] Ejecutando script para actualizar URL...
